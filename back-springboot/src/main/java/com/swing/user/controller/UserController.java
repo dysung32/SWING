@@ -1,0 +1,10 @@
+package com.swing.user.controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
+@RestController
+public class UserController {
+	
+}

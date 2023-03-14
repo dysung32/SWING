@@ -11,16 +11,18 @@ import ReviewNote from "./pages/ReviewNote";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<NavBar />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<LogIn />} />
-      <Route path="/my-page" element={<MyPage />} />
-      <Route path="/sentency" element={<Sentency />} />
-      <Route path="/hi-five" element={<Hifive />} />
-      <Route path="/speedoodle" element={<Speedoodle />} />
-      <Route path="/review-note" element={<ReviewNote />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<NavBar />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/my-page" element={<MyPage />} />
+        <Route path="/sentency" element={<Sentency />} />
+        <Route path="/hi-five" element={<Hifive />} />
+        <Route path="/speedoodle" element={<Speedoodle />} />
+        <Route path="/review-note" element={<ReviewNote />} />
+      </Routes>
+    </>
   );
 }
 

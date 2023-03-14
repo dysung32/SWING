@@ -28,8 +28,8 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx.conf /etc/nginx/conf.d
 COPY --from=builder /app/build /app/build
 
-# 포트 (사용?)
-EXPOSE 80
+# 3000번 포트 (사용?)
+EXPOSE 3000
 
 # NginX로 돌아가게 설정
 CMD ["nginx", "-g", "daemon off;"]

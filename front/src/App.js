@@ -13,8 +13,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<NavBar />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/sentency" element={<Sentency />} />

@@ -1,9 +1,8 @@
-import React from "react";
-import NavBar from "./NavBar";
+import React from 'react';
+
 function Hifive() {
   return (
     <>
-      <NavBar />
       <div>Hi-Five</div>
     </>
   );

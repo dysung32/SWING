@@ -1,9 +1,8 @@
-import React from "react";
-import NavBar from "./NavBar";
+import React from 'react';
+
 function ReviewNote() {
   return (
     <>
-      <NavBar />
       <div>ReviewNote</div>
     </>
   );

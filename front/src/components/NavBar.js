@@ -1,7 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { css } from "@emotion/styled";
-import roundLogo from "../assets/swing_round_logo.png";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from '@emotion/styled';
+import roundLogo from '../assets/swing_round_logo.png';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ function NavBar() {
     width: 100%;
     box-sizing: border-box;
     padding: 1rem 10%;
+    position: absolute;
   `;
   const LogoRouter = styled.img`
     width: ${(props) => props.size};
@@ -23,39 +24,34 @@ function NavBar() {
   `;
 
   const onClickLogo = () => {
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   const onClickSentency = () => {
-    navigate("/sentency", { replace: true });
+    navigate('/sentency', { replace: true });
   };
   const onClickHifive = () => {
-    navigate("/hi-five", { replace: true });
+    navigate('/hi-five', { replace: true });
   };
   const onClickSpeedoodle = () => {
-    navigate("/speedoodle", { replace: true });
+    navigate('/speedoodle', { replace: true });
   };
   const onClickLogIn = () => {
-    navigate("/login", { replace: true });
+    navigate('/login', { replace: true });
   };
   const onClickMyPage = () => {
-    navigate("/my-page", { replace: true });
+    navigate('/my-page', { replace: true });
   };
 
   const onClickReviewNote = () => {
-    navigate("/review-note", { replace: true });
+    navigate('/review-note', { replace: true });
   };
   return (
     <Nav>
       <NavItems onClick={onClickSentency}>Sentency</NavItems>
       <NavItems onClick={onClickHifive}>Hi-Five</NavItems>
       <NavItems onClick={onClickSpeedoodle}>Speedoodle</NavItems>
-      <LogoRouter
-        src={roundLogo}
-        alt="logo"
-        onClick={onClickLogo}
-        size="7rem"
-      />
+      <LogoRouter src={roundLogo} alt='logo' onClick={onClickLogo} size='7rem' />
       <NavItems onClick={onClickLogIn}> LogIn</NavItems>
       <NavItems onClick={onClickMyPage}>MyPage</NavItems>
       <NavItems onClick={onClickReviewNote}>ReviewNote</NavItems>

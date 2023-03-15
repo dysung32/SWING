@@ -1,34 +1,65 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import styled, { css } from "@emotion/styled";
+import roundLogo from "../assets/swing_round_logo.png";
 
 function NavBar() {
-  return (
-    <>
-      <ul>
-        <li>
-          <Link to="/home">Home</Link>
-        </li>
-        <li>
-          <Link to="/login">LogIn</Link>
-        </li>
+  const navigate = useNavigate();
+  const Nav = styled.nav`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 10%;
+  `;
+  const LogoRouter = styled.img`
+    width: ${(props) => props.size};
+    height: ${(props) => props.size};
+    cursor: pointer;
+  `;
+  const NavItems = styled.h4`
+    cursor: pointer;
+  `;
 
-        <li>
-          <Link to="/my-page">MyPage</Link>
-        </li>
-        <li>
-          <Link to="/sentency">Sentency</Link>
-        </li>
-        <li>
-          <Link to="/hi-five">Hi-Five</Link>
-        </li>
-        <li>
-          <Link to="/speedoodle">Speedoodle</Link>
-        </li>
-        <li>
-          <Link to="/review-note">ReviewNote</Link>
-        </li>
-      </ul>
-    </>
+  const onClickLogo = () => {
+    navigate("/", { replace: true });
+  };
+
+  const onClickSentency = () => {
+    navigate("/sentency", { replace: true });
+  };
+  const onClickHifive = () => {
+    navigate("/hi-five", { replace: true });
+  };
+  const onClickSpeedoodle = () => {
+    navigate("/speedoodle", { replace: true });
+  };
+  const onClickLogIn = () => {
+    navigate("/login", { replace: true });
+  };
+  const onClickMyPage = () => {
+    navigate("/my-page", { replace: true });
+  };
+
+  const onClickReviewNote = () => {
+    navigate("/review-note", { replace: true });
+  };
+  return (
+    <Nav>
+      <NavItems onClick={onClickSentency}>Sentency</NavItems>
+      <NavItems onClick={onClickHifive}>Hi-Five</NavItems>
+      <NavItems onClick={onClickSpeedoodle}>Speedoodle</NavItems>
+      <LogoRouter
+        src={roundLogo}
+        alt="logo"
+        onClick={onClickLogo}
+        size="7rem"
+      />
+      <NavItems onClick={onClickLogIn}> LogIn</NavItems>
+      <NavItems onClick={onClickMyPage}>MyPage</NavItems>
+      <NavItems onClick={onClickReviewNote}>ReviewNote</NavItems>
+    </Nav>
   );
 }
 

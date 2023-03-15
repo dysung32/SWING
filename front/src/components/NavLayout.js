@@ -1,11 +1,14 @@
 import { Outlet } from 'react-router-dom';
+import NavBar from './NavBar';
 
 function NavLayout() {
   return (
-    <div className='nav-layout-padding-top'>
-      {/* 여기에 nav 컴포넌트 넣어주세요! */}
-      <Outlet />
-    </div>
+    <>
+      <NavBar />
+      <div className='nav-layout-padding-top'>
+        <Outlet />
+      </div>
+    </>
   );
 }
 

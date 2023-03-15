@@ -1,9 +1,8 @@
-import React from "react";
-import NavBar from "./NavBar";
+import React from 'react';
+
 function Speedoodle() {
   return (
     <>
-      <NavBar />
       <div>Speedoodle</div>
     </>
   );

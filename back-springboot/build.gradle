@@ -25,8 +25,11 @@ dependencies {
 	// S3 연결
 //	implementation group : 'org.springframework.cloud', name:'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 
-//	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
-//	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	// Swagger 3.0 사용
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	
+	// JSON 웹 토큰
 //	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

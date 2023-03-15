@@ -1,9 +1,11 @@
 import React from "react";
-
+import { LogInWrapper, LogInContainer } from "../styles/LogInEmotion";
 function LogIn() {
   return (
     <>
-      <div>LogIn</div>
+      <LogInWrapper>
+        <LogInContainer></LogInContainer>
+      </LogInWrapper>
     </>
   );
 }

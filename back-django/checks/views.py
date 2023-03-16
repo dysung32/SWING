@@ -11,6 +11,9 @@ from .models.sentensim import sentence_similarity
 #         'message': 'success',
 #     }
 #     return Response(context)
+@api_view(['GET'])
+def test(request):
+    return Response('success')
 
 @api_view(['GET'])
 def sentency(request):

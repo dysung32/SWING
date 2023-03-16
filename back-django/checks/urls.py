@@ -6,4 +6,5 @@ urlpatterns = [
     # path('temp/', views.temp),
     path('sentency/check', views.sentency),
     path('five/check', views.five),
+    path('test', views.test),
 ]

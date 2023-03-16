@@ -10,7 +10,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["pip", "list"]
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
-CMD ["./manage.py","runserver","8000"]
+CMD ["./manage.py","runserver"]

@@ -18,43 +18,38 @@ function LogIn() {
     navigate("/");
   };
 
-  // const loginWithKakao = () => {
-  //   console.log("함수 실행됨");
-  //   window.Kakao.Auth.login({
-  //     scope: "profile_nickname, profile_image",
-  //     success: getProfile,
-  //   });
-  //   console.log("함수2");
-  // };
-
-  // const getProfile = () => {
-  //   console.log("함수 실행됨2");
-  //   window.Kakao.API.request({
-  //     url: "http://localhost:3000/login",
-  //     success: (res) => {
-  //       console.log("성공");
-  //       const kakao_account = res.kakao_account;
-  //       let emails = kakao_account.email;
-  //       if (emails == null) {
-  //         if (this.$route.path !== "/") this.$router.push({ name: "home" });
-  //       } else {
-  //         const req_body = {
-  //           userId: "kakao" + res.id,
-  //           userName: kakao_account.profile.nickname,
-  //           email: emails,
-  //           type: "kakao",
-  //         };
-  //         this.socialLogin(req_body);
-  //       }
-  //     },
-  //   });
-  // };
-
   const kakaoLogin = () => {
     window.Kakao.Auth.authorize({
       redirectUri: "http://localhost:3000/login",
     });
   };
+
+  const getCookie = (name) => {
+    let parts = document.cookie.split(name + "=");
+    if (parts.length === 2) {
+      return parts[1].split(";")[0];
+    }
+  };
+
+  const displayToken = () => {
+    let token = getCookie("authorize-access-token");
+
+    if (token) {
+      console.log(token);
+      window.Kakao.Auth.setAccessToken(token);
+      window.Kakao.Auth.getStatusInfo()
+        .then(function (res) {
+          if (res.status === "connected") {
+            document.getElementById("token-result").innerText =
+              "login success, token: " + window.Kakao.Auth.getAccessToken();
+          }
+        })
+        .catch(function (err) {
+          window.Kakao.Auth.setAccessToken(null);
+        });
+    }
+  };
+  displayToken();
 
   return (
     <>

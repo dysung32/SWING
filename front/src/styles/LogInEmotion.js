@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import logInExpImg from "../assets/login_expImg.png";
+import styled from '@emotion/styled';
+import logInExpImg from '../assets/login_expImg.png';
 
 export const LogInWrapper = styled.div`
   display: flex;
@@ -17,13 +17,13 @@ export const LogInContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 2rem;
   grid-template-areas:
-    ". . . . . . . . . . . ."
-    ". expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg ."
-    ". expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg ."
-    ". expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg ."
-    ". expImg expImg expImg expImg . logInBtnCon logInBtnCon logInBtnCon logInBtnCon logInBtnCon ."
-    ". expImg expImg expImg expImg . logInBtnCon logInBtnCon logInBtnCon logInBtnCon logInBtnCon ."
-    ". . . . . . . . . . . .";
+    '. . . . . . . . . . . .'
+    '. expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg .'
+    '. expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg .'
+    '. expImg expImg expImg expImg . logoImg logoImg logoImg logoImg logoImg .'
+    '. expImg expImg expImg expImg . logInBtnCon logInBtnCon logInBtnCon logInBtnCon logInBtnCon .'
+    '. expImg expImg expImg expImg . logInBtnCon logInBtnCon logInBtnCon logInBtnCon logInBtnCon .'
+    '. . . . . . . . . . . .';
   width: 100%;
   height: 68vh;
   box-sizing: border-box;
@@ -53,10 +53,10 @@ export const LogInBtn = styled.div`
   position: relative;
   width: 100%;
   padding: 1.2rem 1rem 1.2rem 3.5rem;
-  border: ${(props) => (props.border ? `1px solid #${props.border}` : "none")};
+  border: ${(props) => (props.border ? `1px solid #${props.border}` : 'none')};
   border-radius: 0.5rem;
   box-sizing: border-box;
-  background-color: ${(props) => (props.color ? `#${props.color}` : "#ffffff")};
+  background-color: ${(props) => (props.color ? `#${props.color}` : '#ffffff')};
   text-align: center;
   font-size: 1.5rem;
   cursor: pointer;

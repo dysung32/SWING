@@ -7,34 +7,34 @@ function NavBar() {
   const navigate = useNavigate();
 
   const onClickLogo = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const onClickSentency = () => {
-    navigate("/sentency");
+    navigate('/sentency');
   };
   const onClickHifive = () => {
-    navigate("/hi-five");
+    navigate('/hi-five');
   };
   const onClickSpeedoodle = () => {
-    navigate("/speedoodle");
+    navigate('/speedoodle');
   };
   const onClickLogIn = () => {
-    navigate("/login");
+    navigate('/login');
   };
   const onClickMyPage = () => {
-    navigate("/my-page");
+    navigate('/my-page');
   };
 
   const onClickReviewNote = () => {
-    navigate("/review-note");
+    navigate('/review-note');
   };
   return (
     <Nav>
       <NavItems onClick={onClickSentency}>Sentency</NavItems>
       <NavItems onClick={onClickHifive}>Hi-Five</NavItems>
       <NavItems onClick={onClickSpeedoodle}>Speedoodle</NavItems>
-      <RoundLogo alt="logo" onClick={onClickLogo} size="7rem" />
+      <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
       <NavItems onClick={onClickLogIn}> LogIn</NavItems>
       <NavItems onClick={onClickMyPage}>MyPage</NavItems>
       <NavItems onClick={onClickReviewNote}>ReviewNote</NavItems>

@@ -1,9 +1,10 @@
 import React from 'react';
+import { MyPageWrapper } from '../styles/MyPageEmotion';
 
 function MyPage() {
   return (
     <>
-      <div>MyPage</div>
+      <MyPageWrapper>MyPage</MyPageWrapper>
     </>
   );
 }

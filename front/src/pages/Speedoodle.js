@@ -1,9 +1,10 @@
 import React from 'react';
+import { SpeedDoodleWrapper } from '../styles/SpeedDoodleEmotion';
 
 function Speedoodle() {
   return (
     <>
-      <div>Speedoodle</div>
+      <SpeedDoodleWrapper>Speedoodle</SpeedDoodleWrapper>
     </>
   );
 }

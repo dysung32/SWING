@@ -7,8 +7,10 @@ import {
   LogoImg,
   LogInBtnContainer,
   LogInBtn,
+  SocialLogoImg,
 } from "../styles/LogInEmotion";
 import { RoundLogo } from "../styles/CommonEmotion";
+import { colors } from "../styles/ColorPalette";
 import Google from "../assets/google_icon.png";
 import Kakao from "../assets/kakaotalk_icon.png";
 
@@ -60,10 +62,12 @@ function LogIn() {
             <RoundLogo alt="logo" onClick={onClickLogo} size="70%" />
           </LogoImg>
           <LogInBtnContainer>
-            <LogInBtn border="#B4B4B4" image={Google}>
+            <LogInBtn border={colors.gray400}>
+              <SocialLogoImg src={Google} alt="google logo" />
               Google로 시작하기
             </LogInBtn>
-            <LogInBtn color="#F7E600" image={Kakao} onClick={kakaoLogin}>
+            <LogInBtn color="F7E600" onClick={kakaoLogin}>
+              <SocialLogoImg src={Kakao} alt="kakao logo" />
               카카오로 시작하기
             </LogInBtn>
           </LogInBtnContainer>

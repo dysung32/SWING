@@ -41,7 +41,3 @@ body {
     transform: rotate(360deg);
   }
 }
-
-.nav-layout-padding-top {
-  padding-top: 9rem;
-}

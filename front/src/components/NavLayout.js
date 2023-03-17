@@ -5,9 +5,7 @@ function NavLayout() {
   return (
     <>
       <NavBar />
-      <div className='nav-layout-padding-top'>
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }

@@ -1,9 +1,10 @@
 import React from 'react';
+import { SentencyWrapper } from '../styles/SentencyEmotion';
 
 function Sentency() {
   return (
     <>
-      <div>Sentency</div>
+      <SentencyWrapper>Sentency</SentencyWrapper>
     </>
   );
 }

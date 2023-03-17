@@ -10,4 +10,28 @@ const RoundLogo = styled.div`
   cursor: pointer;
 `;
 
-export default RoundLogo;
+const CommonInput = styled.input`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height}px;
+  border-radius: ${(props) => props.height / 3}px;
+  font-size: ${(props) => props.font}px;
+  background: white;
+`;
+
+const CommonBtn = styled.button`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height}px;
+  border-radius: ${(props) => props.height / 3}px;
+  background-color: ${(props) => props.color};
+  font-size: ${(props) => props.font}rem;
+  cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.hoverColor};
+  }
+`;
+
+
+export { RoundLogo, 
+  CommonInput,
+  CommonBtn
+};

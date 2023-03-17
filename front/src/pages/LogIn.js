@@ -8,7 +8,7 @@ import {
   LogInBtnContainer,
   LogInBtn,
 } from "../styles/LogInEmotion";
-import RoundLogo from "../styles/CommonEmotion";
+import { RoundLogo } from "../styles/CommonEmotion";
 import Google from "../assets/google_icon.png";
 import Kakao from "../assets/kakaotalk_icon.png";
 

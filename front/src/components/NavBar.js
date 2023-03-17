@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import RoundLogo from '../styles/CommonEmotion';
+import { RoundLogo } from '../styles/CommonEmotion';
 import { Nav, NavItems } from '../styles/NavEmotion';
 
 function NavBar() {

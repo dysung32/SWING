@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import {
   LogInWrapper,
   LogInContainer,
@@ -17,7 +19,12 @@ import Google from '../assets/google_icon.png';
 import Kakao from '../assets/kakaotalk_icon.png';
 
 function LogIn() {
-  const [accessToken, setAccessToken] = useState('');
+  const firebaseConfig = {
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    authDomain: 'http://localhost:3000',
+  };
+
+  const app = initializeApp(firebaseConfig);
   const navigate = useNavigate();
   const onClickLogo = () => {
     navigate('/');
@@ -60,6 +67,61 @@ function LogIn() {
       },
     });
   };
+
+  // const parseJwt = (token) => {
+  //   let base64Url = token.split('.')[1];
+  //   let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   let jsonPayload = decodeURIComponent(
+  //     atob(base64)
+  //       .split('')
+  //       .map(function (c) {
+  //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //       })
+  //       .join('')
+  //   );
+
+  //   return JSON.parse(jsonPayload);
+  // };
+
+  // const handleCredentialResponse = (response) => {
+  //   const responsePayload = parseJwt(response.credential);
+  //   console.log('ID: ' + responsePayload.sub);
+  //   console.log('Full Name: ' + responsePayload.name);
+  //   console.log('Given Name: ' + responsePayload.given_name);
+  //   console.log('Family Name: ' + responsePayload.family_name);
+  //   console.log('Image URL: ' + responsePayload.picture);
+  //   console.log('Email: ' + responsePayload.email);
+  // };
+
+  // const googleLogin = () => {
+  //   window.google.accounts.id.initialize({
+  //     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  //     callback: handleCredentialResponse,
+  //   });
+  // };
+
+  // const provider = new GoogleAuthProvider();
+  // const auth = getAuth();
+  // signInWithPopup(auth, provider)
+  //   .then((result) => {
+  //     // This gives you a Google Access Token. You can use it to access the Google API.
+  //     const credential = GoogleAuthProvider.credentialFromResult(result);
+  //     const token = credential.accessToken;
+  //     // The signed-in user info.
+  //     const user = result.user;
+  //     // IdP data available using getAdditionalUserInfo(result)
+  //     // ...
+  //   })
+  //   .catch((error) => {
+  //     // Handle Errors here.
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //     // The email of the user's account used.
+  //     const email = error.customData.email;
+  //     // The AuthCredential type that was used.
+  //     const credential = GoogleAuthProvider.credentialFromError(error);
+  //     // ...
+  //   });
 
   return (
     <>

@@ -50,8 +50,9 @@ export const LogInBtnContainer = styled.div`
 `;
 
 export const LogInBtn = styled.div`
+  position: relative;
   width: 100%;
-  padding: 1.3rem 0;
+  padding: 1.2rem 1rem 1.2rem 3.5rem;
   border: ${(props) => (props.border ? `1px solid #${props.border}` : "none")};
   border-radius: 0.5rem;
   box-sizing: border-box;
@@ -62,6 +63,9 @@ export const LogInBtn = styled.div`
 `;
 
 export const SocialLogoImg = styled.img`
+  position: absolute;
+  top: 14px;
+  left: 16px;
   width: 2.5rem;
   height: 2.5rem;
 `;

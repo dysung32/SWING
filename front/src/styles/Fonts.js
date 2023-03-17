@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 export const H1 = styled.h1`
   padding: 0;
@@ -10,8 +10,8 @@ export const H1 = styled.h1`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const H2 = styled.h2`
@@ -24,8 +24,8 @@ export const H2 = styled.h2`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const H3 = styled.h3`
@@ -38,8 +38,8 @@ export const H3 = styled.h3`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const H4 = styled.h4`
@@ -52,8 +52,8 @@ export const H4 = styled.h4`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const H5 = styled.h5`
@@ -66,8 +66,8 @@ export const H5 = styled.h5`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const H6 = styled.h6`
@@ -80,8 +80,8 @@ export const H6 = styled.h6`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const P1 = styled.p`
@@ -94,8 +94,8 @@ export const P1 = styled.p`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const P2 = styled.p`
@@ -108,8 +108,8 @@ export const P2 = styled.p`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;
 
 export const SmText = styled.p`
@@ -122,6 +122,6 @@ export const SmText = styled.p`
   text-shadow: ${(props) =>
     props.outline
       ? `-${props.outlineWeight}px 0 ${props.outline}, 0 ${props.outlineWeight}px ${props.outline},  ${props.outlineWeight}px 0 ${props.outline}, 0 -${props.outlineWeight}px ${props.outline}`
-      : "none"};
-  text-align: ${(props) => (props.align ? props.align : "left")};
+      : 'none'};
+  text-align: ${(props) => (props.align ? props.align : 'left')};
 `;

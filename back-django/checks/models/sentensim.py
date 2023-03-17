@@ -1,6 +1,10 @@
+import os
 from sentence_transformers import SentenceTransformer, util
 
-model = SentenceTransformer('all-mpnet-base-v2')
+NOW_DIR = os.path.dirname(os.path.realpath(__file__)) + '/'
+
+# model = SentenceTransformer('all-mpnet-base-v2')
+model = SentenceTransformer(NOW_DIR + 'weights/sbert')
 
 def sentence_similarity(s1, s2):
     embeddings1 = model.encode(s1, convert_to_tensor=True)

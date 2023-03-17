@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "IBM Plex Sans", sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .App {
@@ -40,8 +40,4 @@ body {
   to {
     transform: rotate(360deg);
   }
-}
-
-.nav-layout-padding-top {
-  padding-top: 9rem;
 }

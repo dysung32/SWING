@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { colors } from './ColorPalette';
+import { H1 } from './Fonts';
 
 export const SpeedDoodleWrapper = styled.div`
   display: flex;

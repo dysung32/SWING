@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "@emotion/styled";
-import roundLogo from "../assets/swing_round_logo.png";
+import styled from '@emotion/styled';
+import roundLogo from '../assets/swing_round_logo.png';
 
 const RoundLogo = styled.div`
   width: ${(props) => props.size};

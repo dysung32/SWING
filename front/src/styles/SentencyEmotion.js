@@ -1,23 +1,27 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const SentencyWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: calc(100vh + 9rem);
   padding: 0 10%;
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
 `;
 
 export const SentencyImgContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 
   .sentencyImg {
     height: 20rem;
@@ -42,7 +46,8 @@ export const SentencyGameNav = styled.div`
 
 export const WordListContainer = styled.div`
   display: flex;
-  padding-bottom: 3rem;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
 
   .finishDot {
     color: ${colors.white};
@@ -60,10 +65,12 @@ export const WordBox = styled.span`
   margin-right: 1rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.length > 1 ? '0.3rem' : 'initial')};
+  letter-spacing: ${(props) => (props.length > 1 ? "0.3rem" : "initial")};
   text-align: center;
 `;
 
 export const SentencyInputContainer = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: center;
 `;

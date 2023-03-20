@@ -44,3 +44,12 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}

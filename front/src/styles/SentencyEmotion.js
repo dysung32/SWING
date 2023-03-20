@@ -70,3 +70,48 @@ export const SentencyInputContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const SentencyScoreContainer = styled.div`
+  display: flex;
+  padding: 2rem 0;
+
+  .sentencyResult {
+    padding-left: 2rem;
+  }
+
+  .sentencyScoreBox,
+  .sentencyAnswerBox {
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 2px solid ${colors.gameBlue300};
+  }
+
+  .sentencyScoreBox {
+    margin-bottom: 1rem;
+  }
+`;
+
+export const RetryModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .retryInfo {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .retrySubInfo {
+    color: ${colors.gray500};
+    padding-bottom: 2rem;
+  }
+
+  .coupon {
+    width: 10rem;
+  }
+
+  .retryBtns {
+    padding-top: 3rem;
+  }
+`;

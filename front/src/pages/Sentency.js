@@ -14,10 +14,15 @@ import { colors } from '../styles/ColorPalette';
 
 import Bike from '../assets/bike.jpg';
 import { HeartFill } from 'react-bootstrap-icons';
+import ModalBasic from '../components/ModalBasic';
 
 function Sentency() {
   const [life, setLife] = useState(5);
   const [wordArray, setWordArray] = useState(['A', 'man', 'is', 'riding', 'a', 'bike']);
+
+  // axios.get('http://j8a405.p.ssafy.io:8000/api/test').then((res) => {
+  //   console.log(res);
+  // });
 
   const renderLife = (life) => {
     const lifeArray = [];
@@ -42,6 +47,9 @@ function Sentency() {
 
   return (
     <>
+      <ModalBasic>
+        <div>HI MY NAME IS DAYEON</div>
+      </ModalBasic>
       <SentencyWrapper>
         <GameTitle>
           <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>

@@ -1,4 +1,5 @@
 absl-py==1.4.0
+args==0.1.0
 asgiref==3.6.0
 asttokens==2.2.1
 astunparse==1.6.3
@@ -9,6 +10,7 @@ cffi==1.15.1
 chardet==5.1.0
 charset-normalizer==3.1.0
 click==8.1.3
+clint==0.5.1
 colorama==0.4.6
 comm==0.1.2
 coverage==7.2.2
@@ -17,6 +19,7 @@ Cython==0.29.32
 debugpy==1.6.6
 decorator==5.1.1
 Django==3.2.18
+django-cors-headers==3.14.0
 djangorestframework==3.14.0
 executing==1.2.0
 filelock==3.9.1
@@ -72,10 +75,10 @@ pyOpenSSL==23.0.0
 PySocks==1.7.1
 python-dateutil==2.8.2
 pytz==2022.7.1
-# pywin32==305
-# pywinpty==2.0.10
+pywin32==305
+pywinpty==2.0.10
 PyYAML==6.0
-# pyzmq==25.0.1
+pyzmq==25.0.1
 regex==2022.10.31
 requests==2.28.2
 requests-oauthlib==1.3.1
@@ -99,7 +102,6 @@ termcolor==2.2.0
 threadpoolctl==3.1.0
 tokenizers==0.13.2
 torch==1.13.1
-# torchaudio==0.13.1+cu116
 torchvision==0.14.1
 tornado==6.2
 tqdm==4.65.0

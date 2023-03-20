@@ -15,8 +15,10 @@ import { colors } from '../styles/ColorPalette';
 import Bike from '../assets/bike.jpg';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
+import ModalClosable from '../components/ModalClosable';
 
 function Sentency() {
+  const [modalShow, setModalShow] = useState(false);
   const [life, setLife] = useState(5);
   const [wordArray, setWordArray] = useState(['A', 'man', 'is', 'riding', 'a', 'bike']);
 
@@ -45,11 +47,15 @@ function Sentency() {
     return wordBoxArray;
   };
 
+  const openModalHandler = () => {
+    setModalShow(true);
+  };
+
   return (
     <>
-      <ModalBasic>
+      <ModalClosable modalShow={modalShow} setModalShow={setModalShow}>
         <div>HI MY NAME IS DAYEON</div>
-      </ModalBasic>
+      </ModalClosable>
       <SentencyWrapper>
         <GameTitle>
           <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
@@ -77,6 +83,7 @@ function Sentency() {
             border={'none'}
             padding={'12px 36px'}
             margin={'0 0 0 1rem'}
+            onClick={openModalHandler}
           >
             SUBMIT
           </CommonBtn>

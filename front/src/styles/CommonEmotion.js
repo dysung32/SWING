@@ -24,7 +24,7 @@ export const CommonInput = styled.input`
 `;
 
 export const CommonBtn = styled.button`
-  // width: ${(props) => props.width};
+  width: ${(props) => props.width};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
   border: ${(props) => props.border};
@@ -37,6 +37,7 @@ export const CommonBtn = styled.button`
   }
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
+  box-shadow: ${(props) => (props.shadow ? props.shadow : "nonne")};
   box-sizing: border-box;
 `;
 
@@ -66,6 +67,7 @@ export const CommonModalView = styled.div`
   background-color: white;
   border-radius: ${(props) => (props.font ? props.font / 2 : 0.5)}rem;
   box-sizing: border-box;
+  padding: 0px 6rem 0px 6rem;
 `;
 
 export const ModalBackground = styled.div`

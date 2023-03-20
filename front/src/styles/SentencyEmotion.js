@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const SentencyWrapper = styled.div`
   display: flex;
@@ -11,11 +11,7 @@ export const SentencyWrapper = styled.div`
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
 `;
 
 export const SentencyImgContainer = styled.div`
@@ -65,7 +61,7 @@ export const WordBox = styled.span`
   margin-right: 1rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.length > 1 ? "0.3rem" : "initial")};
+  letter-spacing: ${(props) => (props.length > 1 ? '0.3rem' : 'initial')};
   text-align: center;
 `;
 

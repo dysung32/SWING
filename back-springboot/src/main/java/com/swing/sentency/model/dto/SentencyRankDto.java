@@ -1,4 +1,4 @@
-package com.swing.five.model.dto;
+package com.swing.sentency.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,5 +9,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class FiveDto {
+public class SentencyRankDto {
+	private Integer sentencyRankId;
+	private String userId;
+	private Integer score;
 }

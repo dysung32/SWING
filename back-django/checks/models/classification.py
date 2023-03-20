@@ -32,7 +32,7 @@ with open(NOW_DIR + class_name, 'r') as f:
         else:
             text = text[:-1]
             class_names.append(text)
-
+    f.close()
 
 def get_class(image_path):
     image = Image.open(image_path)
@@ -46,5 +46,10 @@ def get_class(image_path):
     pred = (-pred).argsort()
     return class_names[pred[0]]
 
-if __name__ == '__main__':
-    print(get_class('umbrella.png'))
+
+# 서버가 켜질 때 model을 한 번 구동하여 api 요청 시 바로 값을 return하도록 만듦
+temp = get_class(NOW_DIR + 'weights/cnn/umbrella.png')
+del temp
+
+# if __name__ == '__main__':
+#     print(get_class('umbrella.png'))

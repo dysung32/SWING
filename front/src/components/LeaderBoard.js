@@ -2,6 +2,7 @@ import {
   LeaderBoardWrapper,
   MyRankContainer,
   PlayerInfo,
+  PlayerMedal,
   PlayerName,
   PlayerProfile,
   PlayerScore,
@@ -12,6 +13,10 @@ import {
 } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H5 } from '../styles/Fonts';
+
+import firstMedal from '../assets/1st-medal.svg';
+import secondMedal from '../assets/2nd-medal.svg';
+import thirdMedal from '../assets/3rd-medal.svg';
 
 function LeaderBoard() {
   const myRankInfo = {
@@ -60,9 +65,9 @@ function LeaderBoard() {
                 src='https://cdn-icons-png.flaticon.com/512/189/189533.png'
                 width={4}
                 height={4}
-                margin='0 0 0.5rem 0'
+                margin='0 0 -0.3rem 0'
               />
-              {/* 메달 */}
+              <PlayerMedal src={secondMedal} width={2} height={2} />
               <PlayerName fontColor={colors.white} font={'10px'}>
                 플레이어 1
               </PlayerName>
@@ -73,9 +78,9 @@ function LeaderBoard() {
                 src='https://www4.minijuegosgratis.com/v3/games/thumbnails/230368_7_sq.jpg'
                 width={6}
                 height={6}
-                margin='0 0 0.5rem 0'
+                margin='0 0 -0.3rem 0'
               />
-              {/* 메달 */}
+              <PlayerMedal src={firstMedal} width={2.5} height={2.5} />
               <PlayerName fontColor={colors.white} font={'16px'} fontWeight={700}>
                 플레이어 3
               </PlayerName>
@@ -86,9 +91,9 @@ function LeaderBoard() {
                 src='https://is4-ssl.mzstatic.com/image/thumb/Purple126/v4/52/ac/8f/52ac8f4d-8587-9c5f-9a6e-7d7d12a62b58/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.webp'
                 width={4}
                 height={4}
-                margin='0 0 0.5rem 0'
+                margin='0 0 -0.3rem 0'
               />
-              {/* 메달 */}
+              <PlayerMedal src={thirdMedal} width={2} height={2} />
               <PlayerName fontColor={colors.white} font={'10px'}>
                 플레이어 2
               </PlayerName>

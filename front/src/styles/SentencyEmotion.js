@@ -5,8 +5,8 @@ export const SentencyWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: calc(100vh + 9rem);
   padding: 0 10%;
   padding-top: 9rem;
   padding-bottom: 2rem;
@@ -17,7 +17,7 @@ export const SentencyWrapper = styled.div`
 export const SentencyImgContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 
   .sentencyImg {
     height: 20rem;
@@ -42,7 +42,8 @@ export const SentencyGameNav = styled.div`
 
 export const WordListContainer = styled.div`
   display: flex;
-  padding-bottom: 3rem;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
 
   .finishDot {
     color: ${colors.white};
@@ -65,5 +66,7 @@ export const WordBox = styled.span`
 `;
 
 export const SentencyInputContainer = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: center;
 `;

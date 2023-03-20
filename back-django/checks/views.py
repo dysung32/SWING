@@ -1,16 +1,10 @@
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models.wordsim import word_similarity
 from .models.sentensim import sentence_similarity
+from .models.classification import get_class
 
-# Create your views here.
-# @api_view(['GET'])
-# def temp(request):
-#     context = {
-#         'message': 'success',
-#     }
-#     return Response(context)
+
 @api_view(['GET'])
 def test(request):
     return Response('success')
@@ -49,6 +43,22 @@ def five(request):
 
     context = {
         'similarity': similarity,
+        'message': message,
+    }
+    return Response(context)
+
+
+@api_view(['POST'])
+def doodle(request):
+    # 유저 그림
+    answer = request.FILES['answer']
+
+    result = get_class(answer)
+
+    message = 'success'
+
+    context = {
+        'class': result,
         'message': message,
     }
     return Response(context)

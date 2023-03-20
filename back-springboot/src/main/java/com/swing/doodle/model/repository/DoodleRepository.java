@@ -1,5 +1,5 @@
 package com.swing.doodle.model.repository;
 
 //@Repository
-public class DoodleRepository {
+public interface DoodleRepository {
 }

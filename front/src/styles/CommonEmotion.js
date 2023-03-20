@@ -142,6 +142,11 @@ export const PlayerProfile = styled.img`
   margin: ${(props) => props.margin}rem;
 `;
 
+export const PlayerMedal = styled.img`
+  width: ${(props) => props.width}rem;
+  height: ${(props) => props.height}rem;
+`;
+
 export const PlayerName = styled.div`
   font-size: ${(props) => props.font};
   font-weight: ${(props) => props.fontWeight};

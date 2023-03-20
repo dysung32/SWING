@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
 import {
   LogInWrapper,
   LogInContainer,
@@ -18,17 +17,55 @@ import { H5 } from '../styles/Fonts';
 import Google from '../assets/google_icon.png';
 import Kakao from '../assets/kakaotalk_icon.png';
 
-function LogIn() {
-  const firebaseConfig = {
-    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    authDomain: 'http://localhost:3000',
-  };
+function parseJwt(token) {
+  let base64Url = token.split('.')[1];
+  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  let jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
 
-  const app = initializeApp(firebaseConfig);
+  return JSON.parse(jsonPayload);
+}
+
+function handleCredentialResponse(response) {
+  const responsePayload = parseJwt(response.credential);
+  console.log(responsePayload);
+  console.log('ID: ' + responsePayload.sub);
+  console.log('Full Name: ' + responsePayload.name);
+  console.log('Given Name: ' + responsePayload.given_name);
+  console.log('Family Name: ' + responsePayload.family_name);
+  console.log('Image URL: ' + responsePayload.picture);
+  console.log('Email: ' + responsePayload.email);
+}
+
+window.onload = () => {
+  window.google.accounts.id.initialize({
+    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+  });
+  window.google.accounts.id.renderButton(document.getElementById('buttonDiv'), {
+    type: 'standard',
+    theme: 'outline',
+    size: 'large',
+    text: 'signin_with',
+    shape: 'rectangular',
+    logo_alignment: 'left',
+    width: 500,
+    locale: 'ko_KR',
+  });
+};
+
+function LogIn() {
   const navigate = useNavigate();
   const onClickLogo = () => {
     navigate('/');
   };
+  useEffect(() => window.onload, []);
   const scope = 'profile_nickname, profile_image, account_email';
   const getKakaoProfile = () => {
     window.Kakao.API.request({
@@ -36,7 +73,6 @@ function LogIn() {
       success: (res) => {
         const { nickname, profile_image } = res.properties;
         const email = res.kakao_account.email;
-        console.log(nickname, profile_image, email);
         // if (emails == null) {
         //   if (this.$route.path != '/') this.$router.push({ name: 'home' });
         // } else {
@@ -51,7 +87,8 @@ function LogIn() {
       },
     });
   };
-  const kakaoLogin = () => {
+  const kakaoLogin = (e) => {
+    e.preventDefault();
     window.Kakao.Auth.login({
       scope,
       success: function (response) {
@@ -68,60 +105,13 @@ function LogIn() {
     });
   };
 
-  // const parseJwt = (token) => {
-  //   let base64Url = token.split('.')[1];
-  //   let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  //   let jsonPayload = decodeURIComponent(
-  //     atob(base64)
-  //       .split('')
-  //       .map(function (c) {
-  //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  //       })
-  //       .join('')
-  //   );
-
-  //   return JSON.parse(jsonPayload);
-  // };
-
-  // const handleCredentialResponse = (response) => {
-  //   const responsePayload = parseJwt(response.credential);
-  //   console.log('ID: ' + responsePayload.sub);
-  //   console.log('Full Name: ' + responsePayload.name);
-  //   console.log('Given Name: ' + responsePayload.given_name);
-  //   console.log('Family Name: ' + responsePayload.family_name);
-  //   console.log('Image URL: ' + responsePayload.picture);
-  //   console.log('Email: ' + responsePayload.email);
-  // };
-
-  // const googleLogin = () => {
-  //   window.google.accounts.id.initialize({
-  //     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-  //     callback: handleCredentialResponse,
-  //   });
-  // };
-
-  // const provider = new GoogleAuthProvider();
-  // const auth = getAuth();
-  // signInWithPopup(auth, provider)
-  //   .then((result) => {
-  //     // This gives you a Google Access Token. You can use it to access the Google API.
-  //     const credential = GoogleAuthProvider.credentialFromResult(result);
-  //     const token = credential.accessToken;
-  //     // The signed-in user info.
-  //     const user = result.user;
-  //     // IdP data available using getAdditionalUserInfo(result)
-  //     // ...
-  //   })
-  //   .catch((error) => {
-  //     // Handle Errors here.
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     // The email of the user's account used.
-  //     const email = error.customData.email;
-  //     // The AuthCredential type that was used.
-  //     const credential = GoogleAuthProvider.credentialFromError(error);
-  //     // ...
-  //   });
+  const googleLogin = (e) => {
+    e.preventDefault();
+    window.location.href =
+      'https://accounts.google.com/gsi/button?type=standard&theme=outline&size=large&text=signin_with&shape=rectangular&logo_alignment=left&width=100%25&client_id=12428147789-qgu2fc907vm0tu1otbd9v2a4m3g42sav.apps.googleusercontent.com&iframe_id=gsi_125285_234200&as=qXj4EK%2BCIsTD1l0BA6KTzQ&hl=ko_KR';
+    // const GOOGLE_LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=${process.env.REACT_APP_GOOGLE_SCOPE}`;
+    // window.location.href = GOOGLE_LOGIN_URL;
+  };
 
   return (
     <>
@@ -132,9 +122,10 @@ function LogIn() {
             <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
           </LogoImg>
           <LogInBtnContainer>
-            <LogInBtn border={colors.gray400}>
+            <div id='buttonDiv'></div>
+            <LogInBtn border={colors.gray400} onClick={googleLogin}>
               <SocialLogoImg src={Google} alt='google logo' />
-              <H5 align='center'>Google로 시작하기</H5>
+              <H5 align='center'>구글로 시작하기</H5>
             </LogInBtn>
             <LogInBtn color='F7E600' onClick={kakaoLogin}>
               <SocialLogoImg src={Kakao} alt='kakao logo' />

@@ -1,10 +1,13 @@
 import styled from '@emotion/styled';
 
 const HifiveWrapper = styled.div`
-  position: relative;
+  padding-top: 9rem;
   width: 100%;
   height: calc(100vh - 9rem);
   background-color: #4F84FF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   `;
 
 const HifiveContainer = styled.div`
@@ -15,20 +18,6 @@ const HifiveContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
   column-gap: 2rem;
-  padding-top: 2rem;
-`;
-
-const HifiveTitle = styled.h1`
-  margin: 0;
-  text-align: center;
-  padding-top: 1rem;
-  font-family: 'IBM Plex Sans';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 3rem;
-
-  color: white;
-  text-shadow: -1.5px 0 #0B2D7B, 0 1.5px #0B2D7B, 1.5px 0 #0B2D7B, 0 -1.5px #0B2D7B;
 `;
 
 const ProblemtoalContainer = styled.div`
@@ -78,15 +67,52 @@ const ProblemContainer = styled.div`
 
 const InputContainer = styled.form`
   grid-column: 1/10;
-  grid-row: 12;
+  grid-row: 11;
   display: flex;
   gap: 0.5rem;
+  padding-top: 2rem;
+`;
+
+export const ModalContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .ModalContent {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 61%;
+    padding: 0px 6rem 0px 6rem;
+    box-sizing: content-box;
+  }
+`;
+
+export const TemporaryRanking = styled.div`
+  width: 27.5%;
+  height: 100%;
+  border-radius: 2rem;
+  border-style: solid;
+  border-width: 2px;
+  border-color: ${(props) => props.color};
+`;
+
+export const HifiveStatistics = styled.div`
+  width: 48.5%;
+  height: 100%;
+  border-radius: 2rem;
+  border-style: solid;
+  border-width: 2px;
+  border-color: ${(props) => props.color};
+  display: flex;
+  flex-direction: column;
 `;
 
 
 export { HifiveWrapper,
   HifiveContainer,
-  HifiveTitle,
   AnswerContainer,
   ProblemContainer,
   GameinfoContainer,

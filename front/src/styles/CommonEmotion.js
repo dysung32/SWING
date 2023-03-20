@@ -140,6 +140,7 @@ export const PlayerProfile = styled.img`
   height: ${(props) => props.height}rem;
   border-radius: 50%;
   margin: ${(props) => props.margin}rem;
+  object-fit: cover;
 `;
 
 export const PlayerMedal = styled.img`

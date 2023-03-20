@@ -1,4 +1,6 @@
 import React from 'react';
+import styled from '@emotion/styled';
+
 import {
   MyPageWrapper,
   MyPageContentContainer,
@@ -8,14 +10,18 @@ import {
   MyPageHistoryConatiner,
   MyPageHistoryHeader,
   MyPageHistoryList,
+  FileInput,
+  MyPageProfileImg,
+  MyPageProfileNickname,
 } from '../styles/MyPageEmotion';
-import { GameTitle, CommonBtn } from '../styles/CommonEmotion';
-import { H1, H3, H5, P1 } from '../styles/Fonts';
+import { GameTitle, CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
+import { H1, H3, H5, H6, P1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
+import { Image, PencilSquare } from 'react-bootstrap-icons';
 
 function MyPage() {
   const nickName = 'Sanghwa';
-
+  const coupon = 3;
   const historyList = [
     {
       date: '2023.03.01',
@@ -54,15 +60,16 @@ function MyPage() {
     },
   ];
 
-  const renderList = historyList.map((history) => {
+  const renderList = historyList.map((history, idx) => {
     return (
-      <MyPageHistoryList>
+      <MyPageHistoryList key={idx}>
         <P1 color={colors.gameBlue500}>{history.date}</P1>
         <P1 color={colors.gameBlue500}>{history.title}</P1>
         <P1 color={colors.gameBlue500}>{history.rank}등</P1>
       </MyPageHistoryList>
     );
   });
+
   return (
     <>
       <MyPageWrapper>
@@ -95,7 +102,48 @@ function MyPage() {
               {renderList}
             </MyPageHistoryConatiner>
           </MyPageMainConatiner>
-          <MyPageProfileConatiner></MyPageProfileConatiner>
+          <MyPageProfileConatiner>
+            <MyPageProfileImg>
+              <PlayerProfile
+                src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
+                width='13'
+                height='13'
+              />
+              <label htmlFor='file'>
+                <FileInput>
+                  <Image />
+                </FileInput>
+              </label>
+              <input
+                type='file'
+                name='file'
+                id='file'
+                style={{ display: 'none' }}
+              />
+            </MyPageProfileImg>
+            <MyPageProfileNickname>
+              <P1>{nickName}</P1>
+              <label htmlFor='nickname'>
+                <PencilSquare />
+              </label>
+              <input
+                type='text'
+                name='nickname'
+                id='nickname'
+                style={{ display: 'none' }}
+              />
+            </MyPageProfileNickname>
+            <H6>보유 재도전 쿠폰: {coupon}장</H6>
+            <CommonBtn
+              height={42}
+              fontColor={colors.white}
+              color={colors.gray400}
+              border='none'
+              hoverColor={colors.gray500}
+            >
+              회원탈퇴
+            </CommonBtn>
+          </MyPageProfileConatiner>
         </MyPageContentContainer>
       </MyPageWrapper>
     </>

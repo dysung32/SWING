@@ -35,13 +35,41 @@ export const MyPageMainConatiner = styled.div`
 export const MyPageProfileConatiner = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
   grid-row-start: 1;
   grid-row-end: 1;
   grid-column-start: 10;
   grid-column-end: 13;
-  background-color: blue;
+  background-color: ${colors.white};
   border-radius: 1rem;
   box-sizing: border-box;
+`;
+export const MyPageProfileImg = styled.div`
+  position: relative;
+`;
+
+export const FileInput = styled.div`
+  position: absolute;
+  bottom: 1rem;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.5rem;
+  background-color: ${colors.gray300};
+  color: ${colors.black};
+  font-size: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-sizing: border-box;
+`;
+
+export const MyPageProfileNickname = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const MyPageIntroConatiner = styled.div`
@@ -79,5 +107,6 @@ export const MyPageHistoryList = styled.div`
   justify-content: space-between;
   padding-top: 0.5rem;
   border-bottom: 2px solid ${colors.gameBlue500};
+  cursor: pointer;
   box-sizing: border-box;
 `;

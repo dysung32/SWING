@@ -41,4 +41,31 @@ export const GameTitle = styled.div`
   padding-bottom: 3rem;
 `;
 
-export { RoundLogo, CommonInput, CommonBtn };
+export const CommonModalBackdrop = styled.div`
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100vw;
+  height: 100vh;
+  top: 0%;
+  position: absolute;
+`;
+
+export const CommonModalView = styled.div`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  z-index: 1000;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+  border-radius: ${(props) => (props.font ? props.font /2 : 0.5)}rem;
+  box-sizing: border-box;
+`;
+
+
+export { RoundLogo, 
+  CommonInput,
+  CommonBtn,
+};

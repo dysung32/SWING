@@ -9,5 +9,5 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class FiveDto {
+public class FiveSaveDto {
 }

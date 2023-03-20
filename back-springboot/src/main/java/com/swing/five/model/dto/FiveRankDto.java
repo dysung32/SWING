@@ -9,5 +9,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class FiveDto {
+public class FiveRankDto {
+	private Integer hifiveRankId;
+	private String userId;
+	private Integer score;
 }

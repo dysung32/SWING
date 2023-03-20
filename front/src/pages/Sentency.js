@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createRef, useRef, useState } from 'react';
 import axios from 'axios';
 import {
   SentencyGameNav,
@@ -16,6 +16,7 @@ import Bike from '../assets/bike.jpg';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import ModalClosable from '../components/ModalClosable';
+import LeaderBoard from '../components/LeaderBoard';
 
 function Sentency() {
   const [modalShow, setModalShow] = useState(false);
@@ -54,7 +55,7 @@ function Sentency() {
   return (
     <>
       <ModalClosable modalShow={modalShow} setModalShow={setModalShow}>
-        <div>HI MY NAME IS DAYEON</div>
+        <LeaderBoard />
       </ModalClosable>
       <SentencyWrapper>
         <GameTitle>

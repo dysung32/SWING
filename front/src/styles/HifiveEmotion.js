@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 const HifiveWrapper = styled.div`
   padding-top: 9rem;
@@ -29,24 +30,22 @@ const GameinfoContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-`;
 
-const ScorePoint = styled.span`
-  font-size: 2rem;
-  color: white;
-`;
+  .heart-container {
+    display: flex;
+    align-items: center;
+  }
 
-const LifePoint = styled.span`
+  .heart {
+    color: ${colors.gamePink500};
+    font-size: 2.1rem;
+    margin-right: 1rem;
+  }
 `;
 
 const AnswertotalContainer = styled.div`
   grid-column: 10/13;
   grid-row: 1/10;
-`;
-
-const AnswerText = styled.span`
-  font-size: 2rem;
-  color: white;
 `;
 
 const AnswerContainer = styled.div`
@@ -74,8 +73,6 @@ const InputContainer = styled.form`
 `;
 
 export const ModalContainer = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,16 +80,12 @@ export const ModalContainer = styled.div`
   .ModalContent {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 61%;
-    padding: 0px 6rem 0px 6rem;
-    box-sizing: content-box;
+    justify-content: center;
+    gap: 2.5rem;
   }
 `;
 
 export const TemporaryRanking = styled.div`
-  width: 27.5%;
-  height: 100%;
   border-radius: 2rem;
   border-style: solid;
   border-width: 2px;
@@ -100,15 +93,26 @@ export const TemporaryRanking = styled.div`
 `;
 
 export const HifiveStatistics = styled.div`
-  width: 48.5%;
-  height: 100%;
   border-radius: 2rem;
   border-style: solid;
   border-width: 2px;
   border-color: ${(props) => props.color};
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  padding: 1rem;
+
+  .resultBox {
+    display: flex;
+    gap: 4rem;
+    padding-top: 2rem;
+  }
 `;
+
+
 
 
 export { HifiveWrapper,
@@ -117,9 +121,6 @@ export { HifiveWrapper,
   ProblemContainer,
   GameinfoContainer,
   ProblemtoalContainer,
-  ScorePoint,
-  LifePoint,
   AnswertotalContainer,
-  AnswerText,
   InputContainer,
 };

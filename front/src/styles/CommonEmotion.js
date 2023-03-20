@@ -81,6 +81,10 @@ export const ModalBackground = styled.div`
 `;
 
 export const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   padding: 3rem 5rem;
   text-align: center;

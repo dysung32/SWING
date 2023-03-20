@@ -87,3 +87,89 @@ export const ModalBody = styled.div`
   background-color: ${colors.white};
   border-radius: 1rem;
 `;
+
+export const LeaderBoardWrapper = styled.div`
+  width: 16.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #abb5db;
+  border-radius: 1rem;
+
+  .leaderboardTitle {
+    font-family: 'B612', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: ${colors.white};
+  }
+`;
+
+export const RankerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  padding: 1rem 0 0.5rem 0;
+  background-color: ${colors.studyBlue300};
+
+  .rankersList {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+  }
+`;
+
+export const SingleRankerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const RankListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+`;
+
+export const MyRankContainer = styled.div`
+  border-radius: 1rem;
+  padding: 0.5rem;
+  background-color: ${colors.studyBlue300};
+`;
+
+export const PlayerProfile = styled.img`
+  width: ${(props) => props.width}rem;
+  height: ${(props) => props.height}rem;
+  border-radius: 50%;
+  margin: ${(props) => props.margin}rem;
+`;
+
+export const PlayerName = styled.div`
+  font-size: ${(props) => props.font};
+  font-weight: ${(props) => props.fontWeight};
+  color: ${(props) => props.fontColor};)}
+`;
+
+export const PlayerScore = styled.div`
+  font-size: ${(props) => props.font};
+  font-weight: 700;
+  color: ${colors.gameYellow300};
+`;
+
+export const SinglePlayerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  background-color: #ebeef4;
+  border-radius: 10px;
+  padding: 0 1rem;
+  margin: ${(props) => props.margin};
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export const PlayerInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;

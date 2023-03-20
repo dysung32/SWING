@@ -1,5 +1,6 @@
 package com.swing.note.controller;
 
+import com.swing.note.model.service.NoteService;
 import com.swing.user.model.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,21 +17,11 @@ import java.util.Map;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/note")
 @Api(tags = {"회원 관리 API"})
 public class NoteController {
 	
 	@Autowired
-	private UserService userService;
-	
-	@ApiOperation(value = "Swagger Test", notes = "뭐요!", response = Map.class)
-	@GetMapping("")
-	public ResponseEntity<?> test() {
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		resultMap.put("message", userService.test());
-		
-		return new ResponseEntity<>(resultMap, status);
-	}
+	private NoteService noteService;
 	
 }

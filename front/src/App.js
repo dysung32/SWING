@@ -13,6 +13,8 @@ import History from './pages/History';
 
 import NavLayout from './components/NavLayout';
 import LoginLayout from './components/LoginLayout';
+import WordTest from './pages/WordTest';
+import SentenceTest from './pages/SentenceTest';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path='/speedoodle' element={<Speedoodle />} />
           <Route path='/review-note' element={<ReviewNote />} />
           <Route path='/history/:no' element={<History />} />
+          <Route path='/test-word' element={<WordTest />} />
+          <Route path='/test-sentence' element={<SentenceTest />} />
         </Route>
         <Route element={<LoginLayout />}>
           <Route path='/login' element={<LogIn />} />

@@ -13,6 +13,7 @@ export const RoundLogo = styled.div`
 export const CommonInput = styled.input`
   width: ${(props) => props.width};
   max-width: ${(props) => props.maxWidth};
+  min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
   border: ${(props) => props.border};
@@ -25,6 +26,7 @@ export const CommonInput = styled.input`
 
 export const CommonBtn = styled.button`
   width: ${(props) => props.width};
+  min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
   border: ${(props) => props.border};
@@ -37,7 +39,7 @@ export const CommonBtn = styled.button`
   }
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
-  box-shadow: ${(props) => (props.shadow ? props.shadow : "nonne")};
+  box-shadow: ${(props) => (props.shadow ? props.shadow : 'nonne')};
   box-sizing: border-box;
 `;
 

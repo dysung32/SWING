@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-<<<<<<< Updated upstream
 import { MyPageWrapper, MyPageContentContainer } from '../styles/MyPageEmotion';
 import {
   GameTitle,
@@ -30,9 +29,3 @@ function History() {
 }
 
 export default History;
-=======
-
-function History() {
-  return <> </>;
-}
->>>>>>> Stashed changes

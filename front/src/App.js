@@ -9,6 +9,7 @@ import Sentency from './pages/Sentency';
 import Hifive from './pages/Hifive';
 import Speedoodle from './pages/Speedoodle';
 import ReviewNote from './pages/ReviewNote';
+import History from './pages/History';
 
 import NavLayout from './components/NavLayout';
 import LoginLayout from './components/LoginLayout';
@@ -24,6 +25,7 @@ function App() {
           <Route path='/hi-five' element={<Hifive />} />
           <Route path='/speedoodle' element={<Speedoodle />} />
           <Route path='/review-note' element={<ReviewNote />} />
+          <Route path='/history/:no' element={<History />} />
         </Route>
         <Route element={<LoginLayout />}>
           <Route path='/login' element={<LogIn />} />

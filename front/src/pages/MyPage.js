@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -77,13 +76,9 @@ function MyPage() {
 
   useEffect(() => setNickname(nickName), []);
 
-  const onClickHistory = (idx) => {
-    navigate(`/history/${idx}`);
-  };
-
   const renderList = historyList.map((history, idx) => {
     return (
-      <MyPageHistoryList key={idx} onClick={onClickHistory}>
+      <MyPageHistoryList key={idx} onClick={() => navigate(`/history/${idx}`)}>
         <P1 color={colors.gameBlue500}>{history.date}</P1>
         <P1 color={colors.gameBlue500}>{history.title}</P1>
         <P1 color={colors.gameBlue500}>{history.rank}등</P1>

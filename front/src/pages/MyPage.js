@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 
 import {
   MyPageWrapper,
   MyPageContentContainer,
   MyPageMainConatiner,
+  MyPageSideConatiner,
   MyPageProfileConatiner,
   MyPageIntroConatiner,
   MyPageHistoryConatiner,
@@ -13,13 +15,26 @@ import {
   FileInput,
   MyPageProfileImg,
   MyPageProfileNickname,
+  MyPageProfileCoupon,
+  CouponImg,
 } from '../styles/MyPageEmotion';
-import { GameTitle, CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
-import { H1, H3, H5, H6, P1 } from '../styles/Fonts';
+import Coupon from '../assets/coupon.png';
+import {
+  GameTitle,
+  CommonInput,
+  CommonBtn,
+  PlayerProfile,
+} from '../styles/CommonEmotion';
+import { H1, H3, H5, H6, P1, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { Image, PencilSquare } from 'react-bootstrap-icons';
 
 function MyPage() {
+  const navigate = useNavigate();
+  const [nickname, setNickname] = useState('');
+  const [displayNickname, setDisplayNickname] = useState(true);
+  const [tempNickname, setTempNickname] = useState('');
+  const [alertNickname, setAlertNickname] = useState(false);
   const nickName = 'Sanghwa';
   const coupon = 3;
   const historyList = [
@@ -60,9 +75,15 @@ function MyPage() {
     },
   ];
 
+  useEffect(() => setNickname(nickName), []);
+
+  const onClickHistory = (idx) => {
+    navigate(`/history/${idx}`);
+  };
+
   const renderList = historyList.map((history, idx) => {
     return (
-      <MyPageHistoryList key={idx}>
+      <MyPageHistoryList key={idx} onClick={onClickHistory}>
         <P1 color={colors.gameBlue500}>{history.date}</P1>
         <P1 color={colors.gameBlue500}>{history.title}</P1>
         <P1 color={colors.gameBlue500}>{history.rank}등</P1>
@@ -70,6 +91,36 @@ function MyPage() {
     );
   });
 
+  const toggleNickname = () => {
+    if (alertNickname) return;
+    setDisplayNickname((prev) => !prev);
+    saveNickname();
+  };
+
+  const changeNickname = (e) => {
+    console.log(e.target.value);
+    const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+    if (regExp.test(e.target.value)) {
+      setAlertNickname(true);
+    } else {
+      setAlertNickname(false);
+      setTempNickname(e.target.value);
+    }
+  };
+
+  const saveNickname = () => {
+    setAlertNickname(false);
+    if (tempNickname !== '') {
+      setNickname(tempNickname);
+    }
+  };
+
+  const handleOnKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      toggleNickname();
+      saveNickname();
+    }
+  };
   return (
     <>
       <MyPageWrapper>
@@ -86,7 +137,7 @@ function MyPage() {
         <MyPageContentContainer>
           <MyPageMainConatiner>
             <MyPageIntroConatiner>
-              <H3>Hi, {nickName}!</H3>
+              <H3>Hi, {nickname}!</H3>
               <P1>
                 SWING을 즐기고 계신가요? <br /> 마이페이지에서는 예전
                 SpeeDoodle의 기록을 보기 위한 <br /> 히스토리와 회원님의 정보를
@@ -102,48 +153,96 @@ function MyPage() {
               {renderList}
             </MyPageHistoryConatiner>
           </MyPageMainConatiner>
-          <MyPageProfileConatiner>
-            <MyPageProfileImg>
-              <PlayerProfile
-                src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
-                width='13'
-                height='13'
-              />
-              <label htmlFor='file'>
-                <FileInput>
-                  <Image />
-                </FileInput>
-              </label>
-              <input
-                type='file'
-                name='file'
-                id='file'
-                style={{ display: 'none' }}
-              />
-            </MyPageProfileImg>
-            <MyPageProfileNickname>
-              <P1>{nickName}</P1>
-              <label htmlFor='nickname'>
-                <PencilSquare />
-              </label>
-              <input
-                type='text'
-                name='nickname'
-                id='nickname'
-                style={{ display: 'none' }}
-              />
-            </MyPageProfileNickname>
-            <H6>보유 재도전 쿠폰: {coupon}장</H6>
+          <MyPageSideConatiner>
+            <MyPageProfileConatiner>
+              <MyPageProfileImg>
+                <PlayerProfile
+                  src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
+                  width='12'
+                  height='12'
+                />
+                <label htmlFor='file'>
+                  <FileInput>
+                    <Image />
+                  </FileInput>
+                </label>
+                <input
+                  type='file'
+                  name='file'
+                  id='file'
+                  style={{ display: 'none' }}
+                />
+              </MyPageProfileImg>
+              <MyPageProfileNickname>
+                {displayNickname ? (
+                  <>
+                    <P1 margin=' 0.35rem 0'>{nickname}</P1>
+                    <PencilSquare
+                      style={{
+                        cursor: 'pointer',
+                        fontSize: '1.5rem',
+                        margin: '0.55rem 0',
+                      }}
+                      onClick={toggleNickname}
+                    />
+                  </>
+                ) : (
+                  <div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <CommonInput
+                        width='70%'
+                        font='1'
+                        type='text'
+                        name='nickname'
+                        id='nickname'
+                        onChange={changeNickname}
+                        onKeyDown={handleOnKeyDown}
+                      />
+                      <CommonBtn
+                        height='42'
+                        border='none'
+                        color={colors.studyBlue400}
+                        font='1'
+                        fontColor={colors.white}
+                        hoverColor={colors.studyBlue500}
+                        padding='0 1rem '
+                        onClick={toggleNickname}
+                      >
+                        확인
+                      </CommonBtn>
+                    </div>
+                    {alertNickname ? (
+                      <SmText margin='0.5rem 0' color='red'>
+                        특수문자는 제외해주세요
+                      </SmText>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                )}
+              </MyPageProfileNickname>
+            </MyPageProfileConatiner>
+            <MyPageProfileCoupon>
+              <CouponImg src={Coupon} alt='coupon image' />
+              <H6>보유 재도전 쿠폰: {coupon}장</H6>
+            </MyPageProfileCoupon>
             <CommonBtn
-              height={42}
-              fontColor={colors.white}
-              color={colors.gray400}
+              height='42'
               border='none'
+              color={colors.gray400}
+              font='1.25'
+              fontColor={colors.white}
               hoverColor={colors.gray500}
+              padding='0.5rem 1.5rem '
             >
               회원탈퇴
             </CommonBtn>
-          </MyPageProfileConatiner>
+          </MyPageSideConatiner>
         </MyPageContentContainer>
       </MyPageWrapper>
     </>

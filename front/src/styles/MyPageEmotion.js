@@ -32,10 +32,11 @@ export const MyPageMainConatiner = styled.div`
   box-sizing: border-box;
 `;
 
-export const MyPageProfileConatiner = styled.div`
+export const MyPageSideConatiner = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 1.5rem;
   grid-row-start: 1;
   grid-row-end: 1;
@@ -43,6 +44,14 @@ export const MyPageProfileConatiner = styled.div`
   grid-column-end: 13;
   background-color: ${colors.white};
   border-radius: 1rem;
+  box-sizing: border-box;
+`;
+
+export const MyPageProfileConatiner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 50%;
   box-sizing: border-box;
 `;
 export const MyPageProfileImg = styled.div`
@@ -70,6 +79,18 @@ export const FileInput = styled.div`
 export const MyPageProfileNickname = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
+`;
+
+export const MyPageProfileCoupon = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const CouponImg = styled.img`
+  width: 50%;
+  object-fit: contain;
 `;
 
 export const MyPageIntroConatiner = styled.div`

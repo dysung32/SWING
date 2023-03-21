@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { colors } from '../styles/ColorPalette';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { H2 } from '../styles/Fonts';
-import { SingleWordTestContainer, TestContentContainer, TestWrapper, WordMeaning } from '../styles/TestEmotion';
+import { SingleWordTestContainer, TestWrapper, WordMeaning, WordTestContentContainer } from '../styles/TestEmotion';
 
 function WordTest() {
   const [wordList, setWordList] = useState([
@@ -21,7 +21,7 @@ function WordTest() {
     <>
       <TestWrapper>
         <H2>단어 복습 테스트</H2>
-        <TestContentContainer>
+        <WordTestContentContainer>
           {wordList.map((word, index) => {
             return (
               <SingleWordTestContainer>
@@ -48,7 +48,7 @@ function WordTest() {
               </SingleWordTestContainer>
             );
           })}
-        </TestContentContainer>
+        </WordTestContentContainer>
         <CommonBtn
           height={55}
           font={1.5}

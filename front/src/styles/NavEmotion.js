@@ -8,7 +8,7 @@ export const Nav = styled.nav`
   width: 100%;
   box-sizing: border-box;
   padding: 1rem 10%;
-  position: sticky;
+  position: fixed;
   top: 0;
 `;
 

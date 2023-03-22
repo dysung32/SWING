@@ -112,8 +112,10 @@ function MyPage() {
 
   const handleOnKeyDown = (e) => {
     if (e.key === 'Enter') {
-      toggleNickname();
-      saveNickname();
+      if (!alertNickname) {
+        toggleNickname();
+        saveNickname();
+      }
     }
   };
   return (

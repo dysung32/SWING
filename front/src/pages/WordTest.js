@@ -100,7 +100,7 @@ function WordTest() {
 
   const handleExit = () => {
     setResultModalShow(false);
-    navigate('/review-note'); // 종료 누르면 오답노트로 navigate
+    navigate('/review-note', { state: true }); // 종료 누르면 오답노트로 navigate
   };
 
   return (

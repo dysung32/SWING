@@ -121,6 +121,9 @@ export const MyPageHistoryConatiner = styled.div`
 export const MyPageHistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: ${(props) =>
+    props.border ? `2px solid ${colors.gameBlue500}` : ''};
   box-sizing: border-box;
 `;
 export const MyPageHistoryList = styled.div`

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import GoogleLogin from '../auth/GoogleLogin';
+import { HomeWrapper } from '../styles/HomeEmotion';
 
 function Home() {
   // useEffect(() => {
@@ -10,7 +11,7 @@ function Home() {
   // });
   return (
     <>
-      <div>Home</div>
+      <HomeWrapper></HomeWrapper>
     </>
   );
 }

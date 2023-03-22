@@ -94,6 +94,7 @@ function WordTest() {
       el.value = '';
     }
     // setWordList 새로 해주기
+    setCorrectList([false, false, false, false, false]);
     navigate('/test-word');
   };
 
@@ -148,8 +149,9 @@ function WordTest() {
               <H3>{score} / 5</H3>
               <div className='flex resultItemBox'>
                 {correctList.map((item, index) => {
+                  console.log(item);
                   return (
-                    <div className='flex'>
+                    <div className='flex' key={index}>
                       <H4>문제 {index + 1}</H4>
                       {item ? (
                         <div className='resultIcon correct'>

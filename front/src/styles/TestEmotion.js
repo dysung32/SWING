@@ -69,11 +69,30 @@ export const TestContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5rem 0;
-  width: 30vw;
+  width: 35vw;
 
   .coupon {
     width: 10rem;
     padding-bottom: 1rem;
+  }
+
+  .resultItemBox {
+    flex-wrap: wrap;
+    padding-top: 4rem;
+    justify-content: space-between;
+  }
+
+  .resultIcon {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+
+  .correct {
+    color: #06c258;
+  }
+
+  .wrong {
+    color: #ff0000;
   }
 `;
 

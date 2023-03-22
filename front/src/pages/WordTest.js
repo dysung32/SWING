@@ -13,6 +13,7 @@ import {
 } from '../styles/TestEmotion';
 import Coupon from '../assets/coupon.png';
 import { useNavigate } from 'react-router-dom';
+import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 
 function WordTest() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ function WordTest() {
   ]);
 
   const [inputList, setInputList] = useState(['', '', '', '', '']);
+  const [correctList, setCorrectList] = useState([false, false, false, false, false]);
   const [score, setScore] = useState(0);
   const [resultModalShow, setResultModalShow] = useState(false);
 
@@ -75,6 +77,8 @@ function WordTest() {
     let score = 0;
     for (let i = 0; i < inputList.length; i++) {
       if (inputList[i] === wordList[i].word) {
+        correctList[i] = true;
+        setCorrectList([...correctList]);
         score += 1;
       }
     }
@@ -142,6 +146,24 @@ function WordTest() {
             <>
               <H3>정답 갯수</H3>
               <H3>{score} / 5</H3>
+              <div className='flex resultItemBox'>
+                {correctList.map((item, index) => {
+                  return (
+                    <div className='flex'>
+                      <H4>문제 {index + 1}</H4>
+                      {item ? (
+                        <div className='resultIcon correct'>
+                          <CheckCircleFill />
+                        </div>
+                      ) : (
+                        <div className='resultIcon wrong'>
+                          <XCircleFill />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </>
           )}
         </TestContainer>
@@ -184,6 +206,7 @@ function WordTest() {
                   fontColor={colors.white}
                   border={'none'}
                   shadow={'4px 4px 4px rgba(0, 0, 0, 0.25)'}
+                  tabIndex={-1}
                 >
                   문제 {index + 1}
                 </CommonBtn>

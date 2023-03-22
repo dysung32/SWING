@@ -1,43 +1,86 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReviewNoteWrapperColor, 
   ReviewNoteWrapper, 
   ReviewBtnContainer,
-  WrongWordBox,
-  WordBox, } from '../styles/ReviewNoteEmotion';
-import { GameTitle, CommonBtn } from '../styles/CommonEmotion';
-import { H1,H2,H3 } from '../styles/Fonts';
+  WrongThingBox,
+  WrongBox,
+  ThingMean,
+ } from '../styles/ReviewNoteEmotion';
+import { CommonBtn } from '../styles/CommonEmotion';
+import { H2,H3 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { CheckCircle, CheckCircleFill } from 'react-bootstrap-icons';
+import Pagination from '../components/PaginatorBar';
 
 function ReviewNote() {
-  const lifeArray = [];
-  let nowWPage = 1;
-  let nowSPage = 1;
-  let maxWPage = 1;
-  let maxSPage = 1;
+  const navigate = useNavigate();
 
   const wordArray = [["apple","사과","a round fruit with red, yellow, or green skin and firm white flesh"], 
   ["dentist","치과 의사","a person whose job is to care for people's teeth"], 
-  ["swing","(전후좌우로) 흔들리다[흔들다]","to move backward and forward or from side to side while hanging from something"]];
+  ["swing","(전후좌우로) 흔들리다[흔들다]","to move backward and forward or from side to side while hanging from something"],
+  ["this", "이것","thing sdfajksdkfjadjhkga"],
+  ["is", "이것","thing sdfajksdkfjadjhkga"],
+  ["a", "이것","thing sdfajksdkfjadjhkga"],];
 
-  const [wordChecked, setWordChecked] = useState([false]*3);
+  const sentenceArray = [["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
+  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
+  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
+  ["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
+  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
+  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
+  ["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
+  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
+  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
+];
 
-  const renderWordList = (wordArray) => {
-    const nowList = [];
-    for(let i=(nowWPage-1)*3;i<maxWPage*3;i++) {
-      nowList.push(wordArray[i]);
+  const [posts, setPosts] = useState(wordArray);
+  const [limit, setLimit] = useState(3);
+  const [page, setPage] = useState(1);
+  const [Ppage, setPpage] = useState(1);
+  const [offset, setOffset] = useState(0);
+  const [wordReview, setwordReview] = useState(true);
+  const [wordChecked, setWordChecked] = useState(Array(wordArray.length).fill(false));
+
+  useEffect(() => {
+    const newOffset = ((page - 1) + 5*(Ppage - 1)) * limit;
+    setOffset(newOffset);
+  }, [page, Ppage]);
+
+  const ToggleVersion = () => {
+    if(wordReview){
+      setLimit(4);
+      setPosts(sentenceArray);
+      setwordReview(false);
+      setPage(1);
+      setPpage(1);
+      setOffset(0);
     }
-    return nowList;
+    else{
+      setLimit(3);
+      setPosts(wordArray);
+      setwordReview(true);
+      setPage(1);
+      setPpage(1);
+      setOffset(0);
+    }
   }
 
-  const toggleCheck = (idx) => {
-    if(wordChecked[idx]) {
-      wordChecked[idx] = false;
-      setWordChecked(wordChecked);
-    } else {
-      wordChecked[idx] = true;
-      setWordChecked(wordChecked);
+  const startTest = () => {
+    if(wordReview){
+      navigate('/test-word');
     }
+    else{
+      navigate('/test-sentence');
+    }
+  };
+
+  // 단어 셀프체크 부분 토글 함수
+  const ToggleCheck = (idx) => {
+    let copy = [...wordChecked];
+    copy[idx] = !copy[idx];
+    setWordChecked(copy);
+    console.log(wordChecked); 
   }
 
   return (
@@ -50,23 +93,28 @@ function ReviewNote() {
           <ReviewBtnContainer>
             <div className='selectButton'>
               <CommonBtn color={colors.white} 
+              onClick = {ToggleVersion}
               font={1.5}
               width= "7.5rem"
               height= {55}
               border= {"2px solid" + colors.studyBlue300}
               fontColor = {colors.studyBlue300}
               shadow = {"0px 4px 4px rgba(0, 0, 0, 0.25)"}
+              disabled={wordReview===true? "page" : null}
               >단어</CommonBtn>
               <CommonBtn color={colors.white} 
+              onClick = {ToggleVersion}
               font={1.5}
               width= "7.5rem"
               height= {55}
               border= {"2px solid" + colors.studyBlue300}
               fontColor = {colors.studyBlue300}
               shadow = {"0px 4px 4px rgba(0, 0, 0, 0.25)"}
+              disabled={wordReview===false? "page" : null}
               >문장</CommonBtn>
             </div>
             <CommonBtn color={colors.studyYellow400} 
+            onClick = {startTest}
             width= "14.8rem"
             font={1.5}
             height= {55}
@@ -74,27 +122,35 @@ function ReviewNote() {
             shadow = {"0px 4px 4px rgba(0, 0, 0, 0.25)"}
             >복습 테스트 시작</CommonBtn>
           </ReviewBtnContainer>
-          <WordBox>
-            {renderWordList(wordArray).map((item,idx) => (
-              <WrongWordBox key={idx}>
-                <H3>{item[0]}</H3>
-                <div className='wordMean'>
+          <WrongBox>
+            {posts.slice(offset, offset + limit).map((item, idx) => (
+              <WrongThingBox key={idx}>
+                <H3 margin="0rem 0rem 1rem 0rem">{item[0]}</H3>
+                <ThingMean margin={wordReview===true ? 1 : 0}>
                   {item[1]}
-                </div>
-                <div className='wordMean'>
+                </ThingMean>
+                <div className='thingMean'
+                display={ wordReview===true ? "block" : "none" }>
                   {item[2]}
                 </div>
                 <div className='checkBtn'>
                   {
-                    wordChecked[idx] === true?
-                    <CheckCircleFill color={colors.studyBlue300} />
-                    :<CheckCircle />
+                    wordChecked[idx+(page-1)*limit] === true?
+                    <CheckCircleFill onClick={() => ToggleCheck(idx)} color={colors.studyBlue300} />
+                    :<CheckCircle onClick={() => ToggleCheck(idx)}/>
                   }
                 </div>
-              </WrongWordBox>
+              </WrongThingBox>
             ))}
-          </WordBox>
-          
+          </WrongBox>
+
+          <Pagination
+          total = {posts.length}
+          limit = {limit}
+          page = {page}
+          Ppage = {Ppage}
+          setPage = {setPage}
+          setPpage = {setPpage}/>
         </ReviewNoteWrapperColor>
       </ReviewNoteWrapper>
     </>

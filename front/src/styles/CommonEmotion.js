@@ -41,6 +41,13 @@ export const CommonBtn = styled.button`
   margin: ${(props) => props.margin};
   box-shadow: ${(props) => (props.shadow ? props.shadow : 'nonne')};
   box-sizing: border-box;
+  tabindex: ${(props) => props.tabIndex};
+
+  &[disabled] {
+    background-color: ${colors.studyBlue300};
+    border: none;
+    color: ${colors.white};
+  }
 `;
 
 export const GameTitle = styled.div`

@@ -1,4 +1,5 @@
-import styled from '@emotion/styled/macro';
+// import styled from '@emotion/styled/macro';
+import styled, { keyframes } from 'styled-components';
 import { colors } from '../styles/ColorPalette';
 
 export const HomeWrapper = styled.div`
@@ -9,10 +10,7 @@ export const HomeWrapper = styled.div`
   height: 400vh;
   background-color: ${colors.white};
   box-sizing: border-box;
-  scoll: hidden;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  overflow-y: auto;
 `;
 
 export const HomeHeroContainer = styled.div`
@@ -62,5 +60,28 @@ export const HomeSpeedoodleContainer = styled.div`
 export const Divider = styled.div`
   width: 100%;
   height: 5px;
-  background-color: gray;
+  background-color: ${colors.gray400};
+`;
+
+export const HeroScrollMsg = styled.div`
+  margin: 80vh auto 0;
+`;
+
+export const HeroScrollIconContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  box-sizing: border-box;
+`;
+export const upDown = keyframes`
+0% {
+  margin-top: 0rem;
+100% {
+  margin-top: 1rem;
+}`;
+
+export const HeroScrollIconAni = styled.div`
+  margin-top: 1rem;
+  animation: ${upDown} 0.5s linear infinite alternate;
 `;

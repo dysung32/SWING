@@ -1,27 +1,23 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const SentencyWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
+  // height: 100vh;
   padding: 0 10%;
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
 `;
 
 export const SentencyImgContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 2rem;
 
   .sentencyImg {
     height: 20rem;
@@ -47,7 +43,7 @@ export const SentencyGameNav = styled.div`
 export const WordListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
 
   .finishDot {
     color: ${colors.white};
@@ -65,8 +61,13 @@ export const WordBox = styled.span`
   margin-right: 1.5rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.spacing > 1 ? "0.5rem" : "initial")};
+  letter-spacing: ${(props) => (props.spacing > 1 ? '0.5rem' : 'initial')};
   text-align: center;
+`;
+
+export const SentencyTranslationContainer = styled.div`
+  display: flex;
+  padding: 2rem 0;
 `;
 
 export const SentencyInputContainer = styled.div`

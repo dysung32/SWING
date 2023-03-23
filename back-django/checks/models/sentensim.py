@@ -13,6 +13,17 @@ def sentence_similarity(s1, s2):
     cosine_scores = util.cos_sim(embeddings1, embeddings2)
     return round(cosine_scores[0][0].item(), 2)
 
+
+def word_similarity(answers, user_word):
+    similarities = {}
+    user_word_eb = model.encode(user_word, convert_to_tensor=True)
+    for answer in answers:
+        answer_eb = model.encode(answer, convert_to_tensor=True)
+        cosine_scores = util.cos_sim(user_word_eb, answer_eb)
+        similarities.update({answer: round(cosine_scores[0][0].item(), 2)})
+    
+    return similarities
+
 # test
 if __name__ == '__main__':
     s1 = 'I love you'

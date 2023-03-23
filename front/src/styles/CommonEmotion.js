@@ -104,7 +104,7 @@ export const ModalBody = styled.div`
 `;
 
 export const LeaderBoardWrapper = styled.div`
-  width: 16.5rem;
+  min-width: 16.5rem;
   display: flex;
   flex-direction: column;
   background-color: #abb5db;

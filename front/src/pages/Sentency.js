@@ -7,6 +7,7 @@ import {
   SentencyImgContainer,
   SentencyInputContainer,
   SentencyScoreContainer,
+  SentencyTranslationContainer,
   SentencyWrapper,
   WordBox,
   WordListContainer,
@@ -30,8 +31,12 @@ function Sentency() {
   const [retryModalShow, setRetryModalShow] = useState(false);
 
   const [life, setLife] = useState(5);
-  const [sentence, setSentence] = useState('A man is riding a bicycle.');
-  const [wordArray, setWordArray] = useState(sentence.slice(0, -1).split(' '));
+  const [score, setScore] = useState(0);
+  const [remains, setRemains] = useState(0);
+  const [imageURL, setImageURL] = useState('');
+  const [engSentence, setEngSentence] = useState('');
+  const [korSentence, setKorSentence] = useState('');
+  const [wordArray, setWordArray] = useState([]);
   const [inputArray, setInputArray] = useState(new Array(wordArray.length).fill(''));
   const [finalSentence, setFinalSentence] = useState('');
 
@@ -71,6 +76,7 @@ function Sentency() {
     setInputArray(new Array(wordArray.length).fill(''));
     // input창 초기화
     inputRef.current.value = '';
+    setRemains(remains + 1);
     setRetryModalShow(false);
     navigate('/sentency');
   };
@@ -88,16 +94,24 @@ function Sentency() {
     } else {
       let cnt = 0;
       for (let i = 0; i < tmpWordArray.length; i++) {
-        if (tmpWordArray[i] === wordArray[i]) {
+        if (tmpWordArray[i].toLowerCase() === wordArray[i].toLowerCase()) {
           cnt += 1;
-          inputArray[i] = tmpWordArray[i];
+          inputArray[i] = wordArray[i];
         } else {
           inputArray[i] = '';
         }
       }
+      console.log(cnt);
       setInputArray([...inputArray]);
       if (cnt === wordArray.length) {
         // 성공 모달 띄우고 다음 문제로 넘어가거나
+        console.log('성공!');
+        setScore(score + 1);
+        // 빈 칸에 채워진 단어 지우기
+        setInputArray(new Array(wordArray.length).fill(''));
+        // input창 초기화
+        inputRef.current.value = '';
+        setRemains(remains - 1);
         // 바로 다음 문제 넘어가기
         return;
       } else {
@@ -107,6 +121,56 @@ function Sentency() {
       }
     }
   };
+
+  useEffect(() => {
+    axios
+      .get('http://j8a405.p.ssafy.io:8080/api/sentency', {
+        // headers: {
+        //   'Access-Token': '',
+        // },
+      })
+      .then((res) => {
+        setImageURL(res.data.sentence.sentenceImageUrl);
+        console.log(res.data.sentence);
+        let engSentence = res.data.sentence.content;
+        if (engSentence.slice(-1) !== '.') {
+          engSentence += '.';
+        }
+        const korSentence = res.data.sentence.meaningKr;
+        if (engSentence.includes('In this picture,')) {
+          let filteredEngSentence = engSentence.substring(17);
+          engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
+          console.log(engSentence);
+        }
+        if (engSentence.includes('Image of')) {
+          let filteredEngSentence = engSentence.substring(9);
+          engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
+          console.log(engSentence);
+        }
+        setEngSentence(engSentence);
+        setKorSentence(korSentence);
+        setWordArray(engSentence.slice(0, -1).split(' '));
+      });
+  }, [remains]);
+
+  useEffect(() => {
+    axios
+      .get('http://j8a405.p.ssafy.io:8080/api/user/sentency/1', {
+        // headers: {
+        //   'Access-Token': '',
+        // },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setRemains(res.data.sentencyCnt);
+        console.log('sentency 남은 기회 ' + remains);
+        // 남은 기회가 없다면
+        if (remains === 0) {
+          // 재도전 쿠폰 사용할지에 대한 모달 띄워주기
+          setRetryModalShow(true);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     if (life === 0) {
@@ -128,7 +192,7 @@ function Sentency() {
             <br />
             재도전 쿠폰을 사용해 추가 도전하시겠습니까?
           </div>
-          <div className='retrySubInfo'>재도전 쿠폰은 복습 테스트를 통과하면 얻을 수 있습니다.</div>
+          <div className='retrySubInfo'>재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.</div>
           <img src={Coupon} className='coupon' alt='coupon' />
           <H4>보유 재도전 쿠폰: 3장</H4>
           <div className='flex retryBtns'>
@@ -163,7 +227,7 @@ function Sentency() {
           <LeaderBoard />
           <div className='flex-column sentencyResult'>
             <div className='sentencyScoreBox'>
-              <H4>점수: 5점</H4>
+              <H4>점수: {score}점</H4>
               <H4>오늘의 시도 횟수: 2회</H4>
               <H4>오늘의 최고 점수: 8점</H4>
             </div>
@@ -174,7 +238,7 @@ function Sentency() {
                 {finalSentence}
                 (X)
               </H4>
-              <H4 color={colors.gameBlue300}>{sentence} (O)</H4>
+              <H4 color={colors.gameBlue300}>{engSentence} (O)</H4>
             </div>
           </div>
         </SentencyScoreContainer>
@@ -210,15 +274,20 @@ function Sentency() {
         </GameTitle>
         <SentencyImgContainer>
           <SentencyGameNav>
-            <H4 color={colors.white}>SCORE: 0</H4>
+            <H4 color={colors.white}>SCORE: {score}</H4>
             <div className='heart-container'>{renderLife(life)}</div>
           </SentencyGameNav>
-          <img src={Bike} className='sentencyImg' alt='quizImg' />
+          <img src={imageURL} className='sentencyImg' alt='quizImg' />
         </SentencyImgContainer>
-        <WordListContainer>
-          {renderWordList()}
-          <span className='finishDot'>.</span>
-        </WordListContainer>
+        <SentencyTranslationContainer>
+          <H4 color={colors.white}>{korSentence}</H4>
+        </SentencyTranslationContainer>
+        <div className='wordListCenter'>
+          <WordListContainer>
+            {renderWordList()}
+            <span className='finishDot'>.</span>
+          </WordListContainer>
+        </div>
         <SentencyInputContainer>
           <CommonInput
             maxWidth={'720px'}

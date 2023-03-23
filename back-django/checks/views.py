@@ -1,7 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models.wordsim import word_similarity
-from .models.sentensim import sentence_similarity
+from .models.sentensim import sentence_similarity, word_similarity
 from .models.classification import get_class
 
 
@@ -36,10 +35,7 @@ def five(request):
 
     # 유사도 체크
     similarity = word_similarity(solutions, answer)
-    if similarity == 'KeyError':
-        message = 'fail'
-    else:
-        message = 'success'
+    message = 'success'
 
     context = {
         'similarity': similarity,

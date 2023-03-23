@@ -40,7 +40,10 @@ def get_class(image_path):
     image = Image.open(image_path)
     image = crop(image)
     image = image.resize((128, 128), Image.LANCZOS)
-    image_np = np.array(image)[:, :, 0]
+    try:
+        image_np = np.array(image)[:, :, 0]
+    except:
+        image_np = np.array(image)[:, :]
     image_np = 255 - image_np
     image_np = np.expand_dims(image_np, axis=-1)
 

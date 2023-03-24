@@ -16,12 +16,11 @@ import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
 import { H1, H2, H3, H4 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 
-import Bike from '../assets/bike.jpg';
 import Coupon from '../assets/coupon.png';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import LeaderBoard from '../components/LeaderBoard';
-import { API_URL } from './config';
+import { API_URL } from '../config';
 
 function Sentency() {
   const navigate = useNavigate();

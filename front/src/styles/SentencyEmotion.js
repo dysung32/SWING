@@ -12,6 +12,10 @@ export const SentencyWrapper = styled.div`
   padding-bottom: 2rem;
   box-sizing: border-box;
   background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+
+  .sentencyContentContainer {
+    width: 100%;
+  }
 `;
 
 export const SentencyContentContainer = styled.div`
@@ -21,7 +25,7 @@ export const SentencyContentContainer = styled.div`
   padding-bottom: 2rem;
 
   .sentencyImg {
-    width: fit-content;
+    width: 45%;
     max-height: 50vh;
     object-fit: contain;
   }

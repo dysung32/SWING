@@ -21,6 +21,7 @@ import Coupon from '../assets/coupon.png';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import LeaderBoard from '../components/LeaderBoard';
+import { API_URL } from './config';
 
 function Sentency() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ function Sentency() {
   const [life, setLife] = useState(5);
   const [score, setScore] = useState(0);
   const [remains, setRemains] = useState(0);
+  const [coupon, setCoupon] = useState(0);
   const [imageURL, setImageURL] = useState('');
   const [engSentence, setEngSentence] = useState('');
   const [korSentence, setKorSentence] = useState('');
@@ -103,10 +105,6 @@ function Sentency() {
         // 성공 모달 띄우고 다음 문제로 넘어가거나
         console.log('성공!');
         setScore(score + 1);
-        // 빈 칸에 채워진 단어 지우기
-        // setInputArray(new Array(wordArray.length).fill(''));
-        // // input창 초기화
-        // inputRef.current.value = '';
         // setRemains(remains - 1);
         // 바로 다음 문제 넘어가기
         return;
@@ -124,7 +122,7 @@ function Sentency() {
     // input창 초기화
     inputRef.current.value = '';
     axios
-      .get('http://j8a405.p.ssafy.io:8080/api/sentency', {
+      .get(`${API_URL}/sentency`, {
         // headers: {
         //   'Access-Token': '',
         // },
@@ -157,7 +155,7 @@ function Sentency() {
 
   useEffect(() => {
     axios
-      .get('http://j8a405.p.ssafy.io:8080/api/user/sentency/1', {
+      .get(`${API_URL}/user/sentency/black`, {
         // headers: {
         //   'Access-Token': '',
         // },
@@ -165,9 +163,10 @@ function Sentency() {
       .then((res) => {
         console.log(res.data);
         setRemains(res.data.sentencyCnt);
-        console.log('sentency 남은 기회 ' + remains);
+        setCoupon(res.data.coupon);
+        console.log('sentency 남은 기회 ' + res.data.sentencyCnt);
         // 남은 기회가 없다면
-        if (remains === 0) {
+        if (res.data.sentencyCnt === 0) {
           // 재도전 쿠폰 사용할지에 대한 모달 띄워주기
           setRetryModalShow(true);
         }
@@ -196,7 +195,7 @@ function Sentency() {
           </div>
           <div className='retrySubInfo'>재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.</div>
           <img src={Coupon} className='coupon' alt='coupon' />
-          <H4>보유 재도전 쿠폰: 3장</H4>
+          <H4>보유 재도전 쿠폰: {coupon}장</H4>
           <div className='flex retryBtns'>
             <CommonBtn
               padding={'1rem 3rem'}
@@ -274,13 +273,13 @@ function Sentency() {
             SENTENCY
           </H1>
         </GameTitle>
-        <div className='scroll'>
+        <div className='sentencyContentContainer'>
           <SentencyGameNav>
             <H3 color={colors.white}>SCORE: {score}</H3>
             <div className='heart-container'>{renderLife(life)}</div>
           </SentencyGameNav>
           <SentencyContentContainer>
-            <img src={imageURL} className='sentencyImg' alt='quizImg' />
+            <img src={imageURL} className='sentencyImg' alt='img' />
             <div className='flex-column contentRight'>
               <SentencyTranslationContainer>
                 <H4 color={colors.white}>{korSentence}</H4>

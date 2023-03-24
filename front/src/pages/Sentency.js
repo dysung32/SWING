@@ -40,9 +40,7 @@ function Sentency() {
   const [engSentence, setEngSentence] = useState('');
   const [korSentence, setKorSentence] = useState('');
   const [wordArray, setWordArray] = useState([]);
-  const [inputArray, setInputArray] = useState(
-    new Array(wordArray.length).fill('')
-  );
+  const [inputArray, setInputArray] = useState(new Array(wordArray.length).fill(''));
   const [finalSentence, setFinalSentence] = useState('');
 
   const renderLife = (life) => {
@@ -58,13 +56,9 @@ function Sentency() {
     const wordBoxArray = [];
     for (let idx = 0; idx < wordArray.length; idx++) {
       wordBoxArray.push(
-        <WordBox
-          key={idx}
-          width={wordArray[idx].length * 2}
-          spacing={wordArray[idx].length}
-        >
+        <WordBox key={idx} width={wordArray[idx].length * 2} spacing={wordArray[idx].length}>
           {inputArray[idx]}
-        </WordBox>
+        </WordBox>,
       );
     }
     return wordBoxArray;
@@ -77,14 +71,12 @@ function Sentency() {
   };
 
   const handleRetry = () => {
-    if (remains > 1) {
+    if (remains > 0) {
       console.log('도전 횟수가 아직 남아있다!');
       console.log(remains);
-      setLife(5);
-      setScore(0);
+      setRemains(remains + 1);
       setResultModalShow(false);
     } else {
-      setLife(5);
       setResultModalShow(false);
       setRetryModalShow(true);
     }
@@ -105,7 +97,7 @@ function Sentency() {
           setCoupon(coupon - 1);
           // 임시로 remains 1로 변경
           console.log(remains);
-          // setRemains(remains);
+          setRemains(remains + 1);
           setLife(5);
           setScore(0);
           setRetryModalShow(false);
@@ -165,6 +157,8 @@ function Sentency() {
       })
       .then((res) => {
         if (remains > 0) {
+          setScore(0);
+          setLife(5);
           setImageURL(res.data.sentence.sentenceImageUrl);
           console.log(res.data.sentence);
           let engSentence = res.data.sentence.content;
@@ -174,16 +168,12 @@ function Sentency() {
           const korSentence = res.data.sentence.meaningKr;
           if (engSentence.includes('In this picture,')) {
             let filteredEngSentence = engSentence.substring(17);
-            engSentence =
-              filteredEngSentence.charAt(0).toUpperCase() +
-              filteredEngSentence.slice(1);
+            engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
             console.log(engSentence);
           }
           if (engSentence.includes('Image of')) {
             let filteredEngSentence = engSentence.substring(9);
-            engSentence =
-              filteredEngSentence.charAt(0).toUpperCase() +
-              filteredEngSentence.slice(1);
+            engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
             console.log(engSentence);
           }
           setEngSentence(engSentence);
@@ -220,7 +210,7 @@ function Sentency() {
             });
         }
         // 남은 기회가 없다면
-        else if (res.data.sentencyCnt == 0) {
+        else if (res.data.sentencyCnt === 0) {
           // 재도전 쿠폰 사용할지에 대한 모달 띄워주기
           console.log('하루 도전 횟수를 모두 사용하였습니다.');
           setRetryModalShow(true);
@@ -230,23 +220,15 @@ function Sentency() {
 
   useEffect(() => {
     if (life === 0) {
-      // axios
-      //   .put(`${API_URL}/user/sentency/${userId}/${remains - 1}`, null, {
-      //     // headers: {
-      //     //   'Access-Token': '',
-      //     // },
-      //   })
-      //   .then((res) => {
-      //     console.log(res);
-      //   });
+      if (remains === 1) {
+        setRemains(0);
+      }
       setFinalSentence(
-        inputRef.current.value.slice(-1) === '.'
-          ? inputRef.current.value + ' '
-          : inputRef.current.value + '. '
+        inputRef.current.value.slice(-1) === '.' ? inputRef.current.value + ' ' : inputRef.current.value + '. ',
       );
       setResultModalShow(true);
     }
-  });
+  }, [life]);
 
   return (
     <>
@@ -259,9 +241,7 @@ function Sentency() {
             <br />
             재도전 쿠폰을 사용해 추가 도전하시겠습니까?
           </div>
-          <div className='retrySubInfo'>
-            재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.
-          </div>
+          <div className='retrySubInfo'>재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.</div>
           <img src={Coupon} className='coupon' alt='coupon' />
           <H4>보유 재도전 쿠폰: {coupon}장</H4>
           <div className='flex retryBtns'>
@@ -337,11 +317,7 @@ function Sentency() {
       </ModalBasic>
       <SentencyWrapper>
         <GameTitle>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-          >
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
             SENTENCY
           </H1>
         </GameTitle>

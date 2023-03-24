@@ -16,7 +16,7 @@ export const CommonInput = styled.input`
   min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
-  border: ${(props) => props.border};
+  border: ${(props) => (props.border ? props.border : 'none')};
   font-size: ${(props) => props.font}rem;
   background: white;
   padding: ${(props) => props.padding};
@@ -29,7 +29,7 @@ export const CommonBtn = styled.button`
   min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
-  border: ${(props) => props.border};
+  border: ${(props) => (props.border ? props.border : 'none')};
   color: ${(props) => props.fontColor};
   background-color: ${(props) => props.color};
   font-size: ${(props) => props.font}rem;

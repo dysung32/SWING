@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
+
 import {
   SpeedoodleWrapper,
   SpeedoodleContentContainer,
-  InputContainer,
   SelectInput,
   RoomContainer,
   Room,
   RoomTitleContainer,
-  RoomOtherInfoContainer,
   RoomIconContainer,
+  CreateRoomContainer,
+  FlexContainer,
 } from '../styles/SpeedoodleEmotion';
 import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
-import { H1, H4, H5, P1, P2, SmText } from '../styles/Fonts';
+import { H1, H2, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import Pagination from '../components/PaginatorBar';
+import ModalClosable from '../components/ModalClosable';
+
 import {
   ArrowClockwise,
   AwardFill,
@@ -23,6 +26,9 @@ import {
 
 function Speedoodle() {
   const [activeMode, setActiveMode] = useState('MODE');
+  const [createModalShow, setCreateModalShow] = useState(false);
+  const [isHard, setIsHard] = useState(false);
+  const [isLock, setIsLock] = useState(false);
   const options = [
     { value: 'roomNum', name: '방번호' },
     { value: 'title', name: '방제목' },
@@ -37,7 +43,7 @@ function Speedoodle() {
   const roomList = [
     {
       mode: 'EASY',
-      name: '나랑 놀사람 들어와',
+      name: '밥아저씨를 꿈꾼다',
       roomId: 123,
       leaderId: '행복한초코',
       currentMember: 2,
@@ -46,7 +52,7 @@ function Speedoodle() {
     },
     {
       mode: 'HARD',
-      name: '나랑 놀사람 들어와!!',
+      name: '뽀삐랑 놀자~',
       roomId: 125,
       leaderId: '귀여운뽀삐',
       currentMember: 4,
@@ -131,7 +137,7 @@ function Speedoodle() {
         <P2 align='center'>방번호 [{room.roomId}]</P2>
         <P1 align='center'>{room.name}</P1>
       </RoomTitleContainer>
-      <RoomOtherInfoContainer>
+      <FlexContainer>
         <RoomIconContainer>
           <AwardFill />
           <P2 margin='0 0 0 1rem'>{room.leaderId}</P2>
@@ -140,7 +146,7 @@ function Speedoodle() {
           <PersonFill />
           <P2 margin='0 0 0 1rem'>{room.currentMember} / 6</P2>
         </RoomIconContainer>
-      </RoomOtherInfoContainer>
+      </FlexContainer>
       <CommonBtn
         width='100%'
         padding='0.5rem 0'
@@ -158,12 +164,132 @@ function Speedoodle() {
     </Room>
   ));
 
+  // select에서 모드 선택에 따른 필터 변경
   const handleChangeMode = (e) => {
     setActiveMode(() => e.target.value);
   };
 
+  // 방만들기 모달창 오픈
+  const openModal = () => {
+    setCreateModalShow(true);
+  };
+
+  const changeMode = () => {
+    setIsHard((prev) => !prev);
+  };
+
   return (
     <>
+      {/* speedoodle 방생성 모달 */}
+      <ModalClosable
+        modalShow={createModalShow}
+        setModalShow={setCreateModalShow}
+      >
+        <H2 color={colors.gameBlue500}>방만들기</H2>
+        <CreateRoomContainer>
+          <FlexContainer>
+            <CommonBtn
+              padding='0 1.7rem'
+              margin='0 2rem 0 0'
+              width='20vw'
+              height='164'
+              font='2.5'
+              fontColor={colors.gameBlue500}
+              color={colors.gameBlue100}
+              border={isHard ? 'none' : `3px solid ${colors.gameBlue500}`}
+              onClick={changeMode}
+            >
+              <H4 align='center'>EASY MODE</H4>
+              <P1 align='center' style={{ wordBreak: 'keep-all' }}>
+                EASY MODE는 키워드가 영단어로 제시됩니다.
+                <br /> 제한시간 20초
+              </P1>
+            </CommonBtn>
+            <CommonBtn
+              style={{ wordBreak: 'keep-all' }}
+              padding='0 1.7rem'
+              width='20vw'
+              height='164'
+              font='2.5'
+              fontColor={colors.gameBlue500}
+              color={colors.gamePink200}
+              border={isHard ? `3px solid ${colors.gameBlue500}` : 'none'}
+              onClick={changeMode}
+            >
+              <H4 align='center'>HARD MODE</H4>
+              <P1 align='center'>
+                HARD MODE는 키워드가 영영사전의 뜻으로 제시됩니다. <br />
+                제한시간 30초
+              </P1>
+            </CommonBtn>
+          </FlexContainer>
+          <CommonInput
+            style={{
+              backgroundColor: `${colors.gray100}`,
+              margin: '1rem 0',
+            }}
+            minWidth='100%'
+            height='55'
+            padding='0 1rem'
+            font='1.2'
+            border={'none'}
+            placeholder='방제목을 입력하세요.'
+          />
+          <FlexContainer>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                minWidth: '120px',
+                height: '55px',
+                padding: '0 1rem',
+                marginRight: '2rem',
+                borderRadius: '0.5em',
+                backgroundColor: `${colors.gameYellow100}`,
+                boxSizing: 'border-box',
+              }}
+            >
+              <label htmlFor='isLock' onClick={() => setIsLock(true)}>
+                <LockFill /> 비밀방
+              </label>
+              <input type='checkbox' id='isLock' checked={isLock}></input>
+            </div>
+            <CommonInput
+              disabled={isLock ? false : true}
+              style={{
+                backgroundColor: `${colors.gray100}`,
+              }}
+              width='100%'
+              height='55'
+              padding='0 1rem'
+              font='1.2'
+              placeholder='비밀번호 숫자 6자리'
+            />
+          </FlexContainer>
+          <div style={{ marginTop: '2rem' }}>
+            <CommonBtn
+              padding='0.75rem 1.5rem'
+              font='1.5'
+              fontColor={colors.white}
+              color={colors.gray400}
+              margin='0 2rem 0 0'
+              onClick={() => {
+                setCreateModalShow(false);
+              }}
+            >
+              <H4>취소</H4>
+            </CommonBtn>
+            <CommonBtn
+              padding='0.75rem 1.5rem'
+              font='1.5'
+              fontColor={colors.white}
+              color={colors.gameBlue500}
+            >
+              <H4>확인</H4>
+            </CommonBtn>
+          </div>
+        </CreateRoomContainer>
+      </ModalClosable>
       <SpeedoodleWrapper>
         <GameTitle>
           <H1
@@ -176,7 +302,7 @@ function Speedoodle() {
           </H1>
         </GameTitle>
         <SpeedoodleContentContainer>
-          <InputContainer>
+          <FlexContainer>
             <span>
               <SelectInput>{inputOption}</SelectInput>
               <CommonInput
@@ -220,10 +346,11 @@ function Speedoodle() {
               padding='0.75rem 2rem'
               margin='0 0 0 1rem'
               border={'none'}
+              onClick={openModal}
             >
               <H4>방만들기</H4>
             </CommonBtn>
-          </InputContainer>
+          </FlexContainer>
 
           <RoomContainer>{rooms}</RoomContainer>
         </SpeedoodleContentContainer>

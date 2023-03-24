@@ -37,7 +37,9 @@ function Sentency() {
   const [engSentence, setEngSentence] = useState('');
   const [korSentence, setKorSentence] = useState('');
   const [wordArray, setWordArray] = useState([]);
-  const [inputArray, setInputArray] = useState(new Array(wordArray.length).fill(''));
+  const [inputArray, setInputArray] = useState(
+    new Array(wordArray.length).fill('')
+  );
   const [finalSentence, setFinalSentence] = useState('');
 
   const renderLife = (life) => {
@@ -53,9 +55,13 @@ function Sentency() {
     const wordBoxArray = [];
     for (let idx = 0; idx < wordArray.length; idx++) {
       wordBoxArray.push(
-        <WordBox key={idx} width={wordArray[idx].length * 2} spacing={wordArray[idx].length}>
+        <WordBox
+          key={idx}
+          width={wordArray[idx].length * 2}
+          spacing={wordArray[idx].length}
+        >
           {inputArray[idx]}
-        </WordBox>,
+        </WordBox>
       );
     }
     return wordBoxArray;
@@ -139,12 +145,16 @@ function Sentency() {
         const korSentence = res.data.sentence.meaningKr;
         if (engSentence.includes('In this picture,')) {
           let filteredEngSentence = engSentence.substring(17);
-          engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
+          engSentence =
+            filteredEngSentence.charAt(0).toUpperCase() +
+            filteredEngSentence.slice(1);
           console.log(engSentence);
         }
         if (engSentence.includes('Image of')) {
           let filteredEngSentence = engSentence.substring(9);
-          engSentence = filteredEngSentence.charAt(0).toUpperCase() + filteredEngSentence.slice(1);
+          engSentence =
+            filteredEngSentence.charAt(0).toUpperCase() +
+            filteredEngSentence.slice(1);
           console.log(engSentence);
         }
         setEngSentence(engSentence);
@@ -175,7 +185,9 @@ function Sentency() {
   useEffect(() => {
     if (life === 0) {
       setFinalSentence(
-        inputRef.current.value.slice(-1) === '.' ? inputRef.current.value + ' ' : inputRef.current.value + '. ',
+        inputRef.current.value.slice(-1) === '.'
+          ? inputRef.current.value + ' '
+          : inputRef.current.value + '. '
       );
       setResultModalShow(true);
     }
@@ -192,7 +204,9 @@ function Sentency() {
             <br />
             재도전 쿠폰을 사용해 추가 도전하시겠습니까?
           </div>
-          <div className='retrySubInfo'>재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.</div>
+          <div className='retrySubInfo'>
+            재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.
+          </div>
           <img src={Coupon} className='coupon' alt='coupon' />
           <H4>보유 재도전 쿠폰: 3장</H4>
           <div className='flex retryBtns'>
@@ -268,7 +282,11 @@ function Sentency() {
       </ModalBasic>
       <SentencyWrapper>
         <GameTitle>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+          <H1
+            color={colors.white}
+            outline={colors.gameBlue500}
+            outlineWeight={2}
+          >
             SENTENCY
           </H1>
         </GameTitle>

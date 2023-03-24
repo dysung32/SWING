@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const SentencyWrapper = styled.div`
   display: flex;
@@ -11,7 +11,11 @@ export const SentencyWrapper = styled.div`
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
 
   .sentencyContentContainer {
     width: 100%;
@@ -75,7 +79,7 @@ export const WordBox = styled.span`
   margin-right: 1.5rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.spacing > 1 ? '0.5rem' : 'initial')};
+  letter-spacing: ${(props) => (props.spacing > 1 ? "0.5rem" : "initial")};
   text-align: center;
 `;
 
@@ -131,5 +135,23 @@ export const RetryModalContainer = styled.div`
 
   .retryBtns {
     padding-top: 3rem;
+  }
+`;
+
+export const ResultSentenceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  .mine,
+  .quiz {
+    padding-bottom: 3rem;
+  }
+
+  .mine {
+    color: ${colors.gameBlue300};
+  }
+
+  .quiz {
+    color: ${colors.gamePink500};
   }
 `;

@@ -11,7 +11,7 @@ export const ReviewNoteWrapperColor = styled.div`
   flex-direction: column;
   // align-items: center;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   padding: 0 10%;
   padding-top: 9rem;
   box-sizing: border-box;
@@ -77,11 +77,12 @@ export const PaginationBox = styled.div`
   width: 40%;
   height: 3rem;
   align-self: center;
-  // background-color: ${colors.black};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  position: absolute;
+  bottom: 1.5rem;
 `
 
 export const PageNumBox = styled.button`

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { css, keyframes } from '@emotion/react'
 import { colors } from './ColorPalette';
 
 const HifiveWrapper = styled.div`
@@ -54,14 +55,72 @@ const AnswerContainer = styled.div`
   background-color: #FFFFFF;
   border-radius: 0.5rem;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 1rem 2rem 1rem;  
+  box-sizing: border-box;
+
+  .singleAnswer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }  
+
+`;
+
+const bounce = keyframes`
+  from, 0%, 25%, 50%, 75%, 100% to {
+    transform: translate3d(0,0,0);
+  }
+
+  25%, 75% {
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(10px, 0, 0);
+  }
+
+  0%, 100% {
+    transform: translate3d(0,0,0);
+  }
+`;
+
+const shake = keyframes`
+  0% { transform: translate(-50%, -50%); }
+  25% { transform: translate(-57%, -50%); }
+  50% { transform: translate(-50%, -50%); }
+  75% { transform: translate(-43%, -50%); }
+  100% { transform: translate(-50%, -50%); }
 `;
 
 const ProblemContainer = styled.div`
   width: 100%;
-  border: 1px solid #FFFFFF;
+  position: relative;
+  border: 5px solid ${props => props.color};
   background-color: #FFFFFF;
   border-radius: 0.5rem;
   height: 100%;
+  animation: ${(props) => props.vibration && css`${bounce} 0.3s ease-out` };
+
+  .correctEmoji {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
+
+export const GameImage = styled.img`
+  height: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: ${props => props.opacity};
+  animation: ${(props) => props.vibration && css`${shake} 0.15s linear` };
+  animation-i teration-count: 2;
 `;
 
 const InputContainer = styled.form`
@@ -72,17 +131,11 @@ const InputContainer = styled.form`
   padding-top: 2rem;
 `;
 
-export const ModalContainer = styled.div`
+export const HifiveModalContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .ModalContent {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 2.5rem;
-  }
+  flex-direction: row;
+  justify-content: center;
+  gap: 2.5rem;
 `;
 
 export const TemporaryRanking = styled.div`
@@ -103,17 +156,22 @@ export const HifiveStatistics = styled.div`
   flex-direction: column;
   align-items: center;
 
-  padding: 1rem;
+  padding: 1rem 2rem 1.5rem 2rem;
 
   .resultBox {
+    padding-top: 2.5rem;
     display: flex;
+    flex-direction: column;
     gap: 4rem;
-    padding-top: 2rem;
+  }
+
+  .resultValue {
+    width: ${(props) => props.width}rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
   }
 `;
-
-
-
 
 export { HifiveWrapper,
   HifiveContainer,

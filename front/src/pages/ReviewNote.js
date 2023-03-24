@@ -12,6 +12,8 @@ import { H2,H3 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { CheckCircle, CheckCircleFill } from 'react-bootstrap-icons';
 import Pagination from '../components/PaginatorBar';
+import  axios  from 'axios';
+import { API_URL } from '../config';
 
 function ReviewNote() {
   const navigate = useNavigate();
@@ -34,13 +36,26 @@ function ReviewNote() {
   ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
 ];
 
-  const [posts, setPosts] = useState(wordArray);
+  const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(3);
   const [page, setPage] = useState(1);
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [wordReview, setwordReview] = useState(true);
   const [wordChecked, setWordChecked] = useState(Array(wordArray.length).fill(false));
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${API_URL}/note/word/red/0`,
+    })
+    .then((res) => {
+      setPosts(res.data.wordNoteList);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  })
 
   useEffect(() => {
     const newOffset = ((page - 1) + 5*(Ppage - 1)) * limit;

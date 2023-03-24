@@ -20,7 +20,7 @@ import Coupon from '../assets/coupon.png';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import LeaderBoard from '../components/LeaderBoard';
-import { API_URL } from '../config';
+import { AI_API_URL, API_URL } from '../config';
 
 function Sentency() {
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ function Sentency() {
 
   const [life, setLife] = useState(5);
   const [score, setScore] = useState(0);
+  const [similarity, setSimilarity] = useState(0);
   const [remains, setRemains] = useState(0);
   const [coupon, setCoupon] = useState(0);
   const [imageURL, setImageURL] = useState('');
@@ -107,7 +108,8 @@ function Sentency() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    await calcSimilarity();
     let inputSentence = inputRef.current.value;
     // 입력 문장에 온점을 포함하고 있으면
     if (inputSentence.slice(-1) === '.') {
@@ -144,6 +146,26 @@ function Sentency() {
     }
   };
 
+  // 유사도 검사 함수
+  const calcSimilarity = () => {
+    console.log('유사도 검사 실시!');
+    let inputSentence = inputRef.current.value;
+    axios
+      .get(`${AI_API_URL}/sentency/check`, {
+        params: {
+          solution: engSentence, // 정답 문장
+          answer: inputSentence, // 유저 입력 문장
+        },
+        // headers: {
+        //   'Access-Token': '',
+        // },
+      })
+      .then((res) => {
+        console.log(res);
+        setSimilarity(parseInt(res.data.similarity * 100));
+      });
+  };
+
   useEffect(() => {
     // 빈 칸에 채워진 단어 지우기
     setInputArray(new Array(wordArray.length).fill(''));
@@ -158,6 +180,7 @@ function Sentency() {
       .then((res) => {
         if (remains > 0) {
           setScore(0);
+          setSimilarity(0);
           setLife(5);
           setImageURL(res.data.sentence.sentenceImageUrl);
           console.log(res.data.sentence);
@@ -323,7 +346,12 @@ function Sentency() {
         </GameTitle>
         <div className='sentencyContentContainer'>
           <SentencyGameNav>
-            <H3 color={colors.white}>SCORE: {score}</H3>
+            <div className='flex'>
+              <H3 color={colors.white}>SCORE: {score},</H3>
+              <H3 color={colors.white} margin={'0 0 0 1rem'}>
+                SIMILARITY: {similarity}%
+              </H3>
+            </div>
             <div className='heart-container'>{renderLife(life)}</div>
           </SentencyGameNav>
           <SentencyContentContainer>

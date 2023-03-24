@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 
+import { SpeedoodleWrapper } from '../styles/SpeedoodleEmotion';
 import {
-  SpeedoodleWrapper,
-  SpeedoodleContentContainer,
-} from '../styles/SpeedoodleEmotion';
+  SpeedoodleRoomContainer,
+  UserInfoContainer,
+  GameInfoContainer,
+} from '../styles/SpeedoodleRoomEmotion';
 import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
 import { H1, H2, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
@@ -23,6 +25,10 @@ function SpeedoodleRoom() {
             SPEEDOODLE
           </H1>
         </GameTitle>
+        <SpeedoodleRoomContainer>
+          <UserInfoContainer></UserInfoContainer>
+          <GameInfoContainer></GameInfoContainer>
+        </SpeedoodleRoomContainer>
       </SpeedoodleWrapper>
     </>
   );

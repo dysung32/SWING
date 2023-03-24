@@ -20,11 +20,6 @@ export const SpeedoodleContentContainer = styled.div`
   box-sizing: border-box;
 `;
 
-export const InputContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const SelectInput = styled.select`
   height: 55px;
   width: 8vw;
@@ -33,15 +28,6 @@ export const SelectInput = styled.select`
   font-size: 1.2rem;
   color: ${colors.gameBlue500};
   border-radius: 0.6rem;
-  box-sizing: border-box;
-`;
-
-export const FilterBtnContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 1.5rem;
-  background-color: ${colors.white};
-  border-radius: 0.75rem;
   box-sizing: border-box;
 `;
 
@@ -72,12 +58,16 @@ export const RoomTitleContainer = styled.div`
   border-radius: 1rem;
 `;
 
-export const RoomOtherInfoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const RoomIconContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+export const CreateRoomContainer = styled.div`
+  margin-top: 2rem;
+`;
+
+export const FlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

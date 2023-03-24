@@ -16,7 +16,7 @@ export const CommonInput = styled.input`
   min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
-  border: ${(props) => props.border};
+  border: ${(props) => (props.border ? props.border : 'none')};
   font-size: ${(props) => props.font}rem;
   background: white;
   padding: ${(props) => props.padding};
@@ -29,7 +29,7 @@ export const CommonBtn = styled.button`
   min-width: ${(props) => props.minWidth};
   height: ${(props) => props.height}px;
   border-radius: ${(props) => props.font / 2}rem;
-  border: ${(props) => props.border};
+  border: ${(props) => (props.border ? props.border : 'none')};
   color: ${(props) => props.fontColor};
   background-color: ${(props) => props.color};
   font-size: ${(props) => props.font}rem;
@@ -90,6 +90,7 @@ export const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   animation: opac 0.8s;
+  z-index: 1000;
 
   @keyframes opac {
     from {
@@ -111,6 +112,7 @@ export const ModalBody = styled.div`
   text-align: center;
   background-color: ${colors.white};
   border-radius: 1rem;
+  z-index: 1001;
 `;
 
 export const LeaderBoardWrapper = styled.div`

@@ -187,11 +187,13 @@ function Speedoodle() {
   const handleCreateRoomMode = () => {
     setIsHard((prev) => !prev);
   };
+
   // 방만들기 모달에서 비밀방 클릭 여부
   const handleChangeIsLock = () => {
     setIsLock((prev) => !prev);
   };
 
+  // 비밀번호 생성 및 입력시 6자리로 제한
   const handleOnInputLength = (e) => {
     if (e.target.value.length > e.target.maxLength)
       e.target.value = e.target.value.slice(0, e.target.maxLength);
@@ -200,6 +202,7 @@ function Speedoodle() {
   // 방목록 api 새로고침 함수
   const refreshRoomList = () => {};
 
+  // 방 입장버튼 눌렀을 때 비밀방 여부에 따라 라우터제공
   const enterRoom = (lock, id, code) => {
     if (lock) {
       setWrongCode(false);

@@ -51,8 +51,8 @@ export const CommonBtn = styled.button`
 `;
 
 export const GameTitle = styled.div`
-  padding-top: 2rem;
-  padding-bottom: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
 `;
 
 export const CommonModalBackdrop = styled.div`

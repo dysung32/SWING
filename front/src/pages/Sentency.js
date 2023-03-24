@@ -26,6 +26,8 @@ function Sentency() {
   const navigate = useNavigate();
 
   const inputRef = useRef();
+  // userId는 추후에 recoil 설정 후 삭제 예정
+  const [userId, setUserId] = useState('black');
 
   const [resultModalShow, setResultModalShow] = useState(false);
   const [retryModalShow, setRetryModalShow] = useState(false);
@@ -68,20 +70,43 @@ function Sentency() {
     }
   };
 
-  const handleRetryModal = () => {
-    // 목숨 수 초기화
-    setLife(5);
-    setResultModalShow(false); // 기존 모달 닫고
-    setRetryModalShow(true); // 다시 시도 status true 처리
+  const handleRetry = () => {
+    if (remains > 1) {
+      console.log('도전 횟수가 아직 남아있다!');
+      console.log(remains);
+      setLife(5);
+      setScore(0);
+      setResultModalShow(false);
+    } else {
+      setLife(5);
+      setResultModalShow(false);
+      setRetryModalShow(true);
+    }
   };
 
-  const handleRetry = () => {
-    // 쿠폰 사용하는 API 보내고
-    // 게임 RETRY
-
-    setRemains(remains + 1);
-    setRetryModalShow(false);
-    navigate('/sentency');
+  const handleUseCoupon = () => {
+    if (coupon > 0) {
+      // 쿠폰 사용하는 API 보내고
+      axios
+        .put(`${API_URL}/user/coupon/${userId}/${coupon - 1}`, null, {
+          // headers: {
+          //   'Access-Token': '',
+          // },
+        })
+        .then((res) => {
+          console.log(res);
+          console.log('쿠폰 사용 요청 완료');
+          setCoupon(coupon - 1);
+          // 임시로 remains 1로 변경
+          console.log(remains);
+          // setRemains(remains);
+          setLife(5);
+          setScore(0);
+          setRetryModalShow(false);
+        });
+    } else {
+      alert('쿠폰이 부족하여 재도전이 불가능합니다.');
+    }
   };
 
   const handleSubmit = () => {
@@ -170,9 +195,24 @@ function Sentency() {
         setRemains(res.data.sentencyCnt);
         setCoupon(res.data.coupon);
         console.log('sentency 남은 기회 ' + res.data.sentencyCnt);
+
+        if (res.data.sentencyCnt > 0) {
+          // 하루 sentency 횟수 차감 API
+          axios
+            .put(`${API_URL}/user/sentency/${userId}/${res.data.sentencyCnt - 1}`, null, {
+              // headers: {
+              //   'Access-Token': '',
+              // },
+            })
+            .then((res) => {
+              console.log(res);
+              console.log('sentency 기회 ' + `${res.data.sentencyCnt}에서 1 차감`);
+            });
+        }
         // 남은 기회가 없다면
-        if (res.data.sentencyCnt === 0) {
+        else if (res.data.sentencyCnt == 0) {
           // 재도전 쿠폰 사용할지에 대한 모달 띄워주기
+          console.log('하루 도전 횟수를 모두 사용하였습니다.');
           setRetryModalShow(true);
         }
       });
@@ -180,6 +220,15 @@ function Sentency() {
 
   useEffect(() => {
     if (life === 0) {
+      // axios
+      //   .put(`${API_URL}/user/sentency/${userId}/${remains - 1}`, null, {
+      //     // headers: {
+      //     //   'Access-Token': '',
+      //     // },
+      //   })
+      //   .then((res) => {
+      //     console.log(res);
+      //   });
       setFinalSentence(
         inputRef.current.value.slice(-1) === '.' ? inputRef.current.value + ' ' : inputRef.current.value + '. ',
       );
@@ -219,7 +268,7 @@ function Sentency() {
               fontColor={colors.white}
               font={1.5}
               border={'none'}
-              onClick={handleRetry}
+              onClick={handleUseCoupon}
             >
               확인
             </CommonBtn>
@@ -256,7 +305,7 @@ function Sentency() {
             font={1.5}
             border={'none'}
             margin={'0 5rem 0 0'}
-            onClick={handleRetryModal}
+            onClick={handleRetry}
           >
             재시도
           </CommonBtn>
@@ -268,7 +317,7 @@ function Sentency() {
             border={'none'}
             onClick={() => navigate('/')}
           >
-            메인 페이지
+            홈으로
           </CommonBtn>
         </div>
       </ModalBasic>

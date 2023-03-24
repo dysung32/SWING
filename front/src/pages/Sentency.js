@@ -68,6 +68,12 @@ function Sentency() {
     return wordBoxArray;
   };
 
+  const onKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   const handleRetryModal = () => {
     // 목숨 수 초기화
     setLife(5);
@@ -318,6 +324,7 @@ function Sentency() {
               border={'none'}
               padding={'1rem'}
               ref={inputRef}
+              onKeyPress={onKeyPress}
             />
             <CommonBtn
               height={55}

@@ -90,6 +90,7 @@ export const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   animation: opac 0.8s;
+  z-index: 1000;
 
   @keyframes opac {
     from {
@@ -111,6 +112,7 @@ export const ModalBody = styled.div`
   text-align: center;
   background-color: ${colors.white};
   border-radius: 1rem;
+  z-index: 1001;
 `;
 
 export const LeaderBoardWrapper = styled.div`

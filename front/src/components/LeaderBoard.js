@@ -102,9 +102,9 @@ function LeaderBoard() {
           </div>
         </RankerContainer>
         <RankListContainer>
-          {subRankers.map((subRanker) => {
+          {subRankers.map((subRanker, idx) => {
             return (
-              <SinglePlayerContainer margin={'0 0 0.5rem 0'}>
+              <SinglePlayerContainer margin={'0 0 0.5rem 0'} key={idx}>
                 <PlayerInfo>
                   <H5 color={colors.gameBlue400}>{subRanker.rank}</H5>
                   <PlayerProfile src={subRanker.profile} width={2.5} height={2.5} margin={0.5} />

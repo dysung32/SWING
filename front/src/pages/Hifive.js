@@ -23,10 +23,7 @@ import LeaderBoard from '../components/LeaderBoard';
 function Hifive() {
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState();
-  const modalShow = true;
   const score = [100, 100, 100, 1];
-  const result = true;
   const [imageSet, setImageSet] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isVibrating, setIsVibrating] = useState(false);
@@ -35,9 +32,7 @@ function Hifive() {
   const [lifeStack, setLifeStack] = useState(5);
   const [answerStack, setAnswerStack] = useState([]);
   const [scoreStack, setScoreStack] = useState(0);
-
-  const wrongWords = [["apple", "사과"], ["banana", "바나나"], ["cherry", "체리"], ["orange", "오렌지"], ["pear", "배"]];
-
+  const [wrongWords, setWrongWords] = useState([]);
   const [resultValue,setresultValue] = useState(); 
 
   // imageSet에 이미지를 저장
@@ -73,13 +68,21 @@ function Hifive() {
         maxKey = key;
       }
     }
+
     let temp = [...imageCheck];
+    let tempSet = [...imageSet];
     maxKey = maxKey.replace(' ','_');
     console.log(maxKey);
+
     if(maxSimilar < 0.4) {
       setIsVibrating(true);
       setBorderColor(colors.gamePink500);
-      setLifeStack(lifeStack-1);
+      
+      if(lifeStack - 1 === 0){
+        handleFailModal(tempSet);
+      }else{
+        setLifeStack(lifeStack-1);
+      }
 
       temp.forEach(element => {
         element[0] = Math.ceil(element[0]*0.9);
@@ -112,7 +115,6 @@ function Hifive() {
     else{
       console.log(maxSimilar);
       const idx = imageSet.findIndex(obj => obj.content === maxKey);
-      let tempSet = [...imageSet];
       const answer = tempSet.splice(idx, 1);
       const answerCheck = temp.splice(idx, 1);
       answerStack.push([answer[0].content, answer[0].meaningKr]);
@@ -132,6 +134,12 @@ function Hifive() {
 
       return () => clearTimeout(timeoutId);
     }
+  }
+
+  //목숨이 다했을때 모달 띄우는 함수
+  const handleFailModal = (tempSet) => {
+    setWrongWords(tempSet);
+    setresultValue(false);
   }
 
   // django로 api 호출을 하여 입력한 단어와 정답간에 유사도 판별
@@ -169,6 +177,7 @@ function Hifive() {
 
   return (
     <>
+      {/* 성공했을때 모달 */}
       <ModalBasic modalShow={resultValue===true}>
         <H1 color={colors.gamePink500}
         padding={"0rem 0rem 2rem 0rem"}>SUCCESS</H1>
@@ -179,7 +188,7 @@ function Hifive() {
               <div className='resultBox'>
                 <div className='resultValue'>
                   <H3 color={colors.gameBlue500}>점수</H3>
-                  <H3 color={colors.gameBlue500}>{score[0]}점</H3>
+                  <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
                 </div>
                 <div className='resultValue'>
                 <H3 color={colors.gameBlue500}>누적 점수</H3>
@@ -217,7 +226,7 @@ function Hifive() {
               <div className='resultBox'>
                 <div className='resultValue'>
                   <H3 color={colors.gameBlue500}>점수</H3>
-                  <H3 color={colors.gameBlue500}>{score[0]}점</H3>
+                  <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
                 </div>
                 <div className='resultValue'>
                 <H3 color={colors.gameBlue500}>누적 점수</H3>
@@ -233,14 +242,15 @@ function Hifive() {
                 </div>
               </div>
           </HifiveStatistics>
+          {/* 실패했을 때의 모달 */}
           <HifiveStatistics width={12} color={colors.gameBlue200}>
             <H2 color={colors.gameBlue500}>오답</H2>
             <div className='resultBox'>
               {wrongWords.map((item, index) => {
                 return (
                   <div className='resultValue' key={index}>
-                    <H5 color={colors.gameBlue500}>{item[0]}</H5>
-                    <H5 color={colors.gameBlue500}>{item[1]}</H5>
+                    <H5 color={colors.gameBlue500}>{item.content}</H5>
+                    <H5 color={colors.gameBlue500}>{item.meaningKr}</H5>
                   </div>
                 )
               })}
@@ -309,21 +319,21 @@ function Hifive() {
           </AnswertotalContainer>
           <InputContainer onSubmit={handleSubmit}>
             <CommonInput 
-            width="100%"
-            height={74}
+            width="80%"
+            height={55}
             font={2}
             border={'none'} 
-            padding={'1rem 2rem'}
+            padding={"0rem 1rem 0rem 1rem"}
             value={inputValue}
             onChange={(e) => {setInputValue(e.target.value)}}/>
             <CommonBtn
             type="submit" 
-            width="22%" 
-            height={74} 
+            width="25%" 
+            height={55} 
             font={2} 
             color={colors.gameBlue100} 
-            hoverColor="#516AD3">
-              <H3 align={"center"}>입력</H3>
+            hoverColor={colors.studyBlue200}>
+              <H3 color={colors.black} align={"center"}>SUBMIT</H3>
             </CommonBtn>
           </InputContainer>
         </HifiveContainer>

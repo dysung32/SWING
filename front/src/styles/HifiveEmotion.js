@@ -103,6 +103,7 @@ const ProblemContainer = styled.div`
   border-radius: 0.5rem;
   height: 100%;
   animation: ${(props) => props.vibration && css`${bounce} 0.3s ease-out` };
+  box-sizing: border-box;
 
   .correctEmoji {
     position: absolute;
@@ -124,10 +125,10 @@ export const GameImage = styled.img`
 `;
 
 const InputContainer = styled.form`
-  grid-column: 1/10;
+  grid-column: 1/13;
   grid-row: 11;
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
   padding-top: 2rem;
 `;
 

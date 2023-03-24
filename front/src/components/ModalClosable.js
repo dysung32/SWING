@@ -14,6 +14,8 @@ function ModalClosable(props) {
             if (outSection.current === e.target) {
               console.log('모달 외부공간 클릭!');
               props.setModalShow(false);
+              props.setIsLock(false);
+              props.setWrongCode(false);
             }
           }}
         >

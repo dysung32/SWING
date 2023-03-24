@@ -1,10 +1,10 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   RetryModalContainer,
+  SentencyContentContainer,
   SentencyGameNav,
-  SentencyImgContainer,
   SentencyInputContainer,
   SentencyScoreContainer,
   SentencyTranslationContainer,
@@ -13,14 +13,14 @@ import {
   WordListContainer,
 } from '../styles/SentencyEmotion';
 import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
-import { H1, H2, H4 } from '../styles/Fonts';
+import { H1, H2, H3, H4 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 
-import Bike from '../assets/bike.jpg';
 import Coupon from '../assets/coupon.png';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import LeaderBoard from '../components/LeaderBoard';
+import { API_URL } from '../config';
 
 function Sentency() {
   const navigate = useNavigate();
@@ -33,6 +33,7 @@ function Sentency() {
   const [life, setLife] = useState(5);
   const [score, setScore] = useState(0);
   const [remains, setRemains] = useState(0);
+  const [coupon, setCoupon] = useState(0);
   const [imageURL, setImageURL] = useState('');
   const [engSentence, setEngSentence] = useState('');
   const [korSentence, setKorSentence] = useState('');
@@ -78,10 +79,6 @@ function Sentency() {
     // 쿠폰 사용하는 API 보내고
     // 게임 RETRY
 
-    // 빈 칸에 채워진 단어 지우기
-    setInputArray(new Array(wordArray.length).fill(''));
-    // input창 초기화
-    inputRef.current.value = '';
     setRemains(remains + 1);
     setRetryModalShow(false);
     navigate('/sentency');
@@ -113,11 +110,7 @@ function Sentency() {
         // 성공 모달 띄우고 다음 문제로 넘어가거나
         console.log('성공!');
         setScore(score + 1);
-        // 빈 칸에 채워진 단어 지우기
-        setInputArray(new Array(wordArray.length).fill(''));
-        // input창 초기화
-        inputRef.current.value = '';
-        setRemains(remains - 1);
+        // setRemains(remains - 1);
         // 바로 다음 문제 넘어가기
         return;
       } else {
@@ -129,43 +122,49 @@ function Sentency() {
   };
 
   useEffect(() => {
+    // 빈 칸에 채워진 단어 지우기
+    setInputArray(new Array(wordArray.length).fill(''));
+    // input창 초기화
+    inputRef.current.value = '';
     axios
-      .get('http://j8a405.p.ssafy.io:8080/api/sentency', {
+      .get(`${API_URL}/sentency`, {
         // headers: {
         //   'Access-Token': '',
         // },
       })
       .then((res) => {
-        setImageURL(res.data.sentence.sentenceImageUrl);
-        console.log(res.data.sentence);
-        let engSentence = res.data.sentence.content;
-        if (engSentence.slice(-1) !== '.') {
-          engSentence += '.';
+        if (remains > 0) {
+          setImageURL(res.data.sentence.sentenceImageUrl);
+          console.log(res.data.sentence);
+          let engSentence = res.data.sentence.content;
+          if (engSentence.slice(-1) !== '.') {
+            engSentence += '.';
+          }
+          const korSentence = res.data.sentence.meaningKr;
+          if (engSentence.includes('In this picture,')) {
+            let filteredEngSentence = engSentence.substring(17);
+            engSentence =
+              filteredEngSentence.charAt(0).toUpperCase() +
+              filteredEngSentence.slice(1);
+            console.log(engSentence);
+          }
+          if (engSentence.includes('Image of')) {
+            let filteredEngSentence = engSentence.substring(9);
+            engSentence =
+              filteredEngSentence.charAt(0).toUpperCase() +
+              filteredEngSentence.slice(1);
+            console.log(engSentence);
+          }
+          setEngSentence(engSentence);
+          setKorSentence(korSentence);
+          setWordArray(engSentence.slice(0, -1).split(' '));
         }
-        const korSentence = res.data.sentence.meaningKr;
-        if (engSentence.includes('In this picture,')) {
-          let filteredEngSentence = engSentence.substring(17);
-          engSentence =
-            filteredEngSentence.charAt(0).toUpperCase() +
-            filteredEngSentence.slice(1);
-          console.log(engSentence);
-        }
-        if (engSentence.includes('Image of')) {
-          let filteredEngSentence = engSentence.substring(9);
-          engSentence =
-            filteredEngSentence.charAt(0).toUpperCase() +
-            filteredEngSentence.slice(1);
-          console.log(engSentence);
-        }
-        setEngSentence(engSentence);
-        setKorSentence(korSentence);
-        setWordArray(engSentence.slice(0, -1).split(' '));
       });
-  }, [remains]);
+  }, [score, remains]);
 
   useEffect(() => {
     axios
-      .get('http://j8a405.p.ssafy.io:8080/api/user/sentency/1', {
+      .get(`${API_URL}/user/sentency/black`, {
         // headers: {
         //   'Access-Token': '',
         // },
@@ -173,9 +172,10 @@ function Sentency() {
       .then((res) => {
         console.log(res.data);
         setRemains(res.data.sentencyCnt);
-        console.log('sentency 남은 기회 ' + remains);
+        setCoupon(res.data.coupon);
+        console.log('sentency 남은 기회 ' + res.data.sentencyCnt);
         // 남은 기회가 없다면
-        if (remains === 0) {
+        if (res.data.sentencyCnt === 0) {
           // 재도전 쿠폰 사용할지에 대한 모달 띄워주기
           setRetryModalShow(true);
         }
@@ -208,7 +208,7 @@ function Sentency() {
             재도전 쿠폰은 복습 테스트를 통해 획득이 가능합니다.
           </div>
           <img src={Coupon} className='coupon' alt='coupon' />
-          <H4>보유 재도전 쿠폰: 3장</H4>
+          <H4>보유 재도전 쿠폰: {coupon}장</H4>
           <div className='flex retryBtns'>
             <CommonBtn
               padding={'1rem 3rem'}
@@ -290,45 +290,49 @@ function Sentency() {
             SENTENCY
           </H1>
         </GameTitle>
-        <SentencyImgContainer>
+        <div className='sentencyContentContainer'>
           <SentencyGameNav>
-            <H4 color={colors.white}>SCORE: {score}</H4>
+            <H3 color={colors.white}>SCORE: {score}</H3>
             <div className='heart-container'>{renderLife(life)}</div>
           </SentencyGameNav>
-          <img src={imageURL} className='sentencyImg' alt='quizImg' />
-        </SentencyImgContainer>
-        <SentencyTranslationContainer>
-          <H4 color={colors.white}>{korSentence}</H4>
-        </SentencyTranslationContainer>
-        <div className='wordListCenter'>
-          <WordListContainer>
-            {renderWordList()}
-            <span className='finishDot'>.</span>
-          </WordListContainer>
+          <SentencyContentContainer>
+            <img src={imageURL} className='sentencyImg' alt='img' />
+            <div className='flex-column contentRight'>
+              <SentencyTranslationContainer>
+                <H4 color={colors.white}>{korSentence}</H4>
+              </SentencyTranslationContainer>
+              <div className='wordListCenter'>
+                <WordListContainer>
+                  {renderWordList()}
+                  <span className='finishDot'>.</span>
+                </WordListContainer>
+              </div>
+            </div>
+          </SentencyContentContainer>
+          <SentencyInputContainer>
+            <CommonInput
+              maxWidth={'720px'}
+              height={55}
+              flexGrow={1}
+              font={1.5}
+              border={'none'}
+              padding={'1rem'}
+              ref={inputRef}
+            />
+            <CommonBtn
+              height={55}
+              font={1.5}
+              color={colors.gameBlue300}
+              fontColor={colors.white}
+              border={'none'}
+              padding={'12px 36px'}
+              margin={'0 0 0 1rem'}
+              onClick={handleSubmit}
+            >
+              SUBMIT
+            </CommonBtn>
+          </SentencyInputContainer>
         </div>
-        <SentencyInputContainer>
-          <CommonInput
-            maxWidth={'720px'}
-            height={55}
-            flexGrow={1}
-            font={1.5}
-            border={'none'}
-            padding={'1rem'}
-            ref={inputRef}
-          />
-          <CommonBtn
-            height={55}
-            font={1.5}
-            color={colors.gameBlue300}
-            fontColor={colors.white}
-            border={'none'}
-            padding={'12px 36px'}
-            margin={'0 0 0 1rem'}
-            onClick={handleSubmit}
-          >
-            SUBMIT
-          </CommonBtn>
-        </SentencyInputContainer>
       </SentencyWrapper>
     </>
   );

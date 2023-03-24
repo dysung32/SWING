@@ -26,6 +26,7 @@ import {
 } from '../styles/CommonEmotion';
 import { H1, H3, H5, H6, P1, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
+
 import { Image, PencilSquare } from 'react-bootstrap-icons';
 
 function MyPage() {

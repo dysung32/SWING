@@ -7,36 +7,50 @@ export const SentencyWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  // height: 100vh;
   padding: 0 10%;
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
   background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+
+  .sentencyContentContainer {
+    width: 100%;
+  }
 `;
 
-export const SentencyImgContainer = styled.div`
+export const SentencyContentContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding-bottom: 2rem;
 
   .sentencyImg {
-    height: 20rem;
+    width: 45%;
+    max-height: 50vh;
+    object-fit: contain;
   }
 
-  .heart {
-    color: ${colors.gamePink500};
-    font-size: 1.5rem;
-    margin-left: 1rem;
+  .contentRight {
+    display: flex;
+    flex-direction: column;
+    padding-left: 2rem;
   }
 `;
 
 export const SentencyGameNav = styled.div`
   display: flex;
+  width: 100%;
+  align-items: center;
   justify-content: space-between;
 
   .heart-container {
     display: flex;
-    align-items: center;
+  }
+
+  .heart {
+    color: ${colors.gamePink500};
+    font-size: 1.5rem;
+    margin-right: 1rem;
   }
 `;
 
@@ -66,8 +80,7 @@ export const WordBox = styled.span`
 `;
 
 export const SentencyTranslationContainer = styled.div`
-  display: flex;
-  padding: 2rem 0;
+  padding-bottom: 1rem;
 `;
 
 export const SentencyInputContainer = styled.div`

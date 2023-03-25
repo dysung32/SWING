@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   MyPageWrapper,
@@ -16,61 +16,62 @@ import {
   MyPageProfileNickname,
   MyPageProfileCoupon,
   CouponImg,
-} from '../styles/MyPageEmotion';
-import Coupon from '../assets/coupon.png';
+} from "../styles/MyPageEmotion";
+import MyPageSwing from "../assets/mypage_swing.png";
+import Coupon from "../assets/coupon.svg";
 import {
   GameTitle,
   CommonInput,
   CommonBtn,
   PlayerProfile,
-} from '../styles/CommonEmotion';
-import { H1, H3, H5, H6, P1, SmText } from '../styles/Fonts';
-import { colors } from '../styles/ColorPalette';
+} from "../styles/CommonEmotion";
+import { H1, H3, H5, H6, P1, SmText } from "../styles/Fonts";
+import { colors } from "../styles/ColorPalette";
 
-import { Image, PencilSquare } from 'react-bootstrap-icons';
+import { Image, PencilSquare } from "react-bootstrap-icons";
 
 function MyPage() {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState("");
   const [displayNickname, setDisplayNickname] = useState(true);
-  const [tempNickname, setTempNickname] = useState('');
+  const [tempNickname, setTempNickname] = useState("");
   const [alertNickname, setAlertNickname] = useState(false);
-  const nickName = 'Sanghwa';
+  const nickName = "Sanghwa";
   const coupon = 3;
   const historyList = [
     {
-      date: '2023.03.01',
-      title: '나랑 같이 놀 사람',
+      date: "2023.03.01",
+      title: "나랑 같이 놀 사람",
       rank: 2,
     },
     {
-      date: '2023.03.02',
-      title: '공부합시다',
+      date: "2023.03.02",
+      title: "공부합시다",
       rank: 3,
     },
     {
-      date: '2023.03.03',
-      title: '놀자아',
+      date: "2023.03.03",
+      title: "놀자아",
       rank: 1,
     },
     {
-      date: '2023.03.05',
-      title: 'A405',
+      date: "2023.03.05",
+      title: "A405",
       rank: 2,
     },
     {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
+      date: "2023.03.07",
+      title: "SSAFY 8기",
       rank: 1,
     },
     {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
+      date: "2023.03.07",
+      title: "SSAFY 8기",
       rank: 1,
     },
     {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
+      date: "2023.03.07",
+      title: "SSAFY 8기",
       rank: 1,
     },
   ];
@@ -106,13 +107,13 @@ function MyPage() {
 
   const saveNickname = () => {
     setAlertNickname(false);
-    if (tempNickname !== '') {
+    if (tempNickname !== "") {
       setNickname(tempNickname);
     }
   };
 
   const handleOnKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       if (!alertNickname) {
         toggleNickname();
         saveNickname();
@@ -127,20 +128,23 @@ function MyPage() {
             color={colors.white}
             outline={colors.gameBlue500}
             outlineWeight={2}
-            align='center'
-          >
+            align="center">
             마이페이지
           </H1>
         </GameTitle>
         <MyPageContentContainer>
           <MyPageMainConatiner>
             <MyPageIntroConatiner>
-              <H3>Hi, {nickname}!</H3>
-              <P1>
-                SWING을 즐기고 계신가요? <br /> 마이페이지에서는 예전
-                SpeeDoodle의 기록을 보기 위한 <br /> 히스토리와 회원님의 정보를
-                수정하기 위한 프로필이 있습니다.
-              </P1>
+              <div className="flex-column">
+                <H3>Hi, {nickname}!</H3>
+                <P1>
+                  <span className="swing-bold">SWING</span>을 즐기고 계신가요?{" "}
+                  <br /> 마이페이지에서는 예전 SpeeDoodle의 기록을 보기 위한{" "}
+                  <br /> 히스토리와 회원님의 정보를 수정하기 위한 프로필이
+                  있습니다.
+                </P1>
+              </div>
+              <img src={MyPageSwing} className="swingImg" alt="img" />
             </MyPageIntroConatiner>
             <MyPageHistoryConatiner>
               <MyPageHistoryHeader>
@@ -155,31 +159,31 @@ function MyPage() {
             <MyPageProfileConatiner>
               <MyPageProfileImg>
                 <PlayerProfile
-                  src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
-                  width='12'
-                  height='12'
+                  src="http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx"
+                  width="12"
+                  height="12"
                 />
-                <label htmlFor='file'>
+                <label htmlFor="file">
                   <FileInput>
                     <Image />
                   </FileInput>
                 </label>
                 <input
-                  type='file'
-                  name='file'
-                  id='file'
-                  style={{ display: 'none' }}
+                  type="file"
+                  name="file"
+                  id="file"
+                  style={{ display: "none" }}
                 />
               </MyPageProfileImg>
               <MyPageProfileNickname>
                 {displayNickname ? (
                   <>
-                    <P1 margin=' 0.35rem 0'>{nickname}</P1>
+                    <div className="nickname">{nickname}</div>
                     <PencilSquare
                       style={{
-                        cursor: 'pointer',
-                        fontSize: '1.5rem',
-                        margin: '0.55rem 0',
+                        cursor: "pointer",
+                        fontSize: "1.5rem",
+                        margin: "0.55rem 0",
                       }}
                       onClick={toggleNickname}
                     />
@@ -188,56 +192,54 @@ function MyPage() {
                   <div>
                     <div
                       style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}>
                       <CommonInput
-                        width='70%'
-                        font='1'
-                        type='text'
-                        name='nickname'
-                        id='nickname'
+                        width="70%"
+                        font="1"
+                        type="text"
+                        name="nickname"
+                        id="nickname"
+                        border={`2px solid ${colors.gray300}`}
                         onChange={changeNickname}
                         onKeyDown={handleOnKeyDown}
                       />
                       <CommonBtn
-                        height='42'
-                        border='none'
+                        height="42"
+                        border="none"
                         color={colors.studyBlue400}
-                        font='1'
+                        font="1"
                         fontColor={colors.white}
                         hoverColor={colors.studyBlue500}
-                        padding='0 1rem '
-                        onClick={toggleNickname}
-                      >
+                        padding="0 1rem "
+                        onClick={toggleNickname}>
                         확인
                       </CommonBtn>
                     </div>
                     {alertNickname ? (
-                      <SmText margin='0.5rem 0' color='red'>
+                      <SmText margin="0.5rem 0" color="red">
                         특수문자는 제외해주세요
                       </SmText>
                     ) : (
-                      ''
+                      ""
                     )}
                   </div>
                 )}
               </MyPageProfileNickname>
             </MyPageProfileConatiner>
             <MyPageProfileCoupon>
-              <CouponImg src={Coupon} alt='coupon image' />
-              <H6>보유 재도전 쿠폰: {coupon}장</H6>
+              <CouponImg src={Coupon} alt="coupon image" />
+              <H5>{coupon}장</H5>
             </MyPageProfileCoupon>
             <CommonBtn
-              height='42'
-              border='none'
+              height="42"
+              border="none"
               color={colors.gray400}
-              font='1.25'
+              font="1.25"
               fontColor={colors.white}
               hoverColor={colors.gray500}
-              padding='0.5rem 1.5rem '
-            >
+              padding="0.5rem 1.5rem ">
               회원탈퇴
             </CommonBtn>
           </MyPageSideConatiner>

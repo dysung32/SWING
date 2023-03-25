@@ -128,7 +128,7 @@ export const MyPageIntroConatiner = styled.div`
       transform: rotate(5deg);
     }
     100% {
-      transform: rotate(-45deg);
+      transform: rotate(-65deg);
     }
   }
 

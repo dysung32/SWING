@@ -1,6 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
-import MyPageSwing from '../assets/mypage_swing.png';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -78,32 +77,65 @@ export const FileInput = styled.div`
 
 export const MyPageProfileNickname = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
+  padding-top: 1rem;
+
+  .nickname {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: ${colors.studyBlue300};
+    padding-right: 1rem;
+  }
 `;
 
 export const MyPageProfileCoupon = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 `;
 
 export const CouponImg = styled.img`
-  width: 50%;
+  width: 25%;
+  padding-right: 1rem;
   object-fit: contain;
 `;
 
 export const MyPageIntroConatiner = styled.div`
-  widht: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 100%;
   height: 30%;
   padding: 1.5rem;
   background-color: ${colors.white};
-  background-image: url(${MyPageSwing});
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: right 10% bottom;
   border-radius: 1rem;
   box-sizing: border-box;
+  overflow: hidden;
+
+  .swingImg {
+    width: 8rem;
+    position: absolute;
+    top: -10%;
+    right: 15%;
+
+    animation: swing ease-in-out 2s infinite alternate;
+    transform-origin: 100% 0%;
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(5deg);
+    }
+    100% {
+      transform: rotate(-65deg);
+    }
+  }
+
+  .swing-bold {
+    font-weight: 700;
+    color: ${colors.studyBlue300};
+  }
 `;
 
 export const MyPageHistoryConatiner = styled.div`
@@ -123,7 +155,7 @@ export const MyPageHistoryHeader = styled.div`
   justify-content: space-between;
   padding-bottom: 0.5rem;
   border-bottom: ${(props) =>
-    props.border ? `2px solid ${colors.gameBlue500}` : ''};
+    props.border ? `2px solid ${colors.gameBlue500}` : ""};
   box-sizing: border-box;
 `;
 export const MyPageHistoryList = styled.div`

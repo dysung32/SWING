@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -107,7 +107,7 @@ export const MyPageIntroConatiner = styled.div`
   align-items: center;
   width: 100%;
   height: 30%;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: ${colors.white};
   border-radius: 1rem;
   box-sizing: border-box;
@@ -136,26 +136,41 @@ export const MyPageIntroConatiner = styled.div`
     font-weight: 700;
     color: ${colors.studyBlue300};
   }
+
+  h3 {
+    color: ${colors.gameYellow300};
+  }
 `;
 
 export const MyPageHistoryConatiner = styled.div`
   display: flex;
   flex-direction: column;
-  widht: 100%;
+  width: 100%;
   height: calc(70% - 2rem);
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   margin-top: 2rem;
   background-color: ${colors.white};
   border-radius: 1rem;
   box-sizing: border-box;
+
+  .more-list-nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+  }
+
+  .more-list-nav h6 {
+    cursor: pointer;
+    color: ${colors.studyBlue500};
+  }
 `;
 
 export const MyPageHistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) =>
-    props.border ? `2px solid ${colors.gameBlue500}` : ""};
+  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
   box-sizing: border-box;
 `;
 export const MyPageHistoryList = styled.div`

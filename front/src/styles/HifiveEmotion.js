@@ -122,6 +122,16 @@ export const GameImage = styled.img`
   opacity: ${props => props.opacity};
   animation: ${(props) => props.vibration && css`${shake} 0.15s linear` };
   animation-i teration-count: 2;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
 `;
 
 const InputContainer = styled.form`

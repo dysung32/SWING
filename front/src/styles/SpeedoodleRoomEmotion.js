@@ -9,21 +9,3 @@ export const SpeedoodleRoomContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-export const UserInfoContainer = styled.div`
-  grid-row-start: 1;
-  grid-row-end: 1;
-  grid-column-start: 1;
-  grid-column-end: 5;
-  border: 1px solid red;
-  box-sizing: border-box;
-`;
-
-export const GameInfoContainer = styled.div`
-  grid-row-start: 1;
-  grid-row-end: 1;
-  grid-column-start: 5;
-  grid-column-end: 13;
-  border: 1px solid yellow;
-  box-sizing: border-box;
-`;

@@ -29,6 +29,7 @@ function App() {
           <Route path='/speedoodle' element={<Speedoodle />} />
           <Route path='/speedoodle/room/:no' element={<SpeedoodleRoom />} />
           <Route path='/review-note' element={<ReviewNote />} />
+          <Route path='/history' element={<History />} />
           <Route path='/history/:no' element={<History />} />
           <Route path='/test-word' element={<WordTest />} />
           <Route path='/test-sentence' element={<SentenceTest />} />

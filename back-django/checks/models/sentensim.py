@@ -23,7 +23,10 @@ def word_similarity(answers, user_word):
     for answer in answers:
         answer_eb = model.encode(answer, convert_to_tensor=True)
         cosine_scores = util.cos_sim(user_word_eb, answer_eb)
-        similarities.update({answer: round(cosine_scores[0][0].item(), 2)})
+        if cosine_scores[0][0].item() < 0:
+            similarities.update({answer: 0}) 
+        else:
+            similarities.update({answer: round(cosine_scores[0][0].item(), 2)}) 
     
     return similarities
 

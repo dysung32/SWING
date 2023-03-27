@@ -7,7 +7,8 @@ export const GameInfoContainer = styled.div`
   grid-column-start: 5;
   grid-column-end: 13;
   padding: 1rem;
-  background-color: ${colors.white};
+  background-color: ${(props) =>
+    props.color ? props.color : `${colors.white}`};
   border-radius: 1.5rem;
   box-sizing: border-box;
 `;
@@ -45,8 +46,34 @@ export const Chat = styled.div`
   grid-row-end: 1;
   grid-column-start: 3;
   grid-column-end: 4;
+  padding: 0.5rem;
   background-color: ${colors.gray200};
   border-radius: 1rem;
+`;
+
+export const ChattingContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 71px);
+  margin-bottom: 1rem;
+  background-color: white;
+`;
+
+export const ChattingInputContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.5rem;
+  background-color: ${colors.white};
+`;
+
+export const ChatInput = styled.input`
+  min-width: calc(100% - 48px);
+  padding-left: 0.5rem;
+  border: none;
+  border-radius: 1rem;
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const GameExplain = styled.div`
@@ -67,13 +94,12 @@ export const GameModeContainer = styled.div`
   width: 100%;
   height: 30%;
   margin-bottom: 4%;
-  background-color: ${colors.gray200};
 `;
 
 export const GameMode = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: calc((100% - 1rem) / 2);
   height: 100%;

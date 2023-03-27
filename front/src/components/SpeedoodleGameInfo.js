@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -7,19 +7,26 @@ import {
   RoomInfoContainer,
   RoomInfo,
   Chat,
+  ChattingContainer,
+  ChattingInputContainer,
+  ChatInput,
   GameExplain,
   GameModeContainer,
   GameMode,
   BtnContainer,
 } from '../styles/SpeedoodleGameInfoEmotion';
 import SpeedoodleGame from '../components/SpeedoodleGame';
-import { CommonBtn } from '../styles/CommonEmotion';
+import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 
+import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
+  const chatWindowRef = useRef(null);
   const [isHardMode, setIsHardMode] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [bgColor, setBgColor] = useState(null);
 
   // 모드 변경
   const onClickEasyMode = () => {
@@ -29,19 +36,35 @@ function SpeedoodleGameInfo(props) {
     setIsHardMode(true);
   };
 
+  const linkCopy = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert('링크가 복사되었습니다. 초대할 친구에게 링크를 공유하세요!');
+  };
+
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
     props.setIsGameStart(true);
+    setBgColor(`${colors.gameBlue100}`);
   };
 
+  //방 나가기
   const exitRoom = () => {
     navigate('/speedoodle');
   };
+  // 보낼 메세지 저장해놓기
+  const saveMessage = (e) => {
+    console.log(e.target.value);
+    setChatInput(e.target.value);
+  };
+  // 저장해둔 메세지 보내기
+  const sendMessage = () => {};
   return (
     <>
-      <GameInfoContainer>
+      <GameInfoContainer color={bgColor}>
         {props.start ? (
-          <SpeedoodleGame></SpeedoodleGame>
+          <SpeedoodleGame
+            style={{ width: '100%', height: '100%' }}
+          ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>
             <RoomTitle>
@@ -107,12 +130,12 @@ function SpeedoodleGameInfo(props) {
                       font='0.75'
                       padding='0.5rem 0'
                       margin='0 0 1rem 0'
+                      onClick={linkCopy}
                     >
                       <P1 align='center'>초대하기</P1>
                     </CommonBtn>
                     <CommonBtn
                       color={colors.gray200}
-                      q
                       fontColor={colors.gray400}
                       width='100%'
                       font='0.75'
@@ -133,7 +156,22 @@ function SpeedoodleGameInfo(props) {
                   </CommonBtn>
                 </BtnContainer>
               </RoomInfo>
-              <Chat></Chat>
+              <Chat>
+                <ChattingContainer useRef={chatWindowRef}></ChattingContainer>
+                <ChattingInputContainer>
+                  <ChatInput onChange={saveMessage} />
+                  <button
+                    style={{
+                      all: 'unset',
+                      cursor: 'pointer',
+                      color: `${colors.gameBlue500}`,
+                    }}
+                    onClick={sendMessage}
+                  >
+                    <SendFill />
+                  </button>
+                </ChattingInputContainer>
+              </Chat>
             </RoomInfoContainer>
           </div>
         )}

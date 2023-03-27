@@ -22,6 +22,11 @@ export const CommonInput = styled.input`
   padding: ${(props) => props.padding};
   box-sizing: border-box;
   flex-grow: ${(props) => props.flexGrow};
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 export const CommonBtn = styled.button`

@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ReviewNoteWrapperColor, 
   ReviewNoteWrapper, 
   ReviewBtnContainer,
@@ -17,32 +17,17 @@ import { API_URL } from '../config';
 
 function ReviewNote() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const wordArray = [["apple","사과","a round fruit with red, yellow, or green skin and firm white flesh"], 
-  ["dentist","치과 의사","a person whose job is to care for people's teeth"], 
-  ["swing","(전후좌우로) 흔들리다[흔들다]","to move backward and forward or from side to side while hanging from something"],
-  ["this", "이것","thing sdfajksdkfjadjhkga"],
-  ["is", "이것","thing sdfajksdkfjadjhkga"],
-  ["a", "이것","thing sdfajksdkfjadjhkga"],];
-
-  const sentenceArray = [["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
-  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
-  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
-  ["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
-  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
-  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
-  ["a man is riding a bicycle", "남자가 자전거를 타고 있다"],
-  ["adfdjfk;adsjfn dsfjkld; dfjkl;a", "ㅁㅇ러ㅏㅗㅁ어ㅗ ㅁㅇ러ㅏㅣㅗㅁㄹ ㅏ"],
-  ["adfasdfasdfsadfasd","aㄴㅇㄹㄴㅇㄻㄴㄹㄴㅇㄹ"],
-];
-
+  const [wordArray,setWordArray] = useState([]);
+  const [sentenceArray, setSentenceArray] = useState([]);
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(3);
   const [page, setPage] = useState(1);
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
-  const [wordReview, setwordReview] = useState(true);
-  const [wordChecked, setWordChecked] = useState(Array(wordArray.length).fill(false));
+  const [wordReview, setwordReview] = useState(null);
+  const [wordChecked, setWordChecked] = useState(Array(posts.length).fill(false));
 
   useEffect(() => {
     axios({
@@ -50,12 +35,45 @@ function ReviewNote() {
       url: `${API_URL}/note/word/red/0`,
     })
     .then((res) => {
-      setPosts(res.data.wordNoteList);
+      setWordArray([...res.data.wordNoteList]); 
     })
     .catch((err) => {
       console.log(err);
+    })  
+    axios({
+      method: 'get',
+      url: `${API_URL}/note/sentence/red/0`,
     })
-  })
+    .then((res) => {
+      setSentenceArray([...res.data.sentenceNoteList]);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  },[]);
+
+  useEffect(() => {
+    let nowState = null;
+    if(location.state === null){
+      nowState = true;
+    } 
+    else if(location.state === 1){
+      nowState = true;
+    }
+    else {
+      nowState = false;
+    }
+    setwordReview(nowState);
+  },[location.state]);
+
+  useEffect(() => {
+    if(wordReview){
+      setPosts(wordArray);
+    }
+    else{
+      setPosts(sentenceArray);
+    }
+  }, [wordArray, sentenceArray, wordReview]);
 
   useEffect(() => {
     const newOffset = ((page - 1) + 5*(Ppage - 1)) * limit;
@@ -91,11 +109,49 @@ function ReviewNote() {
   };
 
   // 단어 셀프체크 부분 토글 함수
-  const ToggleCheck = (idx) => {
-    let copy = [...wordChecked];
-    copy[idx] = !copy[idx];
-    setWordChecked(copy);
-    console.log(wordChecked); 
+  const ToggleCheck = (wid) => {
+    if(wordReview){
+      axios({
+        method:'put',
+        url:`${API_URL}/note/word/${wid}`,
+      })
+      .then((res) => {
+        axios({
+          method: 'get',
+          url: `${API_URL}/note/word/red/0`,
+        })
+        .then((res) => {
+          setWordArray([...res.data.wordNoteList]); 
+        })
+        .catch((err) => {
+          console.log(err);
+        })  
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    else{
+      axios({
+        method:'put',
+        url:`${API_URL}/note/sentence/${wid}`,
+      })
+      .then((res) => {
+        axios({
+          method: 'get',
+          url: `${API_URL}/note/sentence/red/0`,
+        })
+        .then((res) => {
+          setSentenceArray([...res.data.sentenceNoteList]);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
   }
 
   return (
@@ -140,19 +196,24 @@ function ReviewNote() {
           <WrongBox>
             {posts.slice(offset, offset + limit).map((item, idx) => (
               <WrongThingBox key={idx}>
-                <H3 margin="0rem 0rem 1rem 0rem">{item[0]}</H3>
+                <H3 margin="0rem 0rem 1rem 0rem">{item.content}</H3>
                 <ThingMean margin={wordReview===true ? 1 : 0}>
-                  {item[1]}
+                  {item.meaningKr}
                 </ThingMean>
                 <div className='thingMean'
                 display={ wordReview===true ? "block" : "none" }>
-                  {item[2]}
+                  {item.meaningEn}
                 </div>
                 <div className='checkBtn'>
                   {
-                    wordChecked[idx+(page-1)*limit] === true?
-                    <CheckCircleFill onClick={() => ToggleCheck(idx)} color={colors.studyBlue300} />
-                    :<CheckCircle onClick={() => ToggleCheck(idx)}/>
+                    wordReview === true ? 
+                    posts[idx+(page-1)*limit].checked === 1?
+                    <CheckCircleFill onClick={() => ToggleCheck(posts[idx+(page-1)*limit].wordNoteId)} color={colors.studyBlue300} />
+                    :<CheckCircle onClick={() => ToggleCheck(posts[idx+(page-1)*limit].wordNoteId)}/>
+                    :
+                    posts[idx+(page-1)*limit].checked === 1?
+                    <CheckCircleFill onClick={() => ToggleCheck(posts[idx+(page-1)*limit].sentenceNoteId)} color={colors.studyBlue300} />
+                    :<CheckCircle onClick={() => ToggleCheck(posts[idx+(page-1)*limit].sentenceNoteId)}/>
                   }
                 </div>
               </WrongThingBox>

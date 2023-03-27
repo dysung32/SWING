@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const SentencyWrapper = styled.div`
   display: flex;
@@ -11,11 +11,7 @@ export const SentencyWrapper = styled.div`
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
 
   .sentencyContentContainer {
     width: 100%;
@@ -79,7 +75,7 @@ export const WordBox = styled.span`
   margin-right: 1.5rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.spacing > 1 ? "0.5rem" : "initial")};
+  letter-spacing: ${(props) => (props.spacing > 1 ? '0.5rem' : 'initial')};
   text-align: center;
 `;
 
@@ -110,6 +106,10 @@ export const SentencyScoreContainer = styled.div`
 
   .sentencyScoreBox {
     margin-bottom: 1rem;
+  }
+
+  .sentencyAnswerBox {
+    flex-grow: 1;
   }
 `;
 
@@ -154,4 +154,13 @@ export const ResultSentenceWrapper = styled.div`
   .quiz {
     color: ${colors.gamePink500};
   }
+`;
+
+export const SentencyLoadingBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
 `;

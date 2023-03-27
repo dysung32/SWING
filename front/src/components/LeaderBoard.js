@@ -38,7 +38,7 @@ function LeaderBoard(ranks, mine) {
               <SingleRankerContainer>
                 <PlayerProfile src={topRankers[1].profileImageUrl} width={4} height={4} margin='0 0 -0.3rem 0' />
                 <PlayerMedal src={secondMedal} width={2} height={2} />
-                <PlayerName fontColor={colors.white} font={'10px'}>
+                <PlayerName fontColor={colors.white} font={'13px'}>
                   {topRankers[1].nickname}
                 </PlayerName>
                 <PlayerScore font={'1rem'}>{topRankers[1].score}</PlayerScore>
@@ -54,7 +54,7 @@ function LeaderBoard(ranks, mine) {
               <SingleRankerContainer>
                 <PlayerProfile src={topRankers[2].profileImageUrl} width={4} height={4} margin='0 0 -0.3rem 0' />
                 <PlayerMedal src={thirdMedal} width={2} height={2} />
-                <PlayerName fontColor={colors.white} font={'10px'}>
+                <PlayerName fontColor={colors.white} font={'13px'}>
                   {topRankers[2].nickname}
                 </PlayerName>
                 <PlayerScore font={'1rem'}>{topRankers[2].score}</PlayerScore>

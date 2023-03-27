@@ -15,12 +15,12 @@ import { H4, P1 } from '../styles/Fonts';
 import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
 
 function Home() {
-  // useEffect(() => {
-  //   if (window.location.href.includes('code')) {
-  //     const code = new URL(window.location.href).searchParams.get('code');
-  //     GoogleLogin(code);
-  //   }
-  // });
+  useEffect(() => {
+    if (window.location.href.includes('code')) {
+      const code = new URL(window.location.href).searchParams.get('code');
+      GoogleLogin(code);
+    }
+  }, []);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();

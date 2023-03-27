@@ -55,10 +55,10 @@ export const LogInBtn = styled.div`
   position: relative;
   width: 100%;
   padding: 1.2rem 1rem 1.2rem 3.5rem;
-  border: ${(props) => (props.border ? `1px solid #${props.border}` : 'none')};
+  border: ${(props) => (props.border ? `1px solid ${props.border}` : 'none')};
   border-radius: 0.5rem;
   box-sizing: border-box;
-  background-color: ${(props) => (props.color ? `#${props.color}` : '#ffffff')};
+  background-color: ${(props) => (props.color ? `${props.color}` : '#ffffff')};
   text-align: center;
   font-size: 1.5rem;
   cursor: pointer;

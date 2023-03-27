@@ -39,7 +39,7 @@ export const CommonBtn = styled.button`
   }
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
-  box-shadow: ${(props) => (props.shadow ? props.shadow : 'nonne')};
+  box-shadow: ${(props) => (props.shadow ? props.shadow : 'none')};
   box-sizing: border-box;
   tabindex: ${(props) => props.tabIndex};
 

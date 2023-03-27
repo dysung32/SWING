@@ -17,55 +17,12 @@ import { H5 } from '../styles/Fonts';
 import Google from '../assets/google_icon.png';
 import Kakao from '../assets/kakaotalk_icon.png';
 
-function parseJwt(token) {
-  let base64Url = token.split('.')[1];
-  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  let jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
-
-  return JSON.parse(jsonPayload);
-}
-
-function handleCredentialResponse(response) {
-  const responsePayload = parseJwt(response.credential);
-  console.log(responsePayload);
-  console.log('ID: ' + responsePayload.sub);
-  console.log('Full Name: ' + responsePayload.name);
-  console.log('Given Name: ' + responsePayload.given_name);
-  console.log('Family Name: ' + responsePayload.family_name);
-  console.log('Image URL: ' + responsePayload.picture);
-  console.log('Email: ' + responsePayload.email);
-}
-
-window.onload = () => {
-  window.google.accounts.id.initialize({
-    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    callback: handleCredentialResponse,
-  });
-  window.google.accounts.id.renderButton(document.getElementById('buttonDiv'), {
-    type: 'standard',
-    theme: 'outline',
-    size: 'large',
-    text: 'signin_with',
-    shape: 'rectangular',
-    logo_alignment: 'left',
-    width: 500,
-    locale: 'ko_KR',
-  });
-};
-
 function LogIn() {
   const navigate = useNavigate();
   const onClickLogo = () => {
     navigate('/');
   };
-  useEffect(() => window.onload, []);
+
   const scope = 'profile_nickname, profile_image, account_email';
   const getKakaoProfile = () => {
     window.Kakao.API.request({
@@ -87,30 +44,34 @@ function LogIn() {
       },
     });
   };
+  // const kakaoLogin = (e) => {
+  //   e.preventDefault();
+  //   window.Kakao.Auth.login({
+  //     scope,
+  //     success: function (response) {
+  //       window.Kakao.Auth.setAccessToken(response.access_token);
+  //       console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
+  //       getKakaoProfile();
+  //       // loginResult = true;
+  //       // // 성공 사항에 따라 페이지를 수정하기 위한 setState
+  //       // home.setState({ loginResult });
+  //     },
+  //     fail: function (error) {
+  //       console.log(error);
+  //     },
+  //   });
+  // };
+
   const kakaoLogin = (e) => {
     e.preventDefault();
-    window.Kakao.Auth.login({
-      scope,
-      success: function (response) {
-        window.Kakao.Auth.setAccessToken(response.access_token);
-        console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
-        getKakaoProfile();
-        // loginResult = true;
-        // // 성공 사항에 따라 페이지를 수정하기 위한 setState
-        // home.setState({ loginResult });
-      },
-      fail: function (error) {
-        console.log(error);
-      },
-    });
+    window.location.href =
+      'http://localhost:8080/api/oauth2/authorize/kakao?redirect_uri=' +
+      'http://localhost:3000/oauth2/redirect';
   };
 
   const googleLogin = (e) => {
     e.preventDefault();
-    window.location.href =
-      'https://accounts.google.com/gsi/button?type=standard&theme=outline&size=large&text=signin_with&shape=rectangular&logo_alignment=left&width=100%25&client_id=12428147789-qgu2fc907vm0tu1otbd9v2a4m3g42sav.apps.googleusercontent.com&iframe_id=gsi_125285_234200&as=qXj4EK%2BCIsTD1l0BA6KTzQ&hl=ko_KR';
-    // const GOOGLE_LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=${process.env.REACT_APP_GOOGLE_SCOPE}`;
-    // window.location.href = GOOGLE_LOGIN_URL;
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=${process.env.REACT_APP_GOOGLE_SCOPE}`;
   };
 
   return (
@@ -122,12 +83,11 @@ function LogIn() {
             <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
           </LogoImg>
           <LogInBtnContainer>
-            <div id='buttonDiv'></div>
             <LogInBtn border={colors.gray400} onClick={googleLogin}>
               <SocialLogoImg src={Google} alt='google logo' />
               <H5 align='center'>구글로 시작하기</H5>
             </LogInBtn>
-            <LogInBtn color='F7E600' onClick={kakaoLogin}>
+            <LogInBtn color='#F7E600' onClick={kakaoLogin}>
               <SocialLogoImg src={Kakao} alt='kakao logo' />
               <H5 align='center'>카카오로 시작하기</H5>
             </LogInBtn>

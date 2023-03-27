@@ -55,7 +55,7 @@ function SentenceTest() {
   const handleExit = () => {
     setSuccessModalShow(false);
     setFailModalShow(false);
-    navigate('/review-note', { state: false }); // 종료 누르면 오답노트로 navigate
+    navigate('/review-note', { state: 2 }); // 종료 누르면 오답노트로 navigate
   };
 
   return (

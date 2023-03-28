@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -28,17 +28,24 @@ import {
 
 function Speedoodle() {
   const navigate = useNavigate();
+  // roomList 관련 useState
   const [roomList, setRoomList] = useState([]);
   const [renderRoomList, setRenderRoomList] = useState([]);
   const [activeMode, setActiveMode] = useState(2);
+  // 검색 관련 useState
+  const [type, setType] = useState('roomId');
+  const [searchInput, setSearchInput] = useState('');
+  // 방생성 모달 관련 useState
   const [createModalShow, setCreateModalShow] = useState(false);
-  const [codeModalShow, setCodeModalShow] = useState(false);
   const [isHard, setIsHard] = useState(false);
   const [isLock, setIsLock] = useState(false);
-  const [code, setCode] = useState('');
+  // 비밀번호 입력 모달 useState
+  const [codeModalShow, setCodeModalShow] = useState(false);
+  const [compareCode, setCompareCode] = useState('');
   const [roomId, setRoomId] = useState(null);
   const [inputCode, setInputCode] = useState('');
   const [wrongCode, setWrongCode] = useState(false);
+  // 페이지네이션 관련 useState
   const [limit, setLimit] = useState(8);
   const [page, setPage] = useState(1);
   const [Ppage, setPpage] = useState(1);
@@ -50,8 +57,8 @@ function Speedoodle() {
   }, [page, Ppage]);
 
   const options = [
-    { value: 'roomNum', name: '방번호' },
-    { value: 'title', name: '방제목' },
+    { value: 'roomId', name: '방번호' },
+    { value: 'name', name: '방제목' },
   ];
 
   const modeOptions = [
@@ -149,11 +156,39 @@ function Speedoodle() {
     }
   };
 
+  // 검색 select에 따른 type 변경
+  const handleType = (e) => {
+    setType(() => e.target.value);
+  };
+
+  const handleSearchInput = (e) => {
+    setSearchInput(() => e.target.value);
+  };
+
+  const handleSearch = () => {
+    handleSearchRoomList([type, searchInput]);
+    setSearchInput(() => '');
+  };
+
+  const handleSearchRoomList = (condition) => {
+    const type = condition[0];
+    const search = condition[1];
+    if (type === 'roomId') {
+      setRenderRoomList(
+        roomList.filter((room) => {
+          const title = room.roomId;
+          return title.toString().includes(search);
+        })
+      );
+    } else {
+      setRenderRoomList(roomList.filter((room) => room.name.includes(search)));
+    }
+  };
+
   // select에서 모드 선택에 따른 필터 변경
   const handleChangeMode = (e) => {
     setActiveMode(() => e.target.value);
     handleRenderRoomList(activeMode);
-    console.log(renderRoomList);
   };
 
   // 방만들기 모달창 오픈
@@ -188,7 +223,7 @@ function Speedoodle() {
     if (code !== '') {
       setWrongCode(false);
       setCodeModalShow(true);
-      setCode(code);
+      setCompareCode(code);
       setRoomId(id);
     } else {
       navigate(`/speedoodle/room/${id}`);
@@ -201,8 +236,8 @@ function Speedoodle() {
   };
 
   // 유저가 입력한 코드와 비밀방 코드 비교 함수
-  const compareCode = () => {
-    if (code === inputCode) {
+  const handleCompareCode = () => {
+    if (compareCode === inputCode) {
       setWrongCode(false);
       navigate(`/speedoodle/room/${roomId}`);
     } else setWrongCode(true);
@@ -354,7 +389,7 @@ function Speedoodle() {
             color={colors.gameBlue100}
             fontColor={colors.gameBlue500}
             font='1.2'
-            onClick={compareCode}
+            onClick={handleCompareCode}
           >
             <P1 align='center'>확인</P1>
           </CommonBtn>
@@ -383,7 +418,9 @@ function Speedoodle() {
         <SpeedoodleContentContainer>
           <FlexContainer>
             <span>
-              <SelectInput>{inputOption}</SelectInput>
+              <SelectInput onChange={handleType} value={type}>
+                {inputOption}
+              </SelectInput>
               <CommonInput
                 minWidth='32vw'
                 height='55'
@@ -391,6 +428,8 @@ function Speedoodle() {
                 padding='0 1rem'
                 border={'none'}
                 placeholder='방번호/방제목을 입력하세요.'
+                onChange={handleSearchInput}
+                value={searchInput}
               />
               <CommonBtn
                 height='55'
@@ -400,6 +439,7 @@ function Speedoodle() {
                 padding='0.75rem 2rem'
                 margin='0 0 0 1rem'
                 border={'none'}
+                onClick={handleSearch}
               >
                 Search
               </CommonBtn>

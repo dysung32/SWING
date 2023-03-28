@@ -56,6 +56,13 @@ export const RoomTitleContainer = styled.div`
   height: 34%;
   background-color: ${colors.white};
   border-radius: 1rem;
+  margin: 0;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
 `;
 
 export const RoomIconContainer = styled.div`

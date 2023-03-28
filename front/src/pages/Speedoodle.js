@@ -8,6 +8,7 @@ import {
   RoomContainer,
   Room,
   RoomTitleContainer,
+  RoomTitle,
   RoomIconContainer,
   CreateRoomContainer,
   FlexContainer,
@@ -27,7 +28,9 @@ import {
 
 function Speedoodle() {
   const navigate = useNavigate();
-  const [activeMode, setActiveMode] = useState('MODE');
+  const [roomList, setRoomList] = useState([]);
+  const [renderRoomList, setRenderRoomList] = useState([]);
+  const [activeMode, setActiveMode] = useState(2);
   const [createModalShow, setCreateModalShow] = useState(false);
   const [codeModalShow, setCodeModalShow] = useState(false);
   const [isHard, setIsHard] = useState(false);
@@ -52,12 +55,10 @@ function Speedoodle() {
   ];
 
   const modeOptions = [
-    { value: 'ALL', name: 'ALL' },
+    { value: 2, name: 'ALL' },
     { value: 0, name: 'EASY' },
     { value: 1, name: 'HARD' },
   ];
-
-  let roomList = [];
 
   // 방 목록 가져오는 함수
   const getRoomList = () => {
@@ -68,7 +69,8 @@ function Speedoodle() {
         // },
       })
       .then((res) => {
-        console.log(res);
+        setRoomList([...res.data.roomList]);
+        setRenderRoomList([...res.data.roomList]);
       })
       .catch((err) => console.error(err));
   };
@@ -77,72 +79,9 @@ function Speedoodle() {
     getRoomList();
   }, []);
 
-  // const roomList = [
-  //   {
-  //     mode: 0,
-  //     name: '밥아저씨를 꿈꾼다',
-  //     roomId: 123,
-  //     leaderNickname: '행복한초코',
-  //     userCnt: 2,
-  //     code: null,
-  //   },
-  //   {
-  //     mode: 1,
-  //     name: '뽀삐랑 놀자~',
-  //     roomId: 125,
-  //     leaderNickname: '귀여운뽀삐',
-  //     userCnt: 4,
-  //     code: '012345',
-  //   },
-  //   {
-  //     mode: 1,
-  //     name: '저는 진심입니다',
-  //     roomId: 121,
-  //     leaderNickname: '데이비드',
-  //     userCnt: 3,
-  //     code: null,
-  //   },
-  //   {
-  //     mode: 0,
-  //     name: '재밌는 스피두들',
-  //     roomId: 127,
-  //     leaderNickname: '쪼안나',
-  //     userCnt: 3,
-  //     code: '111111',
-  //   },
-  //   {
-  //     mode: 0,
-  //     name: '한판만 하고 잘게요',
-  //     roomId: 128,
-  //     leaderNickname: '맹지니',
-  //     userCnt: 2,
-  //     code: null,
-  //   },
-  //   {
-  //     mode: 1,
-  //     name: '나 이겨보셈',
-  //     roomId: 111,
-  //     leaderNickname: '인두목',
-  //     userCnt: 3,
-  //     code: '123445',
-  //   },
-  //   {
-  //     mode: 1,
-  //     name: 'welcome to speedoodle',
-  //     roomId: 116,
-  //     leaderNickname: 'Amily',
-  //     userCnt: 2,
-  //     code: null,
-  //   },
-  //   {
-  //     mode: 0,
-  //     name: '일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십',
-  //     roomId: 119,
-  //     leaderNickname: 'SSAFY8th',
-  //     userCnt: 5,
-  //     code: null,
-  //   },
-  // ];
+  useEffect(() => {
+    handleRenderRoomList(activeMode);
+  }, [activeMode]);
 
   const inputOption = options.map((option, idx) => (
     <option value={option.value} key={idx}>
@@ -156,7 +95,7 @@ function Speedoodle() {
     </option>
   ));
 
-  const rooms = roomList?.slice(offset, offset + limit).map((room) => (
+  const rooms = renderRoomList?.slice(offset, offset + limit).map((room) => (
     <Room
       color={room.mode === 0 ? colors.gameBlue100 : colors.gamePink200}
       key={room.roomId}
@@ -169,7 +108,11 @@ function Speedoodle() {
       <FlexContainer>
         <RoomIconContainer>
           <AwardFill />
-          <P2 margin='0 0 0 1rem'>{room.leaderNickname}</P2>
+          <P2 margin='0 0 0 1rem'>
+            {room.leaderNickname.length > 8
+              ? room.leaderNickname.substr(0, 8) + '...'
+              : room.leaderNickname}
+          </P2>
         </RoomIconContainer>
         <RoomIconContainer>
           <PersonFill />
@@ -185,7 +128,7 @@ function Speedoodle() {
         font='1'
         onClick={() => enterRoom(room.roomId, room.code)}
       >
-        {room.closed ? (
+        {room.code !== '' ? (
           <LockFill style={{ fontSize: '24px' }} />
         ) : (
           <H5 align='center'>ENTER</H5>
@@ -194,9 +137,23 @@ function Speedoodle() {
     </Room>
   ));
 
+  // 필터에 따른 랜더될 room data 변경
+
+  const handleRenderRoomList = (mode) => {
+    if (mode === '0') {
+      setRenderRoomList(roomList.filter((room) => room.mode === 0));
+    } else if (mode === '1') {
+      setRenderRoomList(roomList.filter((room) => room.mode === 1));
+    } else {
+      setRenderRoomList([...roomList]);
+    }
+  };
+
   // select에서 모드 선택에 따른 필터 변경
   const handleChangeMode = (e) => {
     setActiveMode(() => e.target.value);
+    handleRenderRoomList(activeMode);
+    console.log(renderRoomList);
   };
 
   // 방만들기 모달창 오픈
@@ -222,11 +179,13 @@ function Speedoodle() {
   };
 
   // 방목록 api 새로고침 함수
-  const refreshRoomList = () => {};
+  const refreshRoomList = () => {
+    getRoomList();
+  };
 
   // 방 입장버튼 눌렀을 때 비밀방 여부에 따라 라우터제공
   const enterRoom = (id, code) => {
-    if (code !== null) {
+    if (code !== '') {
       setWrongCode(false);
       setCodeModalShow(true);
       setCode(code);
@@ -476,7 +435,7 @@ function Speedoodle() {
           <RoomContainer>{rooms}</RoomContainer>
         </SpeedoodleContentContainer>
         <Pagination
-          total={roomList.length}
+          total={renderRoomList.length}
           limit={limit}
           page={page}
           Ppage={Ppage}

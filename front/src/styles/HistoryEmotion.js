@@ -32,11 +32,11 @@ export const SingleHistoryList = styled.div`
   }
 
   .history-date {
-    flex: 0.3;
+    flex: 0.4;
   }
 
   .history-title {
-    flex: 0.6;
+    flex: 0.5;
   }
 
   .history-rank {

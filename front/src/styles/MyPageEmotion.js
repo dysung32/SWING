@@ -185,11 +185,11 @@ export const HistoryHeader = styled.div`
   color: ${colors.gameBlue500};
 
   .date {
-    flex: 0.3;
+    flex: 0.4;
   }
 
   .roomname {
-    flex: 0.6;
+    flex: 0.5;
   }
 
   .rank {

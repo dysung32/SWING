@@ -36,6 +36,16 @@ function Speedoodle() {
   const [roomId, setRoomId] = useState(null);
   const [inputCode, setInputCode] = useState('');
   const [wrongCode, setWrongCode] = useState(false);
+  const [limit, setLimit] = useState(8);
+  const [page, setPage] = useState(1);
+  const [Ppage, setPpage] = useState(1);
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    const newOffset = ((page - 1) + 5*(Ppage - 1)) * limit;
+    setOffset(newOffset);
+  }, [page, Ppage]);
+
   const options = [
     { value: 'roomNum', name: '방번호' },
     { value: 'title', name: '방제목' },
@@ -120,6 +130,33 @@ function Speedoodle() {
       closed: false,
       code: null,
     },
+    {
+      mode: 'EASY',
+      name: '밥아저씨를 꿈꾼다',
+      roomId: 123,
+      leaderId: '행복한초코',
+      currentMember: 2,
+      closed: false,
+      code: null,
+    },
+    {
+      mode: 'HARD',
+      name: '뽀삐랑 놀자~',
+      roomId: 125,
+      leaderId: '귀여운뽀삐',
+      currentMember: 4,
+      closed: true,
+      code: '012345',
+    },
+    {
+      mode: 'HARD',
+      name: '저는 진심입니다',
+      roomId: 121,
+      leaderId: '데이비드',
+      currentMember: 3,
+      closed: false,
+      code: null,
+    },
   ];
 
   const inputOption = options.map((option, idx) => (
@@ -134,7 +171,7 @@ function Speedoodle() {
     </option>
   ));
 
-  const rooms = roomList?.map((room) => (
+  const rooms = roomList?.slice(offset, offset + limit).map((room) => (
     <Room
       color={room.mode === 'EASY' ? colors.gameBlue100 : colors.gamePink200}
       key={room.roomId}
@@ -454,12 +491,12 @@ function Speedoodle() {
           <RoomContainer>{rooms}</RoomContainer>
         </SpeedoodleContentContainer>
         <Pagination
-          total={42}
-          limit={8}
-          page={1}
-          Ppage={1}
-          setPage={1}
-          setPpage={1}
+          total={roomList.length}
+          limit={limit}
+          page={page}
+          Ppage={Ppage}
+          setPage={setPage}
+          setPpage={setPpage}
         ></Pagination>
       </SpeedoodleWrapper>
     </>

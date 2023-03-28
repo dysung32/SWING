@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
 import { colors } from '../styles/ColorPalette';
 import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { H1 } from '../styles/Fonts';
@@ -15,6 +15,10 @@ import {
   UserNickName,
 } from '../styles/HistoryEmotion';
 import { MyPageWrapper } from '../styles/MyPageEmotion';
+
+import { Autoplay, Pagination, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 function HistoryDetail() {
   const navigate = useNavigate();
@@ -79,6 +83,7 @@ function HistoryDetail() {
             height={45}
             font={1.1}
             color={colors.gameYellow200}
+            hoverColor={colors.gameYellow300}
             fontColor={colors.gameBlue500}
             fontWeight={700}
             className='save-btn'
@@ -127,8 +132,24 @@ function HistoryDetail() {
               )}
             </GameRoundNav>
             <HistoryPictureContainer>
-              {renderPics}
-              <HistoryPictureContainer />
+              <Swiper
+                spaceBetween={50}
+                slidesPerView={1}
+                autoplay={{
+                  delay: 3500,
+                }}
+                pagination={{
+                  clickable: true,
+                }}
+                modules={[Autoplay, Pagination]}
+                className='mySwiper'
+              >
+                <SwiperSlide>{renderPics}</SwiperSlide>
+                <SwiperSlide>{renderPics}</SwiperSlide>
+                <SwiperSlide>{renderPics}</SwiperSlide>
+                <SwiperSlide>{renderPics}</SwiperSlide>
+              </Swiper>
+              {/* {renderPics} */}
             </HistoryPictureContainer>
           </HistoryContent>
         </HistoryContentContainer>

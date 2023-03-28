@@ -11,6 +11,14 @@ export const MyPageWrapper = styled.div`
   padding-top: 9rem;
   box-sizing: border-box;
   background-color: ${colors.studyBlue300};
+
+  .desc {
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    color: ${colors.white};
+    padding-bottom: 0.5rem;
+  }
 `;
 
 export const MyPageContentContainer = styled.div`
@@ -166,12 +174,28 @@ export const MyPageHistoryConatiner = styled.div`
   }
 `;
 
-export const MyPageHistoryHeader = styled.div`
+export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
   border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
   box-sizing: border-box;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: ${colors.gameBlue500};
+
+  .date {
+    flex: 0.3;
+  }
+
+  .roomname {
+    flex: 0.6;
+  }
+
+  .rank {
+    flex: 0.1;
+    text-align: end;
+  }
 `;
 export const MyPageHistoryList = styled.div`
   display: flex;

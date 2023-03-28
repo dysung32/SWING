@@ -9,7 +9,7 @@ import {
   MyPageProfileConatiner,
   MyPageIntroConatiner,
   MyPageHistoryConatiner,
-  MyPageHistoryHeader,
+  HistoryHeader,
   MyPageHistoryList,
   FileInput,
   MyPageProfileImg,
@@ -136,11 +136,11 @@ function MyPage() {
               <img src={MyPageSwing} className='swingImg' alt='img' />
             </MyPageIntroConatiner>
             <MyPageHistoryConatiner>
-              <MyPageHistoryHeader>
+              <HistoryHeader>
                 <H5 color={colors.gameBlue500}>날짜</H5>
                 <H5 color={colors.gameBlue500}>방제목</H5>
                 <H5 color={colors.gameBlue500}>등수</H5>
-              </MyPageHistoryHeader>
+              </HistoryHeader>
               {renderList}
               <div className='more-list-nav'>
                 <H6 onClick={() => navigate('/history')}>+ 더보기</H6>

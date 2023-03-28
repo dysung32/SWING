@@ -19,6 +19,11 @@ export const MyPageWrapper = styled.div`
     color: ${colors.white};
     padding-bottom: 0.5rem;
   }
+
+  .history-btn {
+    width: 100%;
+    justify-content: flex-end;
+  }
 `;
 
 export const MyPageContentContainer = styled.div`

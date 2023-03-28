@@ -16,6 +16,7 @@ import NavLayout from './components/NavLayout';
 import LoginLayout from './components/LoginLayout';
 import WordTest from './pages/WordTest';
 import SentenceTest from './pages/SentenceTest';
+import HistoryDetail from './pages/HistoryDetail';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           <Route path='/speedoodle/room/:no' element={<SpeedoodleRoom />} />
           <Route path='/review-note' element={<ReviewNote />} />
           <Route path='/history' element={<History />} />
-          <Route path='/history/:no' element={<History />} />
+          <Route path='/history/:no' element={<HistoryDetail />} />
           <Route path='/test-word' element={<WordTest />} />
           <Route path='/test-sentence' element={<SentenceTest />} />
         </Route>

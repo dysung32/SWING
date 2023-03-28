@@ -36,6 +36,16 @@ function Speedoodle() {
   const [roomId, setRoomId] = useState(null);
   const [inputCode, setInputCode] = useState('');
   const [wrongCode, setWrongCode] = useState(false);
+  const [limit, setLimit] = useState(8);
+  const [page, setPage] = useState(1);
+  const [Ppage, setPpage] = useState(1);
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    const newOffset = (page - 1 + 5 * (Ppage - 1)) * limit;
+    setOffset(newOffset);
+  }, [page, Ppage]);
+
   const options = [
     { value: 'roomNum', name: '방번호' },
     { value: 'title', name: '방제목' },
@@ -146,7 +156,7 @@ function Speedoodle() {
     </option>
   ));
 
-  const rooms = roomList?.map((room) => (
+  const rooms = roomList?.slice(offset, offset + limit).map((room) => (
     <Room
       color={room.mode === 0 ? colors.gameBlue100 : colors.gamePink200}
       key={room.roomId}
@@ -466,12 +476,12 @@ function Speedoodle() {
           <RoomContainer>{rooms}</RoomContainer>
         </SpeedoodleContentContainer>
         <Pagination
-          total={42}
-          limit={8}
-          page={1}
-          Ppage={1}
-          setPage={1}
-          setPpage={1}
+          total={roomList.length}
+          limit={limit}
+          page={page}
+          Ppage={Ppage}
+          setPage={setPage}
+          setPpage={setPpage}
         ></Pagination>
       </SpeedoodleWrapper>
     </>

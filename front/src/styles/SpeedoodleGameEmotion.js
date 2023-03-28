@@ -1,7 +1,8 @@
-import styled from '@emotion/styled';
+import styled, { keyframes } from 'styled-components';
 import { colors } from './ColorPalette';
 
 export const GameContainer = styled.div`
+  position: relative;
   padding: 1rem;
 `;
 
@@ -32,4 +33,30 @@ export const Keyword = styled.div`
 export const BtnContainer = styled.div`
   display: flex;
   justify-content: end;
+`;
+
+export const fadeIn = keyframes`
+0%{
+  opacity: 0.1;
+}
+50%{
+  opacity: 1;
+}
+75%{
+  opacity: 0.8;
+}
+100% {
+  opacity: 0;
+}`;
+
+export const StartAlert = styled.div`
+  font-size: 7vw;
+  font-weight: bold;
+  color: ${colors.gray100};
+  text-shadow: -5px 0 ${colors.gameBlue500}, 0 5px ${colors.gameBlue500},
+    5px 0 ${colors.gameBlue500}, 0 -5px ${colors.gameBlue500};
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  animation: ${fadeIn} 1.5s ease-in-out 1 forwards;
 `;

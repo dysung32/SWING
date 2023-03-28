@@ -6,32 +6,16 @@ import {
   CanvasContainer,
   Keyword,
   BtnContainer,
+  StartAlert,
 } from '../styles/SpeedoodleGameEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { AlarmFill } from 'react-bootstrap-icons';
 import { CommonBtn } from '../styles/CommonEmotion';
+import Timer from '../components/Timer';
+
 function SpeedoodleGame(props) {
   const navigate = useNavigate();
-  const [milliseconds, setMilliseconds] = useState(0);
-  const [seconds, setSeconds] = useState(20);
-
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      if (parseInt(milliseconds) > 0) {
-        setMilliseconds(parseInt(milliseconds) - 1);
-      }
-      if (parseInt(milliseconds) === 0) {
-        if (parseInt(seconds) === 0) {
-          clearInterval(countdown);
-        } else {
-          setSeconds(parseInt(seconds) - 1);
-          setMilliseconds(99);
-        }
-      }
-    }, 10);
-    return () => clearInterval(countdown);
-  }, [seconds, milliseconds]);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -87,13 +71,12 @@ function SpeedoodleGame(props) {
   return (
     <>
       <GameContainer>
+        <StartAlert>START</StartAlert>
         <RoundHeader>
           <H4>Round 1</H4>
           <span style={{ display: 'flex' }}>
             <AlarmFill style={{ fontSize: '30px', marginRight: '0.5rem' }} />
-            <H5>
-              {seconds}:{milliseconds < 10 ? `0${milliseconds}` : milliseconds}
-            </H5>
+            <Timer flow={true}></Timer>
           </span>
         </RoundHeader>
 

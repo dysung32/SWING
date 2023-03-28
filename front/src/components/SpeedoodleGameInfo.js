@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import {
   GameInfoContainer,
@@ -19,6 +20,7 @@ import SpeedoodleGame from '../components/SpeedoodleGame';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
+import { AI_API_URL, API_URL } from '../config';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
@@ -43,8 +45,11 @@ function SpeedoodleGameInfo(props) {
 
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
-    props.setIsGameStart(true);
-    setBgColor(`${colors.gameBlue100}`);
+    handleChangeMode();
+    setTimeout(() => {
+      props.setIsGameStart(true);
+      setBgColor(`${colors.gameBlue100}`);
+    }, 2000);
   };
 
   //방 나가기
@@ -58,6 +63,16 @@ function SpeedoodleGameInfo(props) {
   };
   // 저장해둔 메세지 보내기
   const sendMessage = () => {};
+
+  //모드 변경 api 전달
+
+  const handleChangeMode = () => {
+    let paramsMode;
+    if (isHardMode) paramsMode = 1;
+    else paramsMode = 0;
+    console.log(paramsMode);
+    // axios.put(`${API_URL}/doodle/room/}`);
+  };
   return (
     <>
       <GameInfoContainer color={bgColor}>

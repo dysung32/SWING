@@ -90,15 +90,15 @@ export const PageNumBox = styled.button`
   width: 2.5rem;
   height: 2.5rem; 
   border-radius:6px;
-  border: 2px solid ${colors.gray400};
-  color: ${colors.gray400};
+  border: 2px solid ${colors.gray500};
+  color: ${colors.gray500};
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0px;
 
   &[disabled] {
-    background-color: ${colors.gray200};
+    background-color: ${colors.gray300};
     color: ${colors.gray500};
     cursor: revert;
     transform: revert;
@@ -106,7 +106,7 @@ export const PageNumBox = styled.button`
 
   &[aria-current] {
     background-color: ${colors.gameBlue100};
-    border: 2px solid ${colors.gameBlue300};
-    color: ${colors.gameBlue500};
+    border: 2px solid ${colors.gameBlue500};
+    color: ${colors.gameBlue400};
   }
 `;

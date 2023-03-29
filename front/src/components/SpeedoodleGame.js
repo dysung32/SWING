@@ -29,6 +29,7 @@ function SpeedoodleGame(props) {
           clearInterval(countdown);
           const dataURL = canvasRef.current.toDataURL("image/png");
 
+          // dataURL을 디코딩하고 post하는 함수
           getAnswer(dataURL);
         } else {
           setSeconds(parseInt(seconds) - 1);

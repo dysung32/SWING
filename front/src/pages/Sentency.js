@@ -177,13 +177,11 @@ function Sentency() {
       inputSentence = inputSentence.slice(0, -1); // 온점 삭제해주기
     }
     const tmpWordArray = inputSentence.split(' ');
-    if (tmpWordArray.length !== wordArray.length) {
-      alert('제시된 문장의 단어 수와 동일한 문장을 입력해주세요.');
-      return;
-    } else {
-      const similar = await calcSimilarity();
-      // 정확히 일치하는 단어 세팅해주기
-      for (let i = 0; i < tmpWordArray.length; i++) {
+    const similar = await calcSimilarity();
+    // 정확히 일치하는 단어 세팅해주기
+    for (let i = 0; i < tmpWordArray.length; i++) {
+      // 입력 문장이 정답 문장보다 길 경우의 예외 처리
+      if (i < wordArray.length) {
         if (tmpWordArray[i].toLowerCase() === wordArray[i].toLowerCase()) {
           inputArray[i] = wordArray[i];
         } else {
@@ -191,12 +189,14 @@ function Sentency() {
         }
       }
       setInputArray([...inputArray]);
-      if (similar >= 85) {
+      if (similar >= 90) {
         // 성공 모달 띄우고 다음 문제로 넘어가거나
         console.log('성공!');
         setScore(score + 1);
         setFinalSentence(
-          inputRef.current.value.slice(-1) === '.' ? inputRef.current.value + ' ' : inputRef.current.value + '. ',
+          inputRef.current.value.trim().slice(-1) === '.'
+            ? inputRef.current.value + ' '
+            : inputRef.current.value.trim() + '. ',
         );
         inputRef.current.blur();
         setSuccessModalShow(true);
@@ -216,7 +216,7 @@ function Sentency() {
   // 유사도 검사 함수
   const calcSimilarity = async () => {
     console.log('유사도 검사 실시!');
-    let inputSentence = inputRef.current.value;
+    let inputSentence = inputRef.current.value.trim();
     let similarity = 0;
     await axios
       .get(`${AI_API_URL}/sentency/check`, {
@@ -319,9 +319,11 @@ function Sentency() {
       if (remains === 1) {
         setRemains(0);
       }
-      // 마지막 입력 문장 설정
+      // life 0일 때의 최종 입력 문장 설정
       setFinalSentence(
-        inputRef.current.value.slice(-1) === '.' ? inputRef.current.value + ' ' : inputRef.current.value + '. ',
+        inputRef.current.value.trim().slice(-1) === '.'
+          ? inputRef.current.value + ' '
+          : inputRef.current.value.trim() + '. ',
       );
       // 결과 모달 보여주기
       setResultModalShow(true);

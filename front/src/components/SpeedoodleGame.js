@@ -11,10 +11,13 @@ import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { AlarmFill } from 'react-bootstrap-icons';
 import { CommonBtn } from '../styles/CommonEmotion';
+import { API_URL, AI_API_URL } from '../config';
+import axios from 'axios';
+
 function SpeedoodleGame(props) {
   const navigate = useNavigate();
   const [milliseconds, setMilliseconds] = useState(0);
-  const [seconds, setSeconds] = useState(20);
+  const [seconds, setSeconds] = useState(10);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -24,6 +27,9 @@ function SpeedoodleGame(props) {
       if (parseInt(milliseconds) === 0) {
         if (parseInt(seconds) === 0) {
           clearInterval(countdown);
+          const dataURL = canvasRef.current.toDataURL("image/png");
+
+          getAnswer(dataURL);
         } else {
           setSeconds(parseInt(seconds) - 1);
           setMilliseconds(99);
@@ -52,6 +58,31 @@ function SpeedoodleGame(props) {
     canvas.setAttribute('width', window.innerWidth * 0.49);
     canvas.setAttribute('height', window.innerHeight * 0.4);
   }, []);
+
+  const getAnswer = (url) => {
+    let blobBin = window.atob(url.split(',')[1]);
+    let array = [];
+    for (let i = 0; i < blobBin.length; i++) {
+      array.push(blobBin.charCodeAt(i));
+    }
+    let imgBlob = new Blob([(new ArrayBuffer(array))], { type: 'image/png' });
+    let imgFile = new File([imgBlob], "blobtofile.png");
+
+    const formdata = new FormData();
+    formdata.append('answer', imgFile);
+
+    axios.post(`${AI_API_URL}/doodle/check`, formdata, {
+      headers: {
+        'Content-Type':'multipart/form-data',
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
 
   const getPosition = (e) => {
     return { X: e.offsetX, Y: e.offsetY };

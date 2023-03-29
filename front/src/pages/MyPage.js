@@ -9,7 +9,7 @@ import {
   MyPageProfileConatiner,
   MyPageIntroConatiner,
   MyPageHistoryConatiner,
-  MyPageHistoryHeader,
+  HistoryHeader,
   MyPageHistoryList,
   FileInput,
   MyPageProfileImg,
@@ -80,7 +80,13 @@ function MyPage() {
 
   const renderList = historyList.map((history, idx) => {
     return (
-      <MyPageHistoryList key={idx} onClick={() => navigate(`/history/${idx}`)}>
+      <MyPageHistoryList
+        key={idx}
+        onClick={() =>
+          navigate(`/history/${idx}`, {
+            state: { date: history.date, rank: history.rank },
+          })
+        }>
         <P1 color={colors.gameBlue500}>{history.date}</P1>
         <P1 color={colors.gameBlue500}>{history.title}</P1>
         <P1 color={colors.gameBlue500}>{history.rank}등</P1>
@@ -137,7 +143,7 @@ function MyPage() {
             <MyPageIntroConatiner>
               <div className="flex-column">
                 <H3>Hi, {nickname}!</H3>
-                <P1>
+                <P1 padding="0.5rem 0 0 0">
                   <span className="swing-bold">SWING</span>을 즐기고 계신가요?{" "}
                   <br /> 마이페이지에서는 예전 SpeeDoodle의 기록을 보기 위한{" "}
                   <br /> 히스토리와 회원님의 정보를 수정하기 위한 프로필이
@@ -147,12 +153,15 @@ function MyPage() {
               <img src={MyPageSwing} className="swingImg" alt="img" />
             </MyPageIntroConatiner>
             <MyPageHistoryConatiner>
-              <MyPageHistoryHeader>
+              <HistoryHeader>
                 <H5 color={colors.gameBlue500}>날짜</H5>
                 <H5 color={colors.gameBlue500}>방제목</H5>
                 <H5 color={colors.gameBlue500}>등수</H5>
-              </MyPageHistoryHeader>
+              </HistoryHeader>
               {renderList}
+              <div className="more-list-nav">
+                <H6 onClick={() => navigate("/history")}>+ 더보기</H6>
+              </div>
             </MyPageHistoryConatiner>
           </MyPageMainConatiner>
           <MyPageSideConatiner>

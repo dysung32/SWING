@@ -22,6 +22,11 @@ export const CommonInput = styled.input`
   padding: ${(props) => props.padding};
   box-sizing: border-box;
   flex-grow: ${(props) => props.flexGrow};
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 export const CommonBtn = styled.button`
@@ -33,13 +38,14 @@ export const CommonBtn = styled.button`
   color: ${(props) => props.fontColor};
   background-color: ${(props) => props.color};
   font-size: ${(props) => props.font}rem;
+  font-weight: ${(props) => props.fontWeight};
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.hoverColor};
   }
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
-  box-shadow: ${(props) => (props.shadow ? props.shadow : 'nonne')};
+  box-shadow: ${(props) => (props.shadow ? props.shadow : 'none')};
   box-sizing: border-box;
   tabindex: ${(props) => props.tabIndex};
 
@@ -164,6 +170,7 @@ export const MyRankContainer = styled.div`
 
 export const PlayerProfile = styled.img`
   width: ${(props) => props.width}rem;
+  max-width: ${(props) => props.maxWidth}rem;
   height: ${(props) => props.height}rem;
   border-radius: 50%;
   margin: ${(props) => props.margin}rem;
@@ -206,3 +213,5 @@ export const PlayerInfo = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const BackButton = styled.button``;

@@ -11,6 +11,19 @@ export const MyPageWrapper = styled.div`
   padding-top: 9rem;
   box-sizing: border-box;
   background-color: ${colors.studyBlue300};
+
+  .desc {
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    color: ${colors.white};
+    padding-bottom: 0.5rem;
+  }
+
+  .history-btn {
+    width: 100%;
+    justify-content: flex-end;
+  }
 `;
 
 export const MyPageContentContainer = styled.div`
@@ -107,7 +120,7 @@ export const MyPageIntroConatiner = styled.div`
   align-items: center;
   width: 100%;
   height: 30%;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: ${colors.white};
   border-radius: 1rem;
   box-sizing: border-box;
@@ -136,27 +149,59 @@ export const MyPageIntroConatiner = styled.div`
     font-weight: 700;
     color: ${colors.studyBlue300};
   }
+
+  h3 {
+    color: ${colors.gameYellow300};
+  }
 `;
 
 export const MyPageHistoryConatiner = styled.div`
   display: flex;
   flex-direction: column;
-  widht: 100%;
+  width: 100%;
   height: calc(70% - 2rem);
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   margin-top: 2rem;
   background-color: ${colors.white};
   border-radius: 1rem;
   box-sizing: border-box;
+
+  .more-list-nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+  }
+
+  .more-list-nav h6 {
+    cursor: pointer;
+    color: ${colors.studyBlue500};
+  }
 `;
 
-export const MyPageHistoryHeader = styled.div`
+export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
   border-bottom: ${(props) =>
     props.border ? `2px solid ${colors.gameBlue500}` : ""};
   box-sizing: border-box;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: ${colors.gameBlue500};
+
+  .date {
+    flex: 0.4;
+  }
+
+  .roomname {
+    flex: 0.5;
+  }
+
+  .rank {
+    flex: 0.1;
+    text-align: end;
+  }
 `;
 export const MyPageHistoryList = styled.div`
   display: flex;
@@ -165,4 +210,8 @@ export const MyPageHistoryList = styled.div`
   border-bottom: 2px solid ${colors.gameBlue500};
   cursor: pointer;
   box-sizing: border-box;
+
+  &:hover {
+    background-color: #f4f6ff;
+  }
 `;

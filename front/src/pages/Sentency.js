@@ -496,6 +496,7 @@ function Sentency() {
                 border={'none'}
                 padding={'1rem'}
                 ref={inputRef}
+                tabIndex={-1}
                 onKeyPress={onEnterSubmit}
               />
               <CommonBtn
@@ -506,6 +507,7 @@ function Sentency() {
                 border={'none'}
                 padding={'12px 36px'}
                 margin={'0 0 0 1rem'}
+                tabIndex={-1}
                 onClick={handleSubmit}
               >
                 SUBMIT

@@ -16,6 +16,7 @@ import { colors } from '../styles/ColorPalette';
 import { H5 } from '../styles/Fonts';
 import Google from '../assets/google_icon.png';
 import Kakao from '../assets/kakaotalk_icon.png';
+import { API_URL } from '../config';
 
 function LogIn() {
   const navigate = useNavigate();
@@ -64,14 +65,12 @@ function LogIn() {
 
   const kakaoLogin = (e) => {
     e.preventDefault();
-    window.location.href =
-      'http://localhost:8080/api/oauth2/authorize/kakao?redirect_uri=' +
-      'http://localhost:3000/oauth2/redirect';
+    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
   };
 
   const googleLogin = (e) => {
     e.preventDefault();
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=${process.env.REACT_APP_GOOGLE_SCOPE}`;
+    window.location.href = `${API_URL}/oauth2/authorization/google`;
   };
 
   return (

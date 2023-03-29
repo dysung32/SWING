@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalBasic from '../components/ModalBasic';
 import { colors } from '../styles/ColorPalette';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
@@ -14,37 +14,63 @@ import {
 import Coupon from '../assets/coupon.png';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import axios from 'axios';
+import { API_URL } from '../config';
 
 function WordTest() {
   const navigate = useNavigate();
-  const [wordList, setWordList] = useState([
-    {
-      word: 'apple',
-      meaning: 'a round fruit with red, yellow, or green skin and firm white flesh',
-    },
-    {
-      word: 'dentist',
-      meaning: `a person whose job is to care for people's teeth`,
-    },
-    {
-      word: 'swing',
-      meaning: 'to move backward and forward or from side to side while hanging from something',
-    },
-    {
-      word: 'amazing',
-      meaning: 'causing great surprise or wonder, causing amazement',
-    },
-    {
-      word: 'chocolate',
-      meaning:
-        'a food that is made from cacao beans and that is eaten as candy or used as a flavoring ingredient in other sweet foods',
-    },
-  ]);
+  // const [wordList, setWordList] = useState([
+  //   {
+  //     word: 'apple',
+  //     meaning: 'a round fruit with red, yellow, or green skin and firm white flesh',
+  //   },
+  //   {
+  //     word: 'dentist',
+  //     meaning: `a person whose job is to care for people's teeth`,
+  //   },
+  //   {
+  //     word: 'swing',
+  //     meaning: 'to move backward and forward or from side to side while hanging from something',
+  //   },
+  //   {
+  //     word: 'amazing',
+  //     meaning: 'causing great surprise or wonder, causing amazement',
+  //   },
+  //   {
+  //     word: 'chocolate',
+  //     meaning:
+  //       'a food that is made from cacao beans and that is eaten as candy or used as a flavoring ingredient in other sweet foods',
+  //   },
+  // ]);
 
+  // userId는 추후에 recoil 설정 후 삭제 예정
+  const [userId, setUserId] = useState('black');
+
+  const [wordList, setWordList] = useState([]);
   const [inputList, setInputList] = useState(['', '', '', '', '']);
   const [correctList, setCorrectList] = useState([false, false, false, false, false]);
   const [score, setScore] = useState(0);
   const [resultModalShow, setResultModalShow] = useState(false);
+
+  const getRandomFiveWords = async () => {
+    await axios
+      .get(`${API_URL}/note/word/${userId}/1`, {
+        headers: {
+          'Access-Token':
+            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.wordNoteList.length === 5) {
+          setWordList(res.data.wordNoteList);
+        } else {
+          alert('최소 5개의 단어가 오답노트에 존재해야만 테스트를 응시할 수 있습니다!');
+          navigate('/review-note', { state: 1 });
+          return;
+        }
+      });
+  };
 
   const onChangeInput = async (e) => {
     let index = e.target.id.slice(-1);
@@ -76,7 +102,19 @@ function WordTest() {
   const calcScore = () => {
     let score = 0;
     for (let i = 0; i < inputList.length; i++) {
-      if (inputList[i] === wordList[i].word) {
+      if (inputList[i] === wordList[i].content.replace('_', ' ')) {
+        // 해당 단어가 맞았다는 axios delete 요청 보내기
+        axios
+          .delete(`${API_URL}/note/word/${wordList[i].wordNoteId}`, {
+            headers: {
+              'Access-Token':
+                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+            },
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {});
         correctList[i] = true;
         setCorrectList([...correctList]);
         score += 1;
@@ -88,6 +126,7 @@ function WordTest() {
   const handleContinue = () => {
     setResultModalShow(false);
     // 다음 문제 불러오는 axios 코드
+    getRandomFiveWords();
     // input 다 지우고
     for (let i = 0; i < inputList.length; i++) {
       const el = document.getElementById(`input${i + 1}`);
@@ -102,6 +141,11 @@ function WordTest() {
     setResultModalShow(false);
     navigate('/review-note', { state: 1 }); // 종료 누르면 오답노트로 navigate
   };
+
+  useEffect(() => {
+    // 랜덤 5개 오답 단어 불러오기
+    getRandomFiveWords();
+  }, []);
 
   return (
     <>
@@ -149,7 +193,6 @@ function WordTest() {
               <H3>{score} / 5</H3>
               <div className='flex resultItemBox'>
                 {correctList.map((item, index) => {
-                  console.log(item);
                   return (
                     <div className='flex' key={index}>
                       <H4>문제 {index + 1}</H4>
@@ -193,52 +236,54 @@ function WordTest() {
           </CommonBtn>
         </div>
       </ModalBasic>
-      <TestWrapper>
-        <H2>단어 복습 테스트</H2>
-        <WordTestContentContainer>
-          {wordList.map((word, index) => {
-            return (
-              <SingleWordTestContainer key={index}>
-                <CommonBtn
-                  width={'8rem'}
-                  minWidth={'8rem'}
-                  height={55}
-                  color={index % 2 === 0 ? colors.studyPink300 : colors.studyBlue200}
-                  font={1.5}
-                  fontColor={colors.white}
-                  border={'none'}
-                  shadow={'4px 4px 4px rgba(0, 0, 0, 0.25)'}
-                  tabIndex={-1}
-                >
-                  문제 {index + 1}
-                </CommonBtn>
-                <WordMeaning>{word.meaning}</WordMeaning>
-                <CommonInput
-                  width={'16rem'}
-                  height={55}
-                  padding={'0 1rem'}
-                  border={`3px solid ${colors.gray300}`}
-                  font={1.5}
-                  id={`input${index + 1}`}
-                  onChange={onChangeInput}
-                />
-              </SingleWordTestContainer>
-            );
-          })}
-        </WordTestContentContainer>
-        <CommonBtn
-          height={55}
-          font={1.5}
-          color={colors.gameBlue300}
-          fontColor={colors.white}
-          border={'none'}
-          padding={'12px 36px'}
-          margin={'0 0 0 1rem'}
-          onClick={handleSubmit}
-        >
-          SUBMIT
-        </CommonBtn>
-      </TestWrapper>
+      {wordList.length === 5 ? (
+        <TestWrapper>
+          <H2 padding={'1rem 0'}>단어 복습 테스트</H2>
+          <WordTestContentContainer>
+            {wordList.map((word, index) => {
+              return (
+                <SingleWordTestContainer key={word.wordNoteId}>
+                  <CommonBtn
+                    width={'8rem'}
+                    minWidth={'8rem'}
+                    height={55}
+                    color={index % 2 === 0 ? colors.studyPink300 : colors.studyBlue200}
+                    font={1.5}
+                    fontColor={colors.white}
+                    border={'none'}
+                    shadow={'4px 4px 4px rgba(0, 0, 0, 0.25)'}
+                    tabIndex={-1}
+                  >
+                    문제 {index + 1}
+                  </CommonBtn>
+                  <WordMeaning>{word.meaningEn}</WordMeaning>
+                  <CommonInput
+                    width={'16rem'}
+                    height={55}
+                    padding={'0 1rem'}
+                    border={`3px solid ${colors.gray300}`}
+                    font={1.5}
+                    id={`input${index + 1}`}
+                    onChange={onChangeInput}
+                  />
+                </SingleWordTestContainer>
+              );
+            })}
+          </WordTestContentContainer>
+          <CommonBtn
+            height={55}
+            font={1.5}
+            color={colors.gameBlue300}
+            fontColor={colors.white}
+            border={'none'}
+            padding={'12px 36px'}
+            margin={'0 0 0 1rem'}
+            onClick={handleSubmit}
+          >
+            SUBMIT
+          </CommonBtn>
+        </TestWrapper>
+      ) : null}
     </>
   );
 }

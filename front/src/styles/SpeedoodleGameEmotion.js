@@ -35,28 +35,31 @@ export const BtnContainer = styled.div`
   justify-content: end;
 `;
 
-export const fadeIn = keyframes`
-0%{
-  opacity: 0.1;
-}
-50%{
-  opacity: 1;
-}
-75%{
-  opacity: 0.8;
-}
-100% {
-  opacity: 0;
-}`;
+// export const fadeIn = keyframes`
+// 0%{
+//   opacity: 1;
+// }
+// 75%{
+//   opacity: 0.8;
+// }
+// 100% {
+//   opacity: 0.2;
+//   z-index: -1;
+// }`;
 
 export const StartAlert = styled.div`
   font-size: 7vw;
   font-weight: bold;
   color: ${colors.gray100};
+  display: flex;
+  width: 20vw;
+  justify-content: center;
+  align-items: center;
   text-shadow: -5px 0 ${colors.gameBlue500}, 0 5px ${colors.gameBlue500},
     5px 0 ${colors.gameBlue500}, 0 -5px ${colors.gameBlue500};
   position: absolute;
   top: 30%;
   left: 30%;
-  animation: ${fadeIn} 1.5s ease-in-out 1 forwards;
+  z-index: 1;
+  text-align: center;
 `;

@@ -1,9 +1,9 @@
-teddy-bear
+teddy_bear
 violin
 bird
 moon
 hexagon
-peas
+pea
 mushroom
 carrot
 oven
@@ -12,7 +12,7 @@ cake
 blueberry
 grass
 octopus
-eyeglasses
+glasses
 nose
 underwear
 train
@@ -30,9 +30,9 @@ fork
 binoculars
 pool
 hedgehog
-rollerskates
+rollerskate
 lighthouse
-house_plant
+houseplant
 clock
 arm
 star
@@ -78,7 +78,7 @@ eye
 zebra
 calculator
 church
-waterslide
+water_slide
 envelope
 feather
 laptop
@@ -93,4 +93,4 @@ floor_lamp
 saxophone
 pliers
 compass
-sock
+socks

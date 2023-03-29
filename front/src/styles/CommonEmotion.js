@@ -38,6 +38,7 @@ export const CommonBtn = styled.button`
   color: ${(props) => props.fontColor};
   background-color: ${(props) => props.color};
   font-size: ${(props) => props.font}rem;
+  font-weight: ${(props) => props.fontWeight};
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.hoverColor};
@@ -169,6 +170,7 @@ export const MyRankContainer = styled.div`
 
 export const PlayerProfile = styled.img`
   width: ${(props) => props.width}rem;
+  max-width: ${(props) => props.maxWidth}rem;
   height: ${(props) => props.height}rem;
   border-radius: 50%;
   margin: ${(props) => props.margin}rem;
@@ -211,3 +213,5 @@ export const PlayerInfo = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const BackButton = styled.button``;

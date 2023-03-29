@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { MyPageWrapper, HistoryHeader } from '../styles/MyPageEmotion';
 import { HistoryContent, HistoryContentContainer, SingleHistoryList } from '../styles/HistoryEmotion';
-import { GameTitle, CommonInput, CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
-import { H1, H3, H5, H6, P1, SmText } from '../styles/Fonts';
+import { GameTitle } from '../styles/CommonEmotion';
+import { H1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,7 +63,11 @@ function History() {
 
   const renderHistoryList = historyList.map((history, idx) => {
     return (
-      <SingleHistoryList key={idx} onClick={() => navigate(`/history/${idx}`)}>
+      // api 연결 후엔 key값 history id로 설정하기
+      <SingleHistoryList
+        key={idx}
+        onClick={() => navigate(`/history/${idx}`, { state: { date: history.date, rank: history.rank } })}
+      >
         <div className='history-date'>{history.date}</div>
         <div className='history-title'>{history.title}</div>
         <div className='history-rank'>{history.rank}등</div>

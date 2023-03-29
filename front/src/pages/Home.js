@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GoogleLogin from '../auth/GoogleLogin';
 import {
   HomeWrapper,
@@ -23,6 +24,8 @@ import { CouponImg } from '../styles/MyPageEmotion';
 import Coupon from '../assets/main_coupon.svg';
 
 function Home() {
+  const navigate = useNavigate();
+
   const [coupon, setCoupon] = useState(0);
 
   useEffect(() => {
@@ -137,10 +140,15 @@ function Home() {
             </div>
           </UserCouponBox>
           <UserBtnBox>
-            <CommonBtn color={colors.studyPink200} font={1} padding='0.5rem 1rem'>
+            <CommonBtn
+              color={colors.studyPink200}
+              font={1}
+              padding='0.5rem 1rem'
+              onClick={() => navigate('/review-note')}
+            >
               오답노트
             </CommonBtn>
-            <CommonBtn color={colors.studyBlue100} font={1} padding='0.5rem 1rem'>
+            <CommonBtn color={colors.studyBlue100} font={1} padding='0.5rem 1rem' onClick={() => navigate('/history')}>
               히스토리
             </CommonBtn>
           </UserBtnBox>

@@ -325,7 +325,8 @@ function Hifive() {
             border={'none'} 
             padding={"0rem 1rem 0rem 1rem"}
             value={inputValue}
-            onChange={(e) => {setInputValue(e.target.value)}}/>
+            onChange={(e) => {setInputValue(e.target.value)}}
+            autoFocus={true}/>
             <CommonBtn
             type="submit" 
             width="25%" 

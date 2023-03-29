@@ -27,7 +27,6 @@ function ReviewNote() {
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [wordReview, setwordReview] = useState(null);
-  const [wordChecked, setWordChecked] = useState(Array(posts.length).fill(false));
 
   useEffect(() => {
     axios({
@@ -219,14 +218,17 @@ function ReviewNote() {
               </WrongThingBox>
             ))}
           </WrongBox>
-
-          <Pagination
-          total = {posts.length}
-          limit = {limit}
-          page = {page}
-          Ppage = {Ppage}
-          setPage = {setPage}
-          setPpage = {setPpage}/>
+          
+          {
+            posts.length !== 0 &&
+              <Pagination
+            total = {posts.length}
+            limit = {limit}
+            page = {page}
+            Ppage = {Ppage}
+            setPage = {setPage}
+            setPpage = {setPpage}/>
+          }
         </ReviewNoteWrapperColor>
       </ReviewNoteWrapper>
     </>

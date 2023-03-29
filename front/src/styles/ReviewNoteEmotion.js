@@ -91,7 +91,7 @@ export const PageNumBox = styled.button`
   height: 2.5rem; 
   border-radius:6px;
   border: 2px solid ${colors.gray500};
-  color: ${colors.gray500};
+  color: ${colors.gameBlue500};
   display: flex;
   justify-content: center;
   align-items: center;

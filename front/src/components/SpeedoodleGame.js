@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useInterval from '../hooks/useInterval';
+import axios from 'axios';
+import { AI_API_URL, API_URL } from '../config';
 
 import {
   GameContainer,
@@ -39,16 +41,41 @@ function SpeedoodleGame(props) {
 
   useEffect(() => {
     canvas = canvasRef.current;
-    ctx = canvas.getContext('2d');
     canvas.addEventListener('mousedown', initDraw);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', finishDraw);
     canvas.addEventListener('mouseout', finishDraw);
     canvas.setAttribute('width', window.innerWidth * 0.49);
     canvas.setAttribute('height', window.innerHeight * 0.4);
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
   }, []);
 
-  // 마우스 위치가져오는 함수
+  const getAnswer = () => {
+    const canvas = canvasRef.current;
+    canvas.toBlob((blob) => {
+      const formdata = new FormData();
+      formdata.append('answer', blob);
+      const url = URL.createObjectURL(blob);
+
+      axios
+        .post(`${AI_API_URL}/doodle/check`, formdata, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  };
+
   const getPosition = (e) => {
     return { X: e.offsetX, Y: e.offsetY };
   };

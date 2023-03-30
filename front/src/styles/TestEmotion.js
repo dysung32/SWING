@@ -7,7 +7,7 @@ export const TestWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   padding: 0 10%;
   padding-top: 9rem;
   padding-bottom: 2rem;
@@ -17,7 +17,26 @@ export const TestWrapper = styled.div`
 export const WordTestContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 4rem 0 2rem 0;
+  padding: 2rem 1rem 0 2rem;
+  margin-bottom: 1rem;
+  overflow-y: auto;
+
+  /* 스크롤바 설정*/
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* 스크롤바 막대 설정*/
+  &::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: ${colors.gray400};
+    border-radius: 10px;
+  }
+
+  /* 스크롤바 뒷 배경 설정*/
+  &::-webkit-scrollbar-track {
+    background-color: ${colors.gray200};
+  }
 `;
 
 export const SentenceTestContentContainer = styled.div`

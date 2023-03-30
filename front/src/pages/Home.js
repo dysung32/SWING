@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GoogleLogin from '../auth/GoogleLogin';
 import {
   HomeWrapper,
@@ -10,11 +11,23 @@ import {
   HeroScrollMsg,
   HeroScrollIconContainer,
   HeroScrollIconAni,
+  UserInfoBox,
+  UserCouponBox,
+  UserBtnBox,
 } from '../styles/HomeEmotion';
-import { H4, P1 } from '../styles/Fonts';
+import { H4, H5 } from '../styles/Fonts';
 import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
+import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
+import { colors } from '../styles/ColorPalette';
+import { CouponImg } from '../styles/MyPageEmotion';
+
+import Coupon from '../assets/main_coupon.svg';
 
 function Home() {
+  const navigate = useNavigate();
+
+  const [coupon, setCoupon] = useState(0);
+
   useEffect(() => {
     if (window.location.href.includes('code')) {
       const code = new URL(window.location.href).searchParams.get('code');
@@ -113,6 +126,33 @@ function Home() {
   return (
     <>
       <HomeWrapper ref={scrollRef}>
+        <UserInfoBox>
+          <div className='flex userInfo'>
+            <PlayerProfile width={5} height={5} src={'https://cdn-icons-png.flaticon.com/512/189/189533.png'} />
+            <H5 padding='0 0 0 1rem' color={colors.white}>
+              플레이어1
+            </H5>
+          </div>
+          <UserCouponBox>
+            <CouponImg src={Coupon} alt='coupon' />
+            <div className='couponInfo'>
+              쿠폰 <span className='couponCnt'>{coupon}</span>
+            </div>
+          </UserCouponBox>
+          <UserBtnBox>
+            <CommonBtn
+              color={colors.studyPink200}
+              font={1}
+              padding='0.5rem 1rem'
+              onClick={() => navigate('/review-note')}
+            >
+              오답노트
+            </CommonBtn>
+            <CommonBtn color={colors.studyBlue100} font={1} padding='0.5rem 1rem' onClick={() => navigate('/history')}>
+              히스토리
+            </CommonBtn>
+          </UserBtnBox>
+        </UserInfoBox>
         <HomeHeroContainer>
           <HeroScrollMsg>
             <H4>Scroll Down for Games</H4>

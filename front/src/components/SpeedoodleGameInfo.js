@@ -74,7 +74,9 @@ function SpeedoodleGameInfo(props) {
     setChatInput(e.target.value);
   };
   // 저장해둔 메세지 보내기
-  const sendMessage = () => {};
+  const sendMessage = () => {
+    props.SendMessage();
+  };
 
   //모드 변경 api 전달
   const handleChangeMode = () => {
@@ -82,7 +84,6 @@ function SpeedoodleGameInfo(props) {
 
     console.log(isMode, limits);
   };
-
   return (
     <>
       <GameInfoContainer color={bgColor}>

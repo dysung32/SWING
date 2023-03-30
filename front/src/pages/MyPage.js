@@ -75,7 +75,14 @@ function MyPage() {
 
   const renderList = historyList.map((history, idx) => {
     return (
-      <MyPageHistoryList key={idx} onClick={() => navigate(`/history/${idx}`)}>
+      <MyPageHistoryList
+        key={idx}
+        onClick={() =>
+          navigate(`/history/${idx}`, {
+            state: { date: history.date, rank: history.rank },
+          })
+        }
+      >
         <P1 color={colors.gameBlue500}>{history.date}</P1>
         <P1 color={colors.gameBlue500}>{history.title}</P1>
         <P1 color={colors.gameBlue500}>{history.rank}등</P1>
@@ -218,7 +225,7 @@ function MyPage() {
               </MyPageProfileNickname>
             </MyPageProfileConatiner>
             <MyPageProfileCoupon>
-              <CouponImg src={Coupon} alt='coupon image' />
+              <CouponImg src={Coupon} alt='coupon' />
               <H5>{coupon}장</H5>
             </MyPageProfileCoupon>
             <CommonBtn

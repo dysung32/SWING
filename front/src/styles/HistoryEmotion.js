@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const HistoryContentContainer = styled.div`
   width: 100%;
@@ -76,9 +76,12 @@ export const GameRoundNav = styled.div`
 `;
 
 export const HistoryPictureContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 2rem;
+  padding-top: 1rem;
+
+  .slideContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `;
 
 export const SinglePicContainer = styled.div`
@@ -88,11 +91,11 @@ export const SinglePicContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   box-sizing: border-box;
 
-  &:nth-child(3),
-  &:nth-child(6) {
+  &:nth-of-type(3),
+  &:nth-of-type(6) {
     margin-right: 0;
   }
 `;

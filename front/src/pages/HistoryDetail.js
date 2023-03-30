@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
 import { colors } from '../styles/ColorPalette';
 import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { H1 } from '../styles/Fonts';
@@ -15,6 +15,10 @@ import {
   UserNickName,
 } from '../styles/HistoryEmotion';
 import { MyPageWrapper } from '../styles/MyPageEmotion';
+
+import { Autoplay, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 function HistoryDetail() {
   const navigate = useNavigate();
@@ -65,6 +69,11 @@ function HistoryDetail() {
 
   const [leftHover, setLeftHover] = useState(false);
   const [rightHover, setRightHover] = useState(false);
+  const navigationPrevRef = useRef(null);
+  const navigationNextRef = useRef(null);
+
+  const swiperRef = useRef();
+  const [round, setRound] = useState(1);
 
   const renderPics = picDatas.map((pic, index) => {
     return (
@@ -79,6 +88,7 @@ function HistoryDetail() {
             height={45}
             font={1.1}
             color={colors.gameYellow200}
+            hoverColor={colors.gameYellow300}
             fontColor={colors.gameBlue500}
             fontWeight={700}
             className='save-btn'
@@ -89,6 +99,13 @@ function HistoryDetail() {
       </SinglePicContainer>
     );
   });
+
+  // useEffect(() => {
+  //   if (swiperRef.current !== undefined) {
+  //     setRound(swiperRef.current.activeIndex + 1);
+  //     return;
+  //   }
+  // }, [swiperRef.current]);
 
   return (
     <>
@@ -115,21 +132,69 @@ function HistoryDetail() {
           <HistoryContent>
             <GameRoundNav>
               {leftHover ? (
-                <CaretLeftFill className='left' onMouseLeave={() => setLeftHover(false)} />
+                <CaretLeftFill
+                  className='left'
+                  ref={navigationPrevRef}
+                  onClick={() => swiperRef.current.slidePrev()}
+                  onMouseLeave={() => setLeftHover(false)}
+                />
               ) : (
                 <CaretLeft className='left' onMouseEnter={() => setLeftHover(true)} />
               )}
-              <div className='roundNum'>ROUND 1</div>
+              <div className='roundNum'>ROUND {round}</div>
               {rightHover ? (
-                <CaretRightFill className='right' onMouseLeave={() => setRightHover(false)} />
+                <CaretRightFill
+                  className='right'
+                  ref={navigationNextRef}
+                  onClick={() => swiperRef.current.slideNext()}
+                  onMouseLeave={() => setRightHover(false)}
+                />
               ) : (
                 <CaretRight className='right' onMouseEnter={() => setRightHover(true)} />
               )}
             </GameRoundNav>
-            <HistoryPictureContainer>
-              {renderPics}
-              <HistoryPictureContainer />
+            <HistoryPictureContainer
+              onMouseEnter={() => swiperRef.current.autoplay.stop()}
+              onMouseLeave={() => swiperRef.current.autoplay.start()}
+            >
+              <Swiper
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+                slidesPerView={1}
+                autoplay={{
+                  delay: 5000, // 5초에 한번씩 자동 재생
+                  disableOnInteraction: true,
+                }}
+                navigation={{
+                  // 버튼 사용자 지정
+                  nextEl: navigationNextRef.current,
+                  prevEl: navigationPrevRef.current,
+                }}
+                onBeforeInit={(swiper) => {
+                  swiper.params.navigation.prevEl = navigationPrevRef.current;
+                  swiper.params.navigation.nextEl = navigationNextRef.current;
+                  swiper.navigation.update();
+                }}
+                onSlideChange={() => {
+                  setRound(swiperRef.current.activeIndex + 1);
+                }}
+                modules={[Autoplay, Navigation]}
+                className='mySwiper'
+              >
+                {/* 1라운드 */}
+                <SwiperSlide className='slideContainer'>{renderPics}</SwiperSlide>
+                {/* 2라운드 */}
+                <SwiperSlide className='slideContainer'>{renderPics}</SwiperSlide>
+                {/* 3라운드 */}
+                <SwiperSlide className='slideContainer'>{renderPics}</SwiperSlide>
+                {/* 4라운드 */}
+                <SwiperSlide className='slideContainer'>{renderPics}</SwiperSlide>
+                {/* 5라운드 */}
+                <SwiperSlide className='slideContainer'>{renderPics}</SwiperSlide>
+              </Swiper>
             </HistoryPictureContainer>
+            {/* {renderPics} */}
           </HistoryContent>
         </HistoryContentContainer>
       </MyPageWrapper>

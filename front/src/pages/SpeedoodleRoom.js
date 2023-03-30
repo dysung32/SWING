@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { SpeedoodleWrapper } from '../styles/SpeedoodleEmotion';
 import SpeedoodleUser from '../components/SpeedoodleUser';
@@ -11,11 +11,17 @@ import { GameTitle } from '../styles/CommonEmotion';
 import { H1, H2, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import ModalBasic from '../components/ModalBasic';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs'
+import { noWait } from 'recoil';
+import { API_URL } from '../config';
 
 function SpeedoodleRoom() {
   const [isGameStart, setIsGameStart] = useState(false);
   const userImg =
     'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx';
+
+  const room_id = 23;
 
   const defaultUser = [
     {
@@ -100,6 +106,50 @@ function SpeedoodleRoom() {
       time: '00:29:38',
     },
   ];
+
+  const sock = new SockJS(`${API_URL}/speedoodle/room`);
+
+  const stomp = Stomp.over(sock);
+
+  const stompConnect = () => {
+    try {
+
+      stomp.connect({}, () => {
+        stomp.subscribe(`/sub/${room_id}`,
+        (message) => {
+          console.log(message);
+        }, {}
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const stompDisconnect = () => {
+    try {
+      stomp.disconnect(() => {
+        stomp.unsubscribe(`sub/${room_id}`);
+      },{} );
+    } catch (error) {
+
+    }
+  };
+
+  const SendMessage = () => {
+    // stomp.debug = null;
+    const data = {
+      roomId: 23,
+      publisher: "mario",
+      message: "testtesttest",
+    };
+    stomp.send("/pub/send",{}, JSON.stringify(data));
+  };
+
+  useEffect(() => {
+    stompConnect();
+  },[]);
+
   return (
     <>
       <SpeedoodleWrapper>
@@ -126,6 +176,7 @@ function SpeedoodleRoom() {
             <SpeedoodleGameInfo
               start={isGameStart}
               setIsGameStart={setIsGameStart}
+              SendMessage={SendMessage}
             ></SpeedoodleGameInfo>
           )}
         </SpeedoodleRoomContainer>

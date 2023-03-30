@@ -10,13 +10,13 @@ export const Nav = styled.nav`
   padding: 1rem 10%;
   position: fixed;
   top: 0;
+  z-index: 999;
 `;
 
 export const NavItem = styled.div`
   padding: ${(props) => (props.padding ? props.padding : '')};
   text-align: center;
-  border-bottom: ${(props) =>
-    props.border ? `1px solid ${props.border}` : 'none'};
+  border-bottom: ${(props) => (props.border ? `1px solid ${props.border}` : 'none')};
   cursor: pointer;
 `;
 
@@ -27,8 +27,8 @@ export const NavLeaderItem = styled.h4`
   font-size: 24px;
   line-height: 1.4;
   color: ${colors.white};
-  text-shadow: 2px 0 ${colors.gameBlue500}, 0 2px ${colors.gameBlue500},
-    -2px 0 ${colors.gameBlue500}, 0 -2px ${colors.gameBlue500};
+  text-shadow: 2px 0 ${colors.gameBlue500}, 0 2px ${colors.gameBlue500}, -2px 0 ${colors.gameBlue500},
+    0 -2px ${colors.gameBlue500};
   cursor: pointer;
 `;
 

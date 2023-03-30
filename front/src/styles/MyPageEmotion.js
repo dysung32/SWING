@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -78,12 +78,14 @@ export const FileInput = styled.div`
   width: 10rem;
   height: 10rem;
   border-radius: 50%;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${(props) => props.imgSrc});
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(${(props) => props.imgSrc});
   background-size: cover;
   background-repeat: no-repeat;
   color: ${colors.white};
   font-size: 2rem;
   line-height: 10rem;
+  cursor: pointer;
 `;
 
 export const MyPageProfileNickname = styled.div`
@@ -187,7 +189,8 @@ export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
+  border-bottom: ${(props) =>
+    props.border ? `2px solid ${colors.gameBlue500}` : ""};
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: 700;
@@ -220,21 +223,32 @@ export const MyPageHistoryList = styled.div`
 `;
 
 export const NickNameEditBox = styled.div`
-  display: flex;
-  flex-direction: column;
   padding: 4rem 5rem 0 5rem;
   width: 32rem;
   height: 10rem;
-  justify-content: flex-start;
-  align-items: center;
 
   .inputBox {
     flex-grow: 1;
+    height: 3rem;
     font-size: 1rem;
     background-color: ${colors.gray100};
     border: none;
     border-radius: 0.5rem;
     padding-left: 1rem;
+  }
+
+  .msg {
+    padding-top: 0.5rem;
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .msg > .allowed {
+    color: ${colors.studyBlue300};
+  }
+
+  .msg > .denied {
+    color: #ed4337;
   }
 `;
 

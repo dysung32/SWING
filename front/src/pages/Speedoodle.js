@@ -8,7 +8,6 @@ import {
   RoomContainer,
   Room,
   RoomTitleContainer,
-  RoomTitle,
   RoomIconContainer,
   CreateRoomContainer,
   FlexContainer,

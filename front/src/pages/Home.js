@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { setCookie, getCookie } from '.././config';
-import GoogleLogin from '../auth/GoogleLogin';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { setCookie, getCookie } from ".././config";
+import GoogleLogin from "../auth/GoogleLogin";
 import {
   HomeWrapper,
   HomeHeroContainer,
@@ -15,14 +15,15 @@ import {
   UserInfoBox,
   UserCouponBox,
   UserBtnBox,
-} from '../styles/HomeEmotion';
-import { H4, H5 } from '../styles/Fonts';
-import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
-import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
-import { colors } from '../styles/ColorPalette';
-import { CouponImg } from '../styles/MyPageEmotion';
+} from "../styles/HomeEmotion";
+import { H4, H5 } from "../styles/Fonts";
+import { Mouse, ChevronDoubleDown } from "react-bootstrap-icons";
+import { CommonBtn, PlayerProfile } from "../styles/CommonEmotion";
+import { colors } from "../styles/ColorPalette";
+import { CouponImg } from "../styles/MyPageEmotion";
 
-import Coupon from '../assets/main_coupon.svg';
+import Coupon from "../assets/main_coupon.svg";
+import { BasicProfile } from "../config";
 
 function Home() {
   const navigate = useNavigate();
@@ -33,27 +34,27 @@ function Home() {
 
   useEffect(() => {
     const reg = /[()]/gi;
-    if (window.location.href.includes('kakao')) {
+    if (window.location.href.includes("kakao")) {
       const accessToken = new URL(window.location.href).searchParams.get(
-        'access-token'
+        "access-token"
       );
       const refreshToken = new URL(window.location.href).searchParams.get(
-        'refresh-token'
+        "refresh-token"
       );
-      let user = new URL(window.location.href).searchParams.get('user');
-      user = user.replace('UserDto', '');
-      user = user.replace(reg, '');
-      user = user.split(', ');
+      let user = new URL(window.location.href).searchParams.get("user");
+      user = user.replace("UserDto", "");
+      user = user.replace(reg, "");
+      user = user.split(", ");
       const saveUser = {};
       user.forEach((str) => {
-        const tmpArr = str.split('=');
-        if (tmpArr[0] !== 'coupon' && tmpArr[0] !== 'first') {
+        const tmpArr = str.split("=");
+        if (tmpArr[0] !== "coupon" && tmpArr[0] !== "first") {
           saveUser[tmpArr[0]] = tmpArr[1];
         }
       });
-      setCookie('accessToken', accessToken, 1);
-      setCookie('refreshToken', refreshToken, 1);
-      navigate('/');
+      setCookie("accessToken", accessToken, 1);
+      setCookie("refreshToken", refreshToken, 1);
+      navigate("/");
     }
   });
 
@@ -70,7 +71,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 2);
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
@@ -78,7 +79,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 3);
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
@@ -86,7 +87,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 3 + DIVIDER_HEIGHT * 3,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 4);
         } else if (scrollTop >= pageHeight * 3) {
@@ -94,7 +95,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 1);
         }
@@ -105,7 +106,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 1);
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
@@ -113,7 +114,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 1);
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
@@ -121,7 +122,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 2);
         } else if (scrollTop >= pageHeight * 3) {
@@ -129,16 +130,16 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
             left: 0,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
           setScrollIndex(() => 3);
         }
       }
     };
     const scrollRefCurrent = scrollRef.current;
-    scrollRefCurrent.addEventListener('wheel', wheelHandler);
+    scrollRefCurrent.addEventListener("wheel", wheelHandler);
     return () => {
-      scrollRefCurrent.removeEventListener('wheel', wheelHandler);
+      scrollRefCurrent.removeEventListener("wheel", wheelHandler);
     };
   }, []);
 
@@ -146,37 +147,31 @@ function Home() {
     <>
       <HomeWrapper ref={scrollRef}>
         <UserInfoBox>
-          <div className='flex userInfo'>
-            <PlayerProfile
-              width={5}
-              height={5}
-              src={'https://cdn-icons-png.flaticon.com/512/189/189533.png'}
-            />
-            <H5 padding='0 0 0 1rem' color={colors.white}>
-              플레이어1
+          <div className="flex userInfo">
+            <PlayerProfile width={5} height={5} src={BasicProfile} />
+            <H5 padding="0 0 0 1rem" color={colors.white}>
+              Player1
             </H5>
           </div>
           <UserCouponBox>
-            <CouponImg src={Coupon} alt='coupon' />
-            <div className='couponInfo'>
-              쿠폰 <span className='couponCnt'>{coupon}</span>
+            <CouponImg src={Coupon} alt="coupon" width={3.5} />
+            <div className="couponInfo">
+              쿠폰 <span className="couponCnt">{coupon}</span>
             </div>
           </UserCouponBox>
           <UserBtnBox>
             <CommonBtn
               color={colors.studyPink200}
               font={1}
-              padding='0.5rem 1rem'
-              onClick={() => navigate('/review-note')}
-            >
+              padding="0.5rem 1rem"
+              onClick={() => navigate("/review-note")}>
               오답노트
             </CommonBtn>
             <CommonBtn
               color={colors.studyBlue100}
               font={1}
-              padding='0.5rem 1rem'
-              onClick={() => navigate('/history')}
-            >
+              padding="0.5rem 1rem"
+              onClick={() => navigate("/history")}>
               히스토리
             </CommonBtn>
           </UserBtnBox>
@@ -186,16 +181,16 @@ function Home() {
             <H4>Scroll Down for Games</H4>
             <HeroScrollIconContainer>
               <HeroScrollIconAni>
-                <ChevronDoubleDown style={{ fontSize: '36px' }} />
+                <ChevronDoubleDown style={{ fontSize: "36px" }} />
               </HeroScrollIconAni>
               <Mouse
                 style={{
-                  fontSize: '48px',
-                  padding: '0.5rem',
+                  fontSize: "48px",
+                  padding: "0.5rem",
                 }}
               />
               <HeroScrollIconAni>
-                <ChevronDoubleDown style={{ fontSize: '36px' }} />
+                <ChevronDoubleDown style={{ fontSize: "36px" }} />
               </HeroScrollIconAni>
             </HeroScrollIconContainer>
           </HeroScrollMsg>

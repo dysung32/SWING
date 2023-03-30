@@ -42,6 +42,8 @@ function Sentency() {
   const [similarity, setSimilarity] = useState(0);
   const [remains, setRemains] = useState(0);
   const [coupon, setCoupon] = useState(0);
+
+  const [sentenceId, setSentenceId] = useState();
   const [imageURL, setImageURL] = useState('');
   const [engSentence, setEngSentence] = useState('');
   const [korSentence, setKorSentence] = useState('');
@@ -128,6 +130,8 @@ function Sentency() {
         setKorSentence(korSentence);
         // 새로운 빈칸 array 설정
         setWordArray(engSentence.slice(0, -1).split(' '));
+        // sentenceId 설정
+        setSentenceId(res.data.sentence.sentenceId);
       });
   };
 
@@ -244,7 +248,7 @@ function Sentency() {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/user/sentency/black`, {
+      .get(`${API_URL}/user/sentency/${userId}`, {
         // headers: {
         //   'Access-Token': '',
         // },
@@ -279,13 +283,15 @@ function Sentency() {
   useEffect(() => {
     if (life === 0) {
       setModalLoading(true);
+
       // 결과 전송 API
-      const sendSentencyResult = async (userId) => {
+      const sendSentencyResult = async () => {
         await axios
           .put(`${API_URL}/sentency/${userId}/${score}`, null, {
-            // headers: {
-            //   'Access-Token': '',
-            // },
+            headers: {
+              'Access-Token':
+                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+            },
           })
           .then((res) => {
             console.log('sentency 결과 전송 완료');
@@ -293,12 +299,14 @@ function Sentency() {
           });
       };
 
-      const getSentencyRank = async (userId) => {
+      // 랭킹 받아오기
+      const getSentencyRank = async () => {
         await axios
           .get(`${API_URL}/sentency/${userId}`, {
-            // headers: {
-            //   'Access-Token': '',
-            // },
+            headers: {
+              'Access-Token':
+                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+            },
           })
           .then((res) => {
             console.log('랭킹 불러오기');
@@ -310,10 +318,30 @@ function Sentency() {
           });
       };
 
-      sendSentencyResult('black');
-      // 결과 저장하고 setTimeout 걸어서 랭킹 가져오기
+      // 오답 문장 오답노트에 저장하기
+      const addWrongAnswer = async () => {
+        axios
+          .post(`${API_URL}/note/sentence/${userId}/${sentenceId}`, null, {
+            headers: {
+              'Access-Token':
+                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+            },
+          })
+          .then((resp) => {
+            console.log(resp);
+          })
+          .catch((err) => {
+            console.log('오답 저장 중 오류 발생!');
+          });
+      };
+
+      // 결과 저장하고
+      sendSentencyResult();
+      // 오답 저장하고
+      addWrongAnswer();
+      // setTimeout 걸어서 랭킹 가져오기
       setTimeout(() => {
-        getSentencyRank('black');
+        getSentencyRank();
       }, 1000);
       // 마지막 기회였다면
       if (remains === 1) {
@@ -325,6 +353,7 @@ function Sentency() {
           ? inputRef.current.value + ' '
           : inputRef.current.value.trim() + '. ',
       );
+
       // 결과 모달 보여주기
       setResultModalShow(true);
 

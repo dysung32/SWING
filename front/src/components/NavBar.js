@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL, getCookie, delCookie } from '.././config';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL, getCookie, delCookie } from ".././config";
 
-import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
+import { RoundLogo, PlayerProfile } from "../styles/CommonEmotion";
 import {
   Nav,
   NavItemGroup,
   NavItem,
   NavSubItems,
   NavLeaderItem,
-} from '../styles/NavEmotion';
-import { H4, H6 } from '../styles/Fonts';
-import { colors } from '../styles/ColorPalette';
-import IsLogin from '../auth/IsLogin';
+} from "../styles/NavEmotion";
+import { H4, H6 } from "../styles/Fonts";
+import { colors } from "../styles/ColorPalette";
+import { BasicProfile } from "../config";
+import IsLogin from "../auth/IsLogin";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -26,47 +27,47 @@ function NavBar() {
   }, [IsLogin]);
 
   const onClickLogo = () => {
-    navigate('/');
+    navigate("/");
   };
 
   const onClickSentency = () => {
     if (IsLogin) {
-      navigate('/sentency');
+      navigate("/sentency");
     }
   };
   const onClickHifive = () => {
     if (IsLogin) {
-      navigate('/hi-five');
+      navigate("/hi-five");
     }
   };
   const onClickSpeedoodle = () => {
     if (IsLogin) {
-      navigate('/speedoodle');
+      navigate("/speedoodle");
     }
   };
   const onClickLogIn = () => {
-    navigate('/login');
+    navigate("/login");
   };
   const onClickMyPage = () => {
-    navigate('/my-page');
+    navigate("/my-page");
   };
 
   const onClickReviewNote = () => {
-    navigate('/review-note');
+    navigate("/review-note");
   };
 
   const Logout = async () => {
     try {
       const response = await axios.get(`${API_URL}/logout`, {
         headers: {
-          'Access-Token': getCookie('accessToken'),
+          "Access-Token": getCookie("accessToken"),
         },
       });
       if (response.status === 200) {
-        delCookie('accessToken');
-        delCookie('refreshToken');
-        console.log(getCookie('accessToken'));
-        navigate('/');
+        delCookie("accessToken");
+        delCookie("refreshToken");
+        console.log(getCookie("accessToken"));
+        navigate("/");
       }
     } catch (e) {
       console.log(e);
@@ -79,70 +80,77 @@ function NavBar() {
         <NavLeaderItem
           onMouseEnter={() => {
             setHoverGame((prev) => true);
-          }}
-        >
+          }}>
           GAME
         </NavLeaderItem>
-        <NavSubItems hover={hoverGame} top='70%' left='10%'>
+        <NavSubItems hover={hoverGame} top="70%" left="10%">
           <NavItem onClick={onClickSentency}>
             <H4
               color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+              outlineWeight="2"
+              outline={colors.gameBlue500}>
               Sentency
             </H4>
           </NavItem>
           <NavItem onClick={onClickHifive}>
             <H4
               color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+              outlineWeight="2"
+              outline={colors.gameBlue500}>
               Hi-Five
             </H4>
           </NavItem>
           <NavItem onClick={onClickSpeedoodle}>
             <H4
               color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+              outlineWeight="2"
+              outline={colors.gameBlue500}>
               Speedoodle
             </H4>
           </NavItem>
         </NavSubItems>
       </NavItemGroup>
 
-      <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
+      <RoundLogo alt="logo" onClick={onClickLogo} size="7rem" />
       {isLogin ? (
         <>
+          <NavItem onClick={onClickLogIn}>
+            <H4
+              color={colors.white}
+              outlineWeight="2"
+              outline={colors.gameBlue500}>
+              LogIn
+            </H4>
+          </NavItem>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}
-            onMouseEnter={() => setHoverProfile(() => true)}
-          >
+            onMouseEnter={() => setHoverProfile(() => true)}>
             <PlayerProfile
-              src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
-              width='3'
-              height='3'
-              alt='user profile image'
-              style={{ cursor: 'pointer' }}
+              src={BasicProfile}
+              width="3"
+              height="3"
+              alt="user profile image"
+              style={{ cursor: "pointer" }}
               onClick={() => setHoverProfile(() => true)}
             />
-            <NavSubItems hover={hoverProfile} top='70%' left='80%'>
-              <NavItem onClick={onClickMyPage} padding='0.5rem 2rem'>
+            <NavSubItems hover={hoverProfile} top="70%" left="80%">
+              <NavItem onClick={onClickMyPage} padding="0.5rem 2rem">
                 <H6>MyPage</H6>
               </NavItem>
               <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
-              ></div>
-              <NavItem onClick={onClickReviewNote} padding='0.5rem 2rem'>
+                style={{
+                  width: "80%",
+                  border: `1px solid ${colors.gray500}`,
+                }}></div>
+              <NavItem onClick={onClickReviewNote} padding="0.5rem 2rem">
                 <H6>ReviewNote</H6>
               </NavItem>
               <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
-              ></div>
-              <NavItem onClick={() => Logout()} padding='0.5rem 2rem'>
+                style={{
+                  width: "80%",
+                  border: `1px solid ${colors.gray500}`,
+                }}></div>
+              <NavItem onClick={() => Logout()} padding="0.5rem 2rem">
                 <H6>LogOut</H6>
               </NavItem>
             </NavSubItems>
@@ -152,9 +160,8 @@ function NavBar() {
         <NavItem onClick={onClickLogIn}>
           <H4
             color={colors.white}
-            outlineWeight='2'
-            outline={colors.gameBlue500}
-          >
+            outlineWeight="2"
+            outline={colors.gameBlue500}>
             LogIn
           </H4>
         </NavItem>

@@ -22,26 +22,35 @@ function NavBar() {
   const [hoverProfile, setHoverProfile] = useState(false);
 
   useEffect(() => {
-    setIsLogin(IsLogin);
-  }, [IsLogin]);
+    setIsLogin(IsLogin());
+  }, []);
 
   const onClickLogo = () => {
     navigate('/');
   };
 
   const onClickSentency = () => {
-    if (IsLogin) {
+    if (isLogin) {
       navigate('/sentency');
+    } else {
+      alert('로그인이 필요한 서비스 입니다.');
+      navigate('/login');
     }
   };
   const onClickHifive = () => {
-    if (IsLogin) {
+    if (isLogin) {
       navigate('/hi-five');
+    } else {
+      alert('로그인이 필요한 서비스 입니다.');
+      navigate('/login');
     }
   };
   const onClickSpeedoodle = () => {
-    if (IsLogin) {
+    if (isLogin) {
       navigate('/speedoodle');
+    } else {
+      alert('로그인이 필요한 서비스 입니다.');
+      navigate('/login');
     }
   };
   const onClickLogIn = () => {
@@ -55,6 +64,9 @@ function NavBar() {
     navigate('/review-note');
   };
 
+  const handleLogout = () => {
+    Logout(setIsLogin);
+  };
   const Logout = async () => {
     try {
       const response = await axios.get(`${API_URL}/logout`, {
@@ -65,7 +77,7 @@ function NavBar() {
       if (response.status === 200) {
         delCookie('accessToken');
         delCookie('refreshToken');
-        console.log(getCookie('accessToken'));
+        setIsLogin(false);
         navigate('/');
       }
     } catch (e) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { setCookie, getCookie } from '.././config';
 import GoogleLogin from '../auth/GoogleLogin';
 import {
   HomeWrapper,
@@ -25,18 +26,36 @@ import Coupon from '../assets/main_coupon.svg';
 
 function Home() {
   const navigate = useNavigate();
-
   const [coupon, setCoupon] = useState(0);
-
-  useEffect(() => {
-    if (window.location.href.includes('code')) {
-      const code = new URL(window.location.href).searchParams.get('code');
-      GoogleLogin(code);
-    }
-  }, []);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();
+
+  useEffect(() => {
+    const reg = /[()]/gi;
+    if (window.location.href.includes('kakao')) {
+      const accessToken = new URL(window.location.href).searchParams.get(
+        'access-token'
+      );
+      const refreshToken = new URL(window.location.href).searchParams.get(
+        'refresh-token'
+      );
+      let user = new URL(window.location.href).searchParams.get('user');
+      user = user.replace('UserDto', '');
+      user = user.replace(reg, '');
+      user = user.split(', ');
+      const saveUser = {};
+      user.forEach((str) => {
+        const tmpArr = str.split('=');
+        if (tmpArr[0] !== 'coupon' && tmpArr[0] !== 'first') {
+          saveUser[tmpArr[0]] = tmpArr[1];
+        }
+      });
+      setCookie('accessToken', accessToken, 1);
+      setCookie('refreshToken', refreshToken, 1);
+      navigate('/');
+    }
+  });
 
   useEffect(() => {
     const wheelHandler = (e) => {
@@ -128,7 +147,11 @@ function Home() {
       <HomeWrapper ref={scrollRef}>
         <UserInfoBox>
           <div className='flex userInfo'>
-            <PlayerProfile width={5} height={5} src={'https://cdn-icons-png.flaticon.com/512/189/189533.png'} />
+            <PlayerProfile
+              width={5}
+              height={5}
+              src={'https://cdn-icons-png.flaticon.com/512/189/189533.png'}
+            />
             <H5 padding='0 0 0 1rem' color={colors.white}>
               플레이어1
             </H5>
@@ -148,7 +171,12 @@ function Home() {
             >
               오답노트
             </CommonBtn>
-            <CommonBtn color={colors.studyBlue100} font={1} padding='0.5rem 1rem' onClick={() => navigate('/history')}>
+            <CommonBtn
+              color={colors.studyBlue100}
+              font={1}
+              padding='0.5rem 1rem'
+              onClick={() => navigate('/history')}
+            >
               히스토리
             </CommonBtn>
           </UserBtnBox>

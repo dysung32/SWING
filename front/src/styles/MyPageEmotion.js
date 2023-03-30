@@ -66,9 +66,6 @@ export const MyPageProfileConatiner = styled.div`
   height: 50%;
   box-sizing: border-box;
 `;
-export const MyPageProfileImg = styled.div`
-  position: relative;
-`;
 
 export const MyPageProfile = styled.img`
   width: 10vw;
@@ -78,47 +75,43 @@ export const MyPageProfile = styled.img`
 `;
 
 export const FileInput = styled.div`
-  position: absolute;
-  bottom: 1rem;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 3rem;
-  height: 3rem;
-  padding: 0.5rem;
-  background-color: ${colors.gray300};
-  color: ${colors.black};
-  font-size: 1.5rem;
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
-  cursor: pointer;
-  box-sizing: border-box;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${(props) => props.imgSrc});
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: ${colors.white};
+  font-size: 2rem;
+  line-height: 10rem;
 `;
 
 export const MyPageProfileNickname = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 100%;
   padding-top: 1rem;
 
   .nickname {
     font-size: 1.5rem;
     font-weight: 700;
-    color: ${colors.studyBlue300};
-    padding-right: 1rem;
+    color: ${colors.black};
+    padding-bottom: 1rem;
   }
 `;
 
 export const MyPageProfileCoupon = styled.div`
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  width: 50%;
+  justify-content: space-around;
   align-items: center;
 `;
 
 export const CouponImg = styled.img`
-  width: 25%;
-  padding-right: 1rem;
-  object-fit: contain;
+  width: ${(props) => props.width}rem;
 `;
 
 export const MyPageIntroConatiner = styled.div`
@@ -183,6 +176,10 @@ export const MyPageHistoryConatiner = styled.div`
   .more-list-nav h6 {
     cursor: pointer;
     color: ${colors.studyBlue500};
+
+    &:hover {
+      font-weight: 900;
+    }
   }
 `;
 
@@ -220,4 +217,28 @@ export const MyPageHistoryList = styled.div`
   &:hover {
     background-color: #f4f6ff;
   }
+`;
+
+export const NickNameEditBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 5rem 0 5rem;
+  width: 32rem;
+  height: 10rem;
+  justify-content: flex-start;
+  align-items: center;
+
+  .inputBox {
+    flex-grow: 1;
+    font-size: 1rem;
+    background-color: ${colors.gray100};
+    border: none;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+  }
+`;
+
+export const EditBtnBox = styled.div`
+  display: flex;
+  justify-content: center;
 `;

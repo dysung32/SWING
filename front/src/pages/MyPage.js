@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -12,27 +12,31 @@ import {
   HistoryHeader,
   MyPageHistoryList,
   FileInput,
-  MyPageProfileImg,
   MyPageProfileNickname,
   MyPageProfileCoupon,
   CouponImg,
   MyPageProfile,
+  NickNameEditBox,
+  EditBtnBox,
 } from '../styles/MyPageEmotion';
 import MyPageSwing from '../assets/mypage_swing.png';
 import Coupon from '../assets/coupon.svg';
-import { GameTitle, CommonInput, CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
-import { H1, H3, H5, H6, P1, SmText } from '../styles/Fonts';
+import { GameTitle, CommonBtn } from '../styles/CommonEmotion';
+import { H1, H2, H3, H5, H6, P1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 
-import { Image, PencilSquare } from 'react-bootstrap-icons';
+import { PencilSquare } from 'react-bootstrap-icons';
+import ModalClosable from '../components/ModalClosable';
+import { BasicProfile } from '../config';
 
 function MyPage() {
   const navigate = useNavigate();
+
+  const nickNameRef = useRef();
+
   const [nickname, setNickname] = useState('');
-  const [displayNickname, setDisplayNickname] = useState(true);
-  const [tempNickname, setTempNickname] = useState('');
-  const [alertNickname, setAlertNickname] = useState(false);
-  const nickName = 'Sanghwa';
+  const [nicknameRegExpTest, setNicknameRegExpTest] = useState(true);
+  const tmpnickName = 'Player1';
   const coupon = 3;
   const historyList = [
     {
@@ -72,7 +76,11 @@ function MyPage() {
     },
   ];
 
-  useEffect(() => setNickname(nickName), []);
+  const [profileEditModalShow, setProfileEditModalShow] = useState(false);
+
+  useEffect(() => {
+    setNickname(tmpnickName);
+  }, []);
 
   const renderList = historyList.map((history, idx) => {
     return (
@@ -91,40 +99,76 @@ function MyPage() {
     );
   });
 
-  const toggleNickname = () => {
-    if (alertNickname) return;
-    setDisplayNickname((prev) => !prev);
-    saveNickname();
-  };
-
-  const changeNickname = (e) => {
-    console.log(e.target.value);
-    const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
-    if (regExp.test(e.target.value)) {
-      setAlertNickname(true);
+  const changeNickname = () => {
+    const changedNickname = nickNameRef.current.value;
+    console.log(changedNickname);
+    const regExp = /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,30}$/g;
+    if (regExp.test(changedNickname)) {
+      console.log('유효성 검사 통과');
+      setNicknameRegExpTest(true);
     } else {
-      setAlertNickname(false);
-      setTempNickname(e.target.value);
+      console.log('유효성 검사 통과 실패');
+      setNicknameRegExpTest(false);
     }
   };
 
-  const saveNickname = () => {
-    setAlertNickname(false);
-    if (tempNickname !== '') {
-      setNickname(tempNickname);
-    }
-  };
-
-  const handleOnKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      if (!alertNickname) {
-        toggleNickname();
-        saveNickname();
-      }
-    }
-  };
   return (
     <>
+      <ModalClosable modalShow={profileEditModalShow} setModalShow={setProfileEditModalShow}>
+        <H2 padding='0 0 3rem 0'>프로필 수정</H2>
+        <label htmlFor='file'>
+          <FileInput imgSrc={BasicProfile}>
+            <PencilSquare />
+          </FileInput>
+        </label>
+        <input type='file' name='file' id='file' style={{ display: 'none' }} />
+        <NickNameEditBox>
+          <div className='flex'>
+            <input
+              ref={nickNameRef}
+              onChange={changeNickname}
+              className='inputBox'
+              defaultValue={nickname}
+              placeholder='닉네임을 입력하세요.'
+            />
+            <CommonBtn
+              width={'7.5rem'}
+              font={1.1}
+              fontWeight={700}
+              color={colors.studyBlue100}
+              hoverColor={'#98A9F0'}
+              margin='0 0 0 0.5rem'
+            >
+              중복 확인
+            </CommonBtn>
+          </div>
+          <div>한글, 영어, 숫자 가능, 특수문자, 공백포함 불가능 (2자-30자)</div>
+        </NickNameEditBox>
+        <EditBtnBox>
+          <CommonBtn
+            width='7.5rem'
+            height={55}
+            margin='0 2rem 0 0'
+            color={colors.gray500}
+            hoverColor={'#888'}
+            font={1.2}
+            fontColor={colors.white}
+            onClick={() => setProfileEditModalShow(false)}
+          >
+            취소
+          </CommonBtn>
+          <CommonBtn
+            width='7.5rem'
+            height={55}
+            color={colors.studyBlue300}
+            hoverColor={colors.studyBlue400}
+            font={1.2}
+            fontColor={colors.white}
+          >
+            확인
+          </CommonBtn>
+        </EditBtnBox>
+      </ModalClosable>
       <MyPageWrapper>
         <GameTitle>
           <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
@@ -157,17 +201,20 @@ function MyPage() {
           </MyPageMainConatiner>
           <MyPageSideConatiner>
             <MyPageProfileConatiner>
-              <MyPageProfileImg>
-                <MyPageProfile src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx' />
-                <label htmlFor='file'>
-                  <FileInput>
-                    <Image />
-                  </FileInput>
-                </label>
-                <input type='file' name='file' id='file' style={{ display: 'none' }} />
-              </MyPageProfileImg>
+              <MyPageProfile src={BasicProfile} />
               <MyPageProfileNickname>
-                {displayNickname ? (
+                <div className='nickname'>{nickname}</div>
+                <CommonBtn
+                  width={'7rem'}
+                  height={32}
+                  color={colors.studyBlue100}
+                  hoverColor={'#98A9F0'}
+                  font={1}
+                  onClick={() => setProfileEditModalShow(true)}
+                >
+                  프로필 편집
+                </CommonBtn>
+                {/* {displayNickname ? (
                   <>
                     <div className='nickname'>{nickname}</div>
                     <PencilSquare
@@ -218,11 +265,11 @@ function MyPage() {
                       ''
                     )}
                   </div>
-                )}
+                )} */}
               </MyPageProfileNickname>
             </MyPageProfileConatiner>
             <MyPageProfileCoupon>
-              <CouponImg src={Coupon} alt='coupon' />
+              <CouponImg src={Coupon} alt='coupon' width={4} />
               <H5>{coupon}장</H5>
             </MyPageProfileCoupon>
             <CommonBtn

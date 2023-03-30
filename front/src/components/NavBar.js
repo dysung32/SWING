@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
-import {
-  Nav,
-  NavItemGroup,
-  NavItem,
-  NavSubItems,
-  NavLeaderItem,
-} from '../styles/NavEmotion';
+import { Nav, NavItemGroup, NavItem, NavSubItems, NavLeaderItem } from '../styles/NavEmotion';
 import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
+import { BasicProfile } from '../config';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -57,29 +52,17 @@ function NavBar() {
         </NavLeaderItem>
         <NavSubItems hover={hoverGame} top='70%' left='10%'>
           <NavItem onClick={onClickSentency}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Sentency
             </H4>
           </NavItem>
           <NavItem onClick={onClickHifive}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Hi-Five
             </H4>
           </NavItem>
           <NavItem onClick={onClickSpeedoodle}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Speedoodle
             </H4>
           </NavItem>
@@ -90,11 +73,7 @@ function NavBar() {
       {isLogin ? (
         <>
           <NavItem onClick={onClickLogIn}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               LogIn
             </H4>
           </NavItem>
@@ -103,7 +82,7 @@ function NavBar() {
             onMouseEnter={() => setHoverProfile(() => true)}
           >
             <PlayerProfile
-              src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
+              src={BasicProfile}
               width='3'
               height='3'
               alt='user profile image'
@@ -114,15 +93,11 @@ function NavBar() {
               <NavItem onClick={onClickMyPage} padding='0.5rem 2rem'>
                 <H6>MyPage</H6>
               </NavItem>
-              <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
-              ></div>
+              <div style={{ width: '80%', border: `1px solid ${colors.gray500}` }}></div>
               <NavItem onClick={onClickReviewNote} padding='0.5rem 2rem'>
                 <H6>ReviewNote</H6>
               </NavItem>
-              <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
-              ></div>
+              <div style={{ width: '80%', border: `1px solid ${colors.gray500}` }}></div>
               <NavItem
                 onClick={() => {
                   setIsLogin(() => false);
@@ -136,11 +111,7 @@ function NavBar() {
         </>
       ) : (
         <NavItem onClick={changeIsLogin}>
-          <H4
-            color={colors.white}
-            outlineWeight='2'
-            outline={colors.gameBlue500}
-          >
+          <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
             LogIn
           </H4>
         </NavItem>

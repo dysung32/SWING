@@ -22,6 +22,7 @@ import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from '../assets/main_coupon.svg';
+import { BasicProfile } from '../config';
 
 function Home() {
   const navigate = useNavigate();
@@ -128,13 +129,13 @@ function Home() {
       <HomeWrapper ref={scrollRef}>
         <UserInfoBox>
           <div className='flex userInfo'>
-            <PlayerProfile width={5} height={5} src={'https://cdn-icons-png.flaticon.com/512/189/189533.png'} />
+            <PlayerProfile width={5} height={5} src={BasicProfile} />
             <H5 padding='0 0 0 1rem' color={colors.white}>
-              플레이어1
+              Player1
             </H5>
           </div>
           <UserCouponBox>
-            <CouponImg src={Coupon} alt='coupon' />
+            <CouponImg src={Coupon} alt='coupon' width={3.5} />
             <div className='couponInfo'>
               쿠폰 <span className='couponCnt'>{coupon}</span>
             </div>

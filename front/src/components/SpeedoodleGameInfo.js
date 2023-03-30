@@ -57,7 +57,9 @@ function SpeedoodleGameInfo(props) {
     setChatInput(e.target.value);
   };
   // 저장해둔 메세지 보내기
-  const sendMessage = () => {};
+  const sendMessage = () => {
+    props.SendMessage();
+  };
   return (
     <>
       <GameInfoContainer color={bgColor}>

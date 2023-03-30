@@ -27,10 +27,7 @@ function SpeedoodleGame(props) {
       if (parseInt(milliseconds) === 0) {
         if (parseInt(seconds) === 0) {
           clearInterval(countdown);
-          const dataURL = canvasRef.current.toDataURL("image/png");
-
-          // dataURL을 디코딩하고 post하는 함수
-          getAnswer(dataURL);
+          getAnswer();
         } else {
           setSeconds(parseInt(seconds) - 1);
           setMilliseconds(99);
@@ -51,38 +48,38 @@ function SpeedoodleGame(props) {
 
   useEffect(() => {
     canvas = canvasRef.current;
-    ctx = canvas.getContext('2d');
     canvas.addEventListener('mousedown', initDraw);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', finishDraw);
     canvas.addEventListener('mouseout', finishDraw);
     canvas.setAttribute('width', window.innerWidth * 0.49);
     canvas.setAttribute('height', window.innerHeight * 0.4);
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
   }, []);
 
-  const getAnswer = (url) => {
-    let blobBin = window.atob(url.split(',')[1]);
-    let array = [];
-    for (let i = 0; i < blobBin.length; i++) {
-      array.push(blobBin.charCodeAt(i));
-    }
-    let imgBlob = new Blob([(new ArrayBuffer(array))], { type: 'image/png' });
-    let imgFile = new File([imgBlob], "blobtofile.png");
+  const getAnswer = () => {
+    const canvas  = canvasRef.current;
+    canvas.toBlob((blob) => {
+      const formdata = new FormData();
+      formdata.append('answer', blob);
+      const url = URL.createObjectURL(blob);
 
-    const formdata = new FormData();
-    formdata.append('answer', imgFile);
-
-    axios.post(`${AI_API_URL}/doodle/check`, formdata, {
-      headers: {
-        'Content-Type':'multipart/form-data',
-      },
+      axios.post(`${AI_API_URL}/doodle/check`, formdata, {
+        headers: {
+          'Content-Type':'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     })
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   };
 
   const getPosition = (e) => {

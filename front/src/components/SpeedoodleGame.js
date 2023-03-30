@@ -24,8 +24,9 @@ function SpeedoodleGame(props) {
   const [record, setRecord] = useState([]);
   const [finish, setFinish] = useState(false);
   const [resultModalShow, setResultModalShow] = useState(false);
+  const [finalResultModalShow, setFinalResultModalShow] = useState(false);
   const [readyGame, setReadyGame] = useState(false);
-  const [limitSeconds, setLimitSeconds] = useState(0);
+  const [isFinal, setIsFinal] = useState(false);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -91,25 +92,52 @@ function SpeedoodleGame(props) {
     }
   }, [finish]);
 
+  useEffect(() => {
+    if (isFinal) {
+      setTimeout(() => {
+        handleFinalResultModal();
+      }, 1000);
+    }
+  }, [isFinal]);
+
   // 결과 모달 여는 함수
 
   const handleResultModal = () => {
     setResultModalShow(true);
-    setLimitSeconds(props.limits);
     setTimeout(() => {
+      if (roundCnt === 1) {
+        setTimeout(() => {
+          setIsFinal(true);
+        }, 2000);
+      }
       setResultModalShow(false);
-      if (roundCnt > 0) {
+
+      if (roundCnt > 1) {
         setFinish(false);
         setRoundCnt((prev) => prev - 1);
+        setTimeout(() => {
+          setReadyGame(false);
+        }, 1000);
       }
     }, 3000);
   };
 
+  // 최종 결과 모달 여는 함수
+
+  const handleFinalResultModal = () => {
+    console.log('hi');
+    setFinalResultModalShow(true);
+    setTimeout(() => {
+      setFinalResultModalShow(false);
+      navigate('/speedoodle');
+    }, 3000);
+  };
+  // readyText 가 끝났을 때 타이머 handle하는 함수
   useEffect(() => {
     if (readyGame) {
       handleRunning();
     }
-  });
+  }, [readyGame]);
 
   // 게임 나가는 함수
   const exitGame = () => {
@@ -124,8 +152,16 @@ function SpeedoodleGame(props) {
   return (
     <>
       {/* 각 라운드 결과 제공 모달 */}
+      <ModalBasic
+        modalShow={finalResultModalShow}
+        setModalShow={setFinalResultModalShow}
+      >
+        <H2>최종결과</H2>
+        <H4>1등 ***</H4>
+        <div style={{ width: '24vw', height: '24vw' }}></div>
+      </ModalBasic>
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
-        {roundCnt > 0 ? <H2>Round {6 - roundCnt}</H2> : <H2>최종결과</H2>}
+        <H2>Round {6 - roundCnt}</H2>
         <H4>1등 ***</H4>
         <div>
           <div style={{ display: 'flex', marginBottom: '1rem' }}>
@@ -191,13 +227,17 @@ function SpeedoodleGame(props) {
 
           <span style={{ display: 'flex' }}>
             <AlarmFill style={{ fontSize: '30px', marginRight: '0.5rem' }} />
-            <Stopwatch
-              running={running}
-              seconds={props.limits}
-              setRunning={setRunning}
-              setRecord={setRecord}
-              setFinish={setFinish}
-            ></Stopwatch>
+            {running ? (
+              <Stopwatch
+                running={running}
+                seconds={props.limits}
+                setRunning={setRunning}
+                setRecord={setRecord}
+                setFinish={setFinish}
+              ></Stopwatch>
+            ) : (
+              <H5 color={colors.gameBlue500}>0: 00</H5>
+            )}
           </span>
         </RoundHeader>
 

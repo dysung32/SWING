@@ -43,11 +43,11 @@ function SpeedoodleGameInfo(props) {
   // 모드 변경
   const onClickEasyMode = () => {
     setIsMode(0);
-    setLimits(20);
+    setLimits(2);
   };
   const onClickHardMode = () => {
     setIsMode(1);
-    setLimits(30);
+    setLimits(3);
   };
 
   const linkCopy = () => {

@@ -10,7 +10,6 @@ function ReadyText(props) {
 
   useInterval(() => {
     if (!props.readyGame) {
-      console.log(readyText);
       if (readyIdx < 4) {
         setReadyText(ready[readyIdx]);
         setReadyIdx((prev) => prev + 1);
@@ -18,6 +17,7 @@ function ReadyText(props) {
         clearInterval();
         props.setReadyGame(true);
         setReadyIdx(0);
+        setReadyText('');
       }
     }
   }, 1200);

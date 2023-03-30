@@ -24,45 +24,6 @@ function LogIn() {
     navigate('/');
   };
 
-  const scope = 'profile_nickname, profile_image, account_email';
-  const getKakaoProfile = () => {
-    window.Kakao.API.request({
-      url: '/v2/user/me',
-      success: (res) => {
-        const { nickname, profile_image } = res.properties;
-        const email = res.kakao_account.email;
-        // if (emails == null) {
-        //   if (this.$route.path != '/') this.$router.push({ name: 'home' });
-        // } else {
-        //   const req_body = {
-        //     userId: 'kakao' + res.id,
-        //     userName: kakao_account.profile.nickname,
-        //     email: emails,
-        //     type: 'kakao',
-        //   };
-        //   this.socialLogin(req_body);
-        // }
-      },
-    });
-  };
-  // const kakaoLogin = (e) => {
-  //   e.preventDefault();
-  //   window.Kakao.Auth.login({
-  //     scope,
-  //     success: function (response) {
-  //       window.Kakao.Auth.setAccessToken(response.access_token);
-  //       console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
-  //       getKakaoProfile();
-  //       // loginResult = true;
-  //       // // 성공 사항에 따라 페이지를 수정하기 위한 setState
-  //       // home.setState({ loginResult });
-  //     },
-  //     fail: function (error) {
-  //       console.log(error);
-  //     },
-  //   });
-  // };
-
   const kakaoLogin = (e) => {
     e.preventDefault();
     window.location.href = `${API_URL}/oauth2/authorization/kakao`;

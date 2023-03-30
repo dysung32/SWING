@@ -64,7 +64,7 @@ function Speedoodle() {
 
   useEffect(() => {
     console.log(userUserId);
-  }, []);
+  }, [userUserId]);
 
   useEffect(() => {
     const newOffset = (page - 1 + 5 * (Ppage - 1)) * limit;

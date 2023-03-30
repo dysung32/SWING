@@ -61,14 +61,13 @@ function WordTest() {
         },
       })
       .then((res) => {
-        console.log(res);
-        if (res.data.wordNoteList.length === 5) {
-          setWordList(res.data.wordNoteList);
-        } else {
+        // console.log(res);
+        if (res.data.wordNoteList.length !== 5) {
           alert('최소 5개의 단어가 오답노트에 존재해야만 테스트를 응시할 수 있습니다!');
           navigate('/review-note', { state: 1 });
           return;
         }
+        setWordList(res.data.wordNoteList);
       });
   };
 
@@ -102,7 +101,7 @@ function WordTest() {
   const calcScore = () => {
     let score = 0;
     for (let i = 0; i < inputList.length; i++) {
-      if (inputList[i] === wordList[i].content.replace('_', ' ')) {
+      if (inputList[i].toLowerCase() === wordList[i].content.replace('_', ' ').toLowerCase()) {
         // 해당 단어가 맞았다는 axios delete 요청 보내기
         axios
           .delete(`${API_URL}/note/word/${wordList[i].wordNoteId}`, {
@@ -124,9 +123,9 @@ function WordTest() {
   };
 
   const handleContinue = () => {
-    setResultModalShow(false);
     // 다음 문제 불러오는 axios 코드
     getRandomFiveWords();
+    setResultModalShow(false);
     // input 다 지우고
     for (let i = 0; i < inputList.length; i++) {
       const el = document.getElementById(`input${i + 1}`);
@@ -134,7 +133,10 @@ function WordTest() {
     }
     // setWordList 새로 해주기
     setCorrectList([false, false, false, false, false]);
-    navigate('/test-word');
+    setTimeout(() => {
+      const el = document.getElementById('input1');
+      el.focus();
+    }, 200);
   };
 
   const handleExit = () => {
@@ -142,9 +144,19 @@ function WordTest() {
     navigate('/review-note', { state: 1 }); // 종료 누르면 오답노트로 navigate
   };
 
+  const onEnterSubmit = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   useEffect(() => {
     // 랜덤 5개 오답 단어 불러오기
     getRandomFiveWords();
+    setTimeout(() => {
+      const el = document.getElementById('input1');
+      el.focus();
+    }, 500);
   }, []);
 
   return (
@@ -264,6 +276,7 @@ function WordTest() {
                     border={`3px solid ${colors.gray300}`}
                     font={1.5}
                     id={`input${index + 1}`}
+                    onKeyPress={onEnterSubmit}
                     onChange={onChangeInput}
                   />
                 </SingleWordTestContainer>

@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import {
   GameInfoContainer,
@@ -19,21 +20,34 @@ import SpeedoodleGame from '../components/SpeedoodleGame';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
+import { AI_API_URL, API_URL } from '../config';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
   const chatWindowRef = useRef(null);
-  const [isHardMode, setIsHardMode] = useState(false);
+  const [isMode, setIsMode] = useState('');
   const [chatInput, setChatInput] = useState('');
   const [bgColor, setBgColor] = useState(null);
+  const [limits, setLimits] = useState('');
+
+  useEffect(() => {
+    getRoomDetail();
+  }, []);
+
+  const getRoomDetail = () => {
+    // 룸상세 정보 가져오는 axios
+    // axios.get(API_URL)
+  };
 
   // 모드 변경
   const onClickEasyMode = () => {
-    setIsHardMode(false);
+    setIsMode(0);
+    setLimits(2);
   };
   const onClickHardMode = () => {
-    setIsHardMode(true);
+    setIsMode(1);
+    setLimits(3);
   };
 
   const linkCopy = () => {
@@ -43,8 +57,11 @@ function SpeedoodleGameInfo(props) {
 
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
-    props.setIsGameStart(true);
-    setBgColor(`${colors.gameBlue100}`);
+    handleChangeMode();
+    setTimeout(() => {
+      props.setIsGameStart(true);
+      setBgColor(`${colors.gameBlue100}`);
+    }, 2000);
   };
 
   //방 나가기
@@ -60,12 +77,21 @@ function SpeedoodleGameInfo(props) {
   const sendMessage = () => {
     props.SendMessage();
   };
+
+  //모드 변경 api 전달
+  const handleChangeMode = () => {
+    // axios.put(`${API_URL}/doodle/room/}`);
+
+    console.log(isMode, limits);
+  };
   return (
     <>
       <GameInfoContainer color={bgColor}>
         {props.start ? (
           <SpeedoodleGame
             style={{ width: '100%', height: '100%' }}
+            isMode={isMode}
+            limits={limits}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>
@@ -98,7 +124,7 @@ function SpeedoodleGameInfo(props) {
                     fontColor={colors.gameBlue500}
                     color={colors.gameBlue100}
                     border={
-                      isHardMode ? 'none' : `3px solid ${colors.gameBlue500}`
+                      isMode === 1 ? 'none' : `3px solid ${colors.gameBlue500}`
                     }
                     onClick={onClickEasyMode}
                   >
@@ -112,7 +138,7 @@ function SpeedoodleGameInfo(props) {
                     fontColor={colors.gameBlue500}
                     color={colors.gamePink200}
                     border={
-                      isHardMode ? `3px solid ${colors.gameBlue500}` : 'none'
+                      isMode === 1 ? `3px solid ${colors.gameBlue500}` : 'none'
                     }
                     onClick={onClickHardMode}
                   >

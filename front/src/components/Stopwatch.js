@@ -31,9 +31,13 @@ function Stopwatch(props) {
   }, 10);
 
   return (
-    <H5 color={colors.gameBlue500}>
-      {seconds}:{milliseconds < 10 ? `0${milliseconds}` : milliseconds}
-    </H5>
+    <>
+      <div style={{ width: '3vw', display: 'flex', justifyContent: 'start' }}>
+        <H5 color={colors.gameBlue500}>
+          {seconds}:{milliseconds < 10 ? `0${milliseconds}` : milliseconds}
+        </H5>
+      </div>
+    </>
   );
 }
 

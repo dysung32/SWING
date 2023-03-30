@@ -113,6 +113,8 @@ function SpeedoodleGame(props) {
 
   useEffect(() => {
     if (finish) {
+      getAnswer();
+      resetCanvas();
       setTimeout(() => {
         handleResultModal();
       }, 1000);
@@ -152,7 +154,6 @@ function SpeedoodleGame(props) {
   // 최종 결과 모달 여는 함수
 
   const handleFinalResultModal = () => {
-    console.log('hi');
     setFinalResultModalShow(true);
     setTimeout(() => {
       setFinalResultModalShow(false);
@@ -178,7 +179,7 @@ function SpeedoodleGame(props) {
 
   return (
     <>
-      {/* 각 라운드 결과 제공 모달 */}
+      {/* 최종결과 제공 모달 */}
       <ModalBasic
         modalShow={finalResultModalShow}
         setModalShow={setFinalResultModalShow}
@@ -187,6 +188,7 @@ function SpeedoodleGame(props) {
         <H4>1등 ***</H4>
         <div style={{ width: '24vw', height: '24vw' }}></div>
       </ModalBasic>
+      {/* 각 라운드 결과 제공 모달 */}
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
         <H4>1등 ***</H4>
@@ -263,7 +265,15 @@ function SpeedoodleGame(props) {
                 setFinish={setFinish}
               ></Stopwatch>
             ) : (
-              <H5 color={colors.gameBlue500}>0: 00</H5>
+              <div
+                style={{
+                  width: '3vw',
+                  display: 'flex',
+                  justifyContent: 'start',
+                }}
+              >
+                <H5 color={colors.gameBlue500}>{props.limits}:00</H5>
+              </div>
             )}
           </span>
         </RoundHeader>
@@ -272,6 +282,14 @@ function SpeedoodleGame(props) {
           <Keyword>
             <H4 align='center'>키워드</H4>
           </Keyword>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: running ? 'none' : 'block',
+              position: 'absolute',
+            }}
+          ></div>
           <canvas ref={canvasRef}></canvas>
         </CanvasContainer>
         <BtnContainer>

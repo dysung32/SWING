@@ -1,3 +1,8 @@
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../config';
+
 import { H1, H2, H4 } from '../styles/Fonts';
 import {
   SentenceTestContentContainer,
@@ -7,13 +12,10 @@ import {
   TestModalTitle,
   TestWrapper,
 } from '../styles/TestEmotion';
-import Bike from '../assets/bike.jpg';
 import Coupon from '../assets/coupon.png';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import ModalBasic from '../components/ModalBasic';
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 function SentenceTest() {
   const navigate = useNavigate();
@@ -21,20 +23,64 @@ function SentenceTest() {
   const [successModalShow, setSuccessModalShow] = useState(false);
   const [failModalShow, setFailModalShow] = useState(false);
 
-  const [answer, setAnswer] = useState('A man is riding a bicycle.');
+  const [answer, setAnswer] = useState('');
+  // const [translation, setTranslation] = useState('');
+  // const [imgURL, setImgURL] = useState('');
   const [sentence, setSentence] = useState('');
 
   const sentenceInput = useRef();
 
+  // userId는 추후에 recoil 설정 후 삭제 예정
+  const [userId, setUserId] = useState('black');
+
+  const getRandomSentence = async () => {
+    await axios
+      .get(`${API_URL}/note/sentence/${userId}/1`, {
+        headers: {
+          'Access-Token':
+            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.sentenceNoteList.length === 0) {
+          alert('최소 1개의 문장이 오답노트에 존재해야만 테스트를 응시할 수 있습니다!');
+          navigate('/review-note', { state: 2 });
+          return;
+        }
+        setAnswer(res.data.sentenceNoteList[0]);
+        // setTranslation(res.data.sentenceNoteList[0].meaningKr);
+        // setImgURL(res.data.sentenceNoteList[0].sentenceImageUrl);
+      });
+  };
+
   const onChangeInput = (e) => {
-    setSentence(e.target.value);
+    setSentence(e.target.value.trim());
   };
 
   const handleSubmit = () => {
-    if (sentence === answer) {
+    let tmpSentence = sentence;
+    if (sentence.slice(-1) !== '.') {
+      tmpSentence += '.';
+      setSentence(tmpSentence); // 온점 추가해주기
+      console.log(tmpSentence);
+    }
+    if (tmpSentence.toLowerCase() === answer.content.toLowerCase()) {
+      // 맞춘 문장은 오답노트에서 삭제
+      axios
+        .delete(`${API_URL}/note/sentence/${answer.sentenceNoteId}`, {
+          headers: {
+            'Access-Token':
+              'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {});
       setSuccessModalShow(true);
     } else {
-      if (sentence === '') {
+      if (sentence === '' || sentence === '.') {
         alert('답안을 입력해주세요.');
         return;
       }
@@ -43,13 +89,15 @@ function SentenceTest() {
   };
 
   const handleContinue = () => {
+    // 다음 문제 불러오기
+    getRandomSentence();
+
     setSuccessModalShow(false);
     setFailModalShow(false);
-    // 다음 문제 불러오는 axios 코드
     // setAnswer 새로 해주기
     sentenceInput.current.value = '';
     setSentence('');
-    navigate('/test-sentence');
+    sentenceInput.current.focus();
   };
 
   const handleExit = () => {
@@ -57,6 +105,21 @@ function SentenceTest() {
     setFailModalShow(false);
     navigate('/review-note', { state: 2 }); // 종료 누르면 오답노트로 navigate
   };
+
+  const onEnterSubmit = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
+  useEffect(() => {
+    // 랜덤 오답 문장 불러오기
+    getRandomSentence();
+
+    setTimeout(() => {
+      sentenceInput.current.focus();
+    }, 500);
+  }, []);
 
   return (
     <>
@@ -129,7 +192,7 @@ function SentenceTest() {
             <div className='flex'>
               <H4>정답</H4>
               <div className='rightAnswer'>
-                <H4 color={colors.gameBlue300}>{answer} (O)</H4>
+                <H4 color={colors.gameBlue300}>{answer.content} (O)</H4>
               </div>
             </div>
           </TestFailModalContent>
@@ -161,7 +224,7 @@ function SentenceTest() {
       <TestWrapper>
         <H2>문장 복습 테스트</H2>
         <SentenceTestContentContainer>
-          <img src={Bike} className='testImg' alt='testImg' />
+          <img src={answer.sentenceImageUrl} className='testImg' alt='testImg' />
           <div className='flex testDesc'>
             <CommonBtn
               width={'8rem'}
@@ -175,7 +238,7 @@ function SentenceTest() {
             >
               해설
             </CommonBtn>
-            <div className='translation'>남자가 자전거를 타고 있습니다.</div>
+            <div className='translation'>{answer.meaningKr}</div>
           </div>
         </SentenceTestContentContainer>
         <SentenceTestInputContainer>
@@ -187,6 +250,7 @@ function SentenceTest() {
             font={1.5}
             padding={'1rem'}
             ref={sentenceInput}
+            onKeyPress={onEnterSubmit}
             onChange={onChangeInput}
           />
           <CommonBtn

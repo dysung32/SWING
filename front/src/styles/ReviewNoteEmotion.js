@@ -43,21 +43,23 @@ export const ReviewBtnContainer = styled.div`
 export const WrongThingBox = styled.div`
   display: flex;
   position: relative;
-  flex-direction: column;
   margin-bottom: 1rem;
-  width: 100%;
   border-radius: 0.5rem;
   background-color: ${colors.white};
   padding: 1rem 2rem 1rem 2rem;
   box-sizing: border-box;
 
+  .contentBox {
+    width: 92%;
+  }
+
   .thingMean {
-    font-size: 24px;
-    display: ${props => props.display};
+    font-size: 20px;
+    display: ${(props) => props.display};
   }
 
   .checkBtn {
-    height:auto;
+    height: auto;
     font-size: 2.5rem;
     position: absolute;
     right: 2rem;
@@ -68,8 +70,8 @@ export const WrongThingBox = styled.div`
 `;
 
 export const ThingMean = styled.div`
-  font-size: 24px;
-  margin-bottom: ${props => props.margin}rem;
+  font-size: 20px;
+  margin-bottom: ${(props) => props.margin}rem;
 `;
 
 export const PaginationBox = styled.div`
@@ -83,13 +85,13 @@ export const PaginationBox = styled.div`
   gap: 1rem;
   position: absolute;
   bottom: 1.5rem;
-`
+`;
 
 export const PageNumBox = styled.button`
   background-color: ${colors.white};
   width: 2.5rem;
-  height: 2.5rem; 
-  border-radius:6px;
+  height: 2.5rem;
+  border-radius: 6px;
   border: 2px solid ${colors.gray500};
   color: ${colors.gameBlue500};
   display: flex;

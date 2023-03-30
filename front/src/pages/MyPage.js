@@ -16,6 +16,7 @@ import {
   MyPageProfileNickname,
   MyPageProfileCoupon,
   CouponImg,
+  MyPageProfile,
 } from '../styles/MyPageEmotion';
 import MyPageSwing from '../assets/mypage_swing.png';
 import Coupon from '../assets/coupon.svg';
@@ -157,11 +158,7 @@ function MyPage() {
           <MyPageSideConatiner>
             <MyPageProfileConatiner>
               <MyPageProfileImg>
-                <PlayerProfile
-                  src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
-                  width='12'
-                  height='12'
-                />
+                <MyPageProfile src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx' />
                 <label htmlFor='file'>
                   <FileInput>
                     <Image />

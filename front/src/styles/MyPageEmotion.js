@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -68,6 +68,13 @@ export const MyPageProfileConatiner = styled.div`
 `;
 export const MyPageProfileImg = styled.div`
   position: relative;
+`;
+
+export const MyPageProfile = styled.img`
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 export const FileInput = styled.div`
@@ -183,8 +190,7 @@ export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) =>
-    props.border ? `2px solid ${colors.gameBlue500}` : ""};
+  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: 700;

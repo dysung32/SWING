@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  userIdState,
+  userNicknameState,
+  userImgState,
+  sentencyCntState,
+  fiveCntState,
+} from '../atoms';
+import { useRecoilState } from 'recoil';
+
 import { setCookie, getCookie } from '.././config';
 import GoogleLogin from '../auth/GoogleLogin';
 import {
@@ -26,6 +35,11 @@ import Coupon from '../assets/main_coupon.svg';
 
 function Home() {
   const navigate = useNavigate();
+  const [userUserId, setUserUserId] = useRecoilState(userIdState);
+  const [userNickname, setUserNickname] = useRecoilState(userNicknameState);
+  const [userImg, setUserImg] = useRecoilState(userImgState);
+  const [userSenCnt, setUserSenCnt] = useRecoilState(sentencyCntState);
+  const [userFiveCnt, setUserFiveCnt] = useRecoilState(fiveCntState);
   const [coupon, setCoupon] = useState(0);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
@@ -47,8 +61,16 @@ function Home() {
       const saveUser = {};
       user.forEach((str) => {
         const tmpArr = str.split('=');
-        if (tmpArr[0] !== 'coupon' && tmpArr[0] !== 'first') {
-          saveUser[tmpArr[0]] = tmpArr[1];
+        if (tmpArr[0] === 'userId') {
+          setUserUserId(tmpArr[1]);
+        } else if (tmpArr[0] === 'nickname') {
+          setUserNickname(tmpArr[1]);
+        } else if (tmpArr[0] === 'profileImageUrl') {
+          setUserImg(tmpArr[1]);
+        } else if (tmpArr[0] === 'fiveCnt') {
+          setUserFiveCnt(parseInt(tmpArr[1]));
+        } else if (tmpArr[0] === 'sentencyCnt') {
+          setUserFiveCnt(parseInt(tmpArr[1]));
         }
       });
       setCookie('accessToken', accessToken, 1);

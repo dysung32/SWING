@@ -68,21 +68,21 @@ function NavBar() {
     Logout(setIsLogin);
   };
   const Logout = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/logout`, {
+    await axios
+      .get(`${API_URL}/logout`, {
         headers: {
           'Access-Token': getCookie('accessToken'),
         },
-      });
-      if (response.status === 200) {
-        delCookie('accessToken');
-        delCookie('refreshToken');
-        setIsLogin(false);
-        navigate('/');
-      }
-    } catch (e) {
-      console.log(e);
-    }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setIsLogin(false);
+          navigate('/');
+        }
+      })
+      .catch((e) => console.error(e));
   };
 
   return (

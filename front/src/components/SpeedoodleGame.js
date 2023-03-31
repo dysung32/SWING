@@ -157,7 +157,8 @@ function SpeedoodleGame(props) {
     setFinalResultModalShow(true);
     setTimeout(() => {
       setFinalResultModalShow(false);
-      navigate('/speedoodle');
+      // 다시 대기방 상태로 회귀
+      props.isSetGameStart(false);
     }, 3000);
   };
   // readyText 가 끝났을 때 타이머 handle하는 함수

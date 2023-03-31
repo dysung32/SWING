@@ -62,17 +62,19 @@ function Home() {
           tmpArr[0] === 'profileImageUrl'
         ) {
           userSave[tmpArr[0]] = tmpArr[1];
-          // window.localStorage.setItem(tmpArr[0], tmpArr[1]);
         }
       });
       setUser(userSave);
-      window.localStorage.setItem('user', JSON.stringify(userSave));
       setCookie('accessToken', accessToken, 1);
       setCookie('refreshToken', refreshToken, 1);
 
       navigate('/');
     }
   });
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   useEffect(() => {
     const wheelHandler = (e) => {
@@ -217,7 +219,7 @@ function Home() {
         <HomeSentencyContainer></HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer></HomeHiFiveContainer>
-        <Divider style={{ backgroundColor: `${colors.gameBlue300}` }}></Divider>
+        <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>
       </HomeWrapper>
     </>

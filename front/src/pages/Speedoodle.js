@@ -2,13 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
-import {
-  userIdState,
-  userNicknameState,
-  userImgState,
-  sentencyCntState,
-  fiveCntState,
-} from '../atoms';
+import { userState } from '../recoil';
 
 import {
   SpeedoodleWrapper,
@@ -26,7 +20,7 @@ import { H1, H2, H3, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import Pagination from '../components/PaginatorBar';
 import ModalClosable from '../components/ModalClosable';
-import { AI_API_URL, API_URL } from '../config';
+import { API_URL, getCookie, delCookie } from '.././config';
 import {
   ArrowClockwise,
   AwardFill,
@@ -48,6 +42,7 @@ function Speedoodle() {
   const [makeMode, setMakeMode] = useState(0);
   const [isLock, setIsLock] = useState(false);
   const [makeCode, setMakeCode] = useState('');
+  const [makeTitle, setMakeTitle] = useState('');
   // 비밀번호 입력 모달 useState
   const [codeModalShow, setCodeModalShow] = useState(false);
   const [compareCode, setCompareCode] = useState('');
@@ -60,11 +55,8 @@ function Speedoodle() {
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
   // 리코일에서 가져온 유저 정보
-  const userUserId = useRecoilValue(userIdState);
-
-  useEffect(() => {
-    console.log(userUserId);
-  }, [userUserId]);
+  // const user = useRecoilValue(userState);
+  const user = JSON.parse(window.localStorage.getItem('user'));
 
   useEffect(() => {
     const newOffset = (page - 1 + 5 * (Ppage - 1)) * limit;
@@ -208,8 +200,18 @@ function Speedoodle() {
 
   // 방만들기 모달창 오픈
   const openModal = () => {
+    // 방만들기 모달 열때 값 리셋
+    setMakeTitle('');
+    setMakeMode(0);
+    setMakeCode('');
     setIsLock(false);
+    // 방만들기 모달 오픈
     setCreateModalShow(true);
+  };
+
+  // 방만들기 방제목 값
+  const handleMakeTitle = (e) => {
+    setMakeTitle(e.target.value);
   };
 
   // 방만들기 모달에서 모드 변경
@@ -224,14 +226,15 @@ function Speedoodle() {
     setIsLock((prev) => !prev);
   };
 
+  // 방만들기 비밀번호 값
+  const handleMakeCode = (e) => {
+    setMakeCode(e.target.value);
+  };
+
   // 비밀번호 생성 및 입력시 6자리로 제한
   const handleOnInputLength = (e) => {
     if (e.target.value.length > e.target.maxLength)
       e.target.value = e.target.value.slice(0, e.target.maxLength);
-  };
-
-  const handleMakeCode = (e) => {
-    setMakeCode(e.target.value);
   };
 
   // 방목록 api 새로고침 함수
@@ -267,16 +270,28 @@ function Speedoodle() {
   // 방 만들기 api
 
   const makeRoom = async () => {
-    // axios.post(
-    //   `${API_URL}/doodle/room`,{
-    //     params: {
-    //       "code": makeCode,
-    //       "leaderId": "test120",
-    //       "mode": makeMode,
-    //       "name": "테스트"
-    //     }
-    //   }
-    // )
+    axios
+      .post(
+        `${API_URL}/doodle/room`,
+        {
+          code: makeCode,
+          leaderId: user.userId,
+          mode: makeMode,
+          name: makeTitle,
+        },
+        {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+            'Content-Type': `application/json`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.lo(res);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -297,7 +312,7 @@ function Speedoodle() {
               font='2.5'
               fontColor={colors.gameBlue500}
               color={colors.gameBlue100}
-              border={makeMode ? `3px solid ${colors.gameBlue500}` : 'none'}
+              border={makeMode ? 'none' : `3px solid ${colors.gameBlue500}`}
               onClick={() => handleCreateRoomMode(0)}
             >
               <H4 align='center'>EASYMODE</H4>
@@ -335,6 +350,7 @@ function Speedoodle() {
             font='1.2'
             border={'none'}
             placeholder='방제목을 입력하세요.'
+            onChange={handleMakeTitle}
           />
           <FlexContainer>
             <div

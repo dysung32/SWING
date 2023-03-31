@@ -1,14 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  userIdState,
-  userNicknameState,
-  userImgState,
-  sentencyCntState,
-  fiveCntState,
-} from '../atoms';
-import { useRecoilState } from 'recoil';
 
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 import { setCookie, getCookie } from '.././config';
 import GoogleLogin from '../auth/GoogleLogin';
 import {
@@ -35,11 +29,11 @@ import Coupon from '../assets/main_coupon.svg';
 
 function Home() {
   const navigate = useNavigate();
-  const [userUserId, setUserUserId] = useRecoilState(userIdState);
-  const [userNickname, setUserNickname] = useRecoilState(userNicknameState);
-  const [userImg, setUserImg] = useRecoilState(userImgState);
-  const [userSenCnt, setUserSenCnt] = useRecoilState(sentencyCntState);
-  const [userFiveCnt, setUserFiveCnt] = useRecoilState(fiveCntState);
+  const [user, setUser] = useRecoilState(userState);
+
+  // const [userNickname, setUserNickname] = useRecoilState(userNicknameState);
+  // const [userImg, setUserImg] = useRecoilState(userImgState);
+
   const [coupon, setCoupon] = useState(0);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
@@ -58,23 +52,23 @@ function Home() {
       user = user.replace('UserDto', '');
       user = user.replace(reg, '');
       user = user.split(', ');
-      const saveUser = {};
+      const userSave = {};
       user.forEach((str) => {
         const tmpArr = str.split('=');
-        if (tmpArr[0] === 'userId') {
-          setUserUserId(tmpArr[1]);
-        } else if (tmpArr[0] === 'nickname') {
-          setUserNickname(tmpArr[1]);
-        } else if (tmpArr[0] === 'profileImageUrl') {
-          setUserImg(tmpArr[1]);
-        } else if (tmpArr[0] === 'fiveCnt') {
-          setUserFiveCnt(parseInt(tmpArr[1]));
-        } else if (tmpArr[0] === 'sentencyCnt') {
-          setUserFiveCnt(parseInt(tmpArr[1]));
+        if (
+          tmpArr[0] === 'userId' ||
+          tmpArr[0] === 'nickname' ||
+          tmpArr[0] === 'profileImageUrl'
+        ) {
+          userSave[tmpArr[0]] = tmpArr[1];
+          // window.localStorage.setItem(tmpArr[0], tmpArr[1]);
         }
       });
+      setUser(userSave);
+      window.localStorage.setItem('user', JSON.stringify(userSave));
       setCookie('accessToken', accessToken, 1);
       setCookie('refreshToken', refreshToken, 1);
+
       navigate('/');
     }
   });

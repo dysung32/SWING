@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { userState } from '../recoil';
+import { useRecoilValue } from 'recoil';
 import { API_URL, getCookie, delCookie } from '.././config';
 
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
@@ -20,6 +22,7 @@ function NavBar() {
   const [isLogin, setIsLogin] = useState(false);
   const [hoverGame, setHoverGame] = useState(false);
   const [hoverProfile, setHoverProfile] = useState(false);
+  const user = useRecoilValue(userState);
 
   useEffect(() => {
     setIsLogin(IsLogin());
@@ -64,9 +67,6 @@ function NavBar() {
     navigate('/review-note');
   };
 
-  const handleLogout = () => {
-    Logout(setIsLogin);
-  };
   const Logout = async () => {
     await axios
       .get(`${API_URL}/logout`, {
@@ -78,6 +78,7 @@ function NavBar() {
         if (res.status === 200) {
           delCookie('accessToken');
           delCookie('refreshToken');
+          window.localStorage.setItem('user', '');
           setIsLogin(false);
           navigate('/');
         }

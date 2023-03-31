@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { SpeedoodleWrapper } from '../styles/SpeedoodleEmotion';
 import SpeedoodleUser from '../components/SpeedoodleUser';
@@ -17,11 +17,11 @@ import { noWait } from 'recoil';
 import { API_URL } from '../config';
 
 function SpeedoodleRoom() {
+  const [chatInput, setChatInput] = useState('');
   const [isGameStart, setIsGameStart] = useState(false);
+  const [chatData, setChatData] = useState([]);
   const userImg =
     'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx';
-
-  const room_id = 23;
 
   const defaultUser = [
     {
@@ -107,29 +107,38 @@ function SpeedoodleRoom() {
     },
   ];
 
-  const sock = new SockJS(`${API_URL}/speedoodle/room`);
+  
+  // const sock = new SockJS(`${API_URL}/speedoodle/room`);
 
-  const stomp = Stomp.over(sock);
+  // stomp.reconnect_delay(1000);
+  const stompRef = useRef(null);
+  const room_id = 23;
 
   const stompConnect = () => {
     try {
-
-      stomp.connect({}, () => {
+      const stomp = Stomp.over(function(){
+        return new SockJS(`${API_URL}/speedoodle/room`);
+      });
+      stomp.connect({}, (message) => {
+        console.log(message);
+        console.log('STOMP connection established');
         stomp.subscribe(`/sub/${room_id}`,
-        (message) => {
-          console.log(message);
-        }, {}
+          (Ms) => {
+            const msObj = JSON.parse(Ms.body); 
+            setChatData(chatData => [...chatData, [msObj.publisher, msObj.message]]);
+          }, {}
         );
       });
+      stompRef.current = stomp;
     } catch (error) {
       console.log(error);
     }
-  };
+  }; 
 
   const stompDisconnect = () => {
     try {
-      stomp.disconnect(() => {
-        stomp.unsubscribe(`sub/${room_id}`);
+      stompRef.disconnect(() => {
+        stompRef.unsubscribe(`sub/${room_id}`);
       },{} );
     } catch (error) {
 
@@ -140,14 +149,27 @@ function SpeedoodleRoom() {
     // stomp.debug = null;
     const data = {
       roomId: 23,
-      publisher: "mario",
-      message: "testtesttest",
+      publisher: `user/${room_id}`,
+      message: chatInput,
     };
-    stomp.send("/pub/send",{}, JSON.stringify(data));
+    if (stompRef.current?.connected) {
+      console.log(stompRef.current.connected);
+      stompRef.current.send("/pub/send", {}, JSON.stringify(data));
+    } else {
+      console.log(stompRef.current.connected);
+      console.log("STOMP connection is not open");
+    }
+  
   };
 
   useEffect(() => {
-    stompConnect();
+    if(!stompRef.current) {
+      stompConnect();
+    }
+
+    console.log(stompRef.current.connected);
+    return () => {
+    };
   },[]);
 
   return (
@@ -176,7 +198,10 @@ function SpeedoodleRoom() {
             <SpeedoodleGameInfo
               start={isGameStart}
               setIsGameStart={setIsGameStart}
-              SendMessage={SendMessage}
+              SendMessage = {SendMessage}
+              chatInput={chatInput}
+              setChatInput={setChatInput}
+              chatData = {chatData}
             ></SpeedoodleGameInfo>
           )}
         </SpeedoodleRoomContainer>

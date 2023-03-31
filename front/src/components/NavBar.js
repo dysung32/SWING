@@ -15,6 +15,7 @@ import {
 } from '../styles/NavEmotion';
 import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
+import { BasicProfile } from '../config';
 import IsLogin from '../auth/IsLogin';
 
 function NavBar() {
@@ -22,7 +23,6 @@ function NavBar() {
   const [isLogin, setIsLogin] = useState(false);
   const [hoverGame, setHoverGame] = useState(false);
   const [hoverProfile, setHoverProfile] = useState(false);
-  const user = useRecoilValue(userState);
 
   useEffect(() => {
     setIsLogin(IsLogin());
@@ -130,12 +130,21 @@ function NavBar() {
       <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
       {isLogin ? (
         <>
+          <NavItem onClick={onClickLogIn}>
+            <H4
+              color={colors.white}
+              outlineWeight='2'
+              outline={colors.gameBlue500}
+            >
+              LogIn
+            </H4>
+          </NavItem>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}
             onMouseEnter={() => setHoverProfile(() => true)}
           >
             <PlayerProfile
-              src='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcRSM-bLdlw42S0tP6jHNppEhfDDU2nwKRL9UzKv7Mx6uOay9N4RsJLJmst9VIxAOckx'
+              src={BasicProfile}
               width='3'
               height='3'
               alt='user profile image'
@@ -147,13 +156,19 @@ function NavBar() {
                 <H6>MyPage</H6>
               </NavItem>
               <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
+                style={{
+                  width: '80%',
+                  border: `1px solid ${colors.gray500}`,
+                }}
               ></div>
               <NavItem onClick={onClickReviewNote} padding='0.5rem 2rem'>
                 <H6>ReviewNote</H6>
               </NavItem>
               <div
-                style={{ width: '80%', border: `1px solid ${colors.gray500}` }}
+                style={{
+                  width: '80%',
+                  border: `1px solid ${colors.gray500}`,
+                }}
               ></div>
               <NavItem onClick={() => Logout()} padding='0.5rem 2rem'>
                 <H6>LogOut</H6>

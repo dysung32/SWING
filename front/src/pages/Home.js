@@ -217,7 +217,7 @@ function Home() {
         <HomeSentencyContainer></HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer></HomeHiFiveContainer>
-        <Divider style={{ backgroundColor: `${colors.gameBlue300}` }}></Divider>
+        <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>
       </HomeWrapper>
     </>

@@ -288,7 +288,7 @@ function Speedoodle() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
+          navigate(`/speedoodle/room/${res.data.roomId}`);
         }
       })
       .catch((err) => console.error(err));

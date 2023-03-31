@@ -11,6 +11,7 @@ export const GameInfoContainer = styled.div`
     props.color ? props.color : `${colors.white}`};
   border-radius: 1.5rem;
   box-sizing: border-box;
+  height: 100%;
 `;
 
 export const RoomTitle = styled.div`
@@ -42,6 +43,7 @@ export const RoomInfo = styled.div`
 `;
 
 export const Chat = styled.div`
+  position: relative;
   grid-row-start: 1;
   grid-row-end: 1;
   grid-column-start: 3;
@@ -49,18 +51,42 @@ export const Chat = styled.div`
   padding: 0.5rem;
   background-color: ${colors.gray200};
   border-radius: 1rem;
+  height: calc(100% - 1rem);
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 `;
 
 export const ChattingContainer = styled.div`
-  width: 100%;
-  height: calc(100% - 71px);
+  position: absolute;
+  padding: 0.5rem;
+  width: 88%;
+  height: 85%;
   margin-bottom: 1rem;
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  word-wrap: break-word;
+
+  &::-webkit-scrollbar {
+    width:3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: ${colors.gameBlue300};
+  }
+  &::-webkit-scrollbar-track {
+    background-color: ${colors.studyYellow100}
+  }
 `;
 
 export const ChattingInputContainer = styled.div`
   display: flex;
-  width: 100%;
+  position: absolute;
+  width: 94.5%;
+  bottom: 0.5rem;
   height: 3rem;
   border-radius: 0.5rem;
   background-color: ${colors.white};

@@ -27,7 +27,6 @@ function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
   const chatWindowRef = useRef(null);
   const [isMode, setIsMode] = useState('');
-  const [chatInput, setChatInput] = useState('');
   const [bgColor, setBgColor] = useState(null);
   const [limits, setLimits] = useState('');
 
@@ -70,12 +69,14 @@ function SpeedoodleGameInfo(props) {
   };
   // 보낼 메세지 저장해놓기
   const saveMessage = (e) => {
-    console.log(e.target.value);
-    setChatInput(e.target.value);
+    props.setChatInput(e.target.value);
   };
   // 저장해둔 메세지 보내기
   const sendMessage = () => {
-    props.SendMessage();
+    if(props.chatInput !== ''){
+      props.SendMessage();
+      props.setChatInput('');
+    }
   };
 
   //모드 변경 api 전달
@@ -185,9 +186,19 @@ function SpeedoodleGameInfo(props) {
                 </BtnContainer>
               </RoomInfo>
               <Chat>
-                <ChattingContainer useRef={chatWindowRef}></ChattingContainer>
+                <ChattingContainer useRef={chatWindowRef}>
+                  {
+                    props.chatData.map((item,idx) => {
+                      return (
+                        <P2 key={idx}>{item[0]}: {item[1]}</P2>
+                      )
+                    })
+                  }
+                </ChattingContainer>
                 <ChattingInputContainer>
-                  <ChatInput onChange={saveMessage} />
+                  <ChatInput onChange={saveMessage} 
+                  value={props.chatInput} 
+                  onKeyDown={(e) => e.key==='Enter'&&sendMessage()}/>
                   <button
                     style={{
                       all: 'unset',
@@ -195,6 +206,7 @@ function SpeedoodleGameInfo(props) {
                       color: `${colors.gameBlue500}`,
                     }}
                     onClick={sendMessage}
+
                   >
                     <SendFill />
                   </button>

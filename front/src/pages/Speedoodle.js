@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../recoil';
+
 import {
   SpeedoodleWrapper,
   SpeedoodleContentContainer,
@@ -17,7 +20,7 @@ import { H1, H2, H3, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import Pagination from '../components/PaginatorBar';
 import ModalClosable from '../components/ModalClosable';
-import { AI_API_URL, API_URL } from '../config';
+import { API_URL, getCookie, delCookie } from '.././config';
 import {
   ArrowClockwise,
   AwardFill,
@@ -36,8 +39,10 @@ function Speedoodle() {
   const [searchInput, setSearchInput] = useState('');
   // 방생성 모달 관련 useState
   const [createModalShow, setCreateModalShow] = useState(false);
-  const [isHard, setIsHard] = useState(false);
+  const [makeMode, setMakeMode] = useState(0);
   const [isLock, setIsLock] = useState(false);
+  const [makeCode, setMakeCode] = useState('');
+  const [makeTitle, setMakeTitle] = useState('');
   // 비밀번호 입력 모달 useState
   const [codeModalShow, setCodeModalShow] = useState(false);
   const [compareCode, setCompareCode] = useState('');
@@ -49,31 +54,44 @@ function Speedoodle() {
   const [page, setPage] = useState(1);
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
+  // 리코일에서 가져온 유저 정보
+  // const user = useRecoilValue(userState);
+  const user = JSON.parse(window.localStorage.getItem('user'));
 
   useEffect(() => {
     const newOffset = (page - 1 + 5 * (Ppage - 1)) * limit;
     setOffset(newOffset);
   }, [page, Ppage]);
 
+  // 검색 option
   const options = [
     { value: 'roomId', name: '방번호' },
     { value: 'name', name: '방제목' },
   ];
 
+  const inputOption = options.map((option, idx) => (
+    <option value={option.value} key={idx}>
+      {option.name}
+    </option>
+  ));
+
+  // 모드 option
   const modeOptions = [
     { value: 2, name: 'ALL' },
     { value: 0, name: 'EASY' },
     { value: 1, name: 'HARD' },
   ];
 
+  const modeOption = modeOptions.map((option, idx) => (
+    <option value={option.value} key={idx}>
+      {option.name}
+    </option>
+  ));
+
   // 방 목록 가져오는 함수
   const getRoomList = () => {
     axios
-      .get(`${API_URL}/doodle/rooms`, {
-        // headers: {
-        //   'Access-Token': '',
-        // },
-      })
+      .get(`${API_URL}/doodle/rooms`, {})
       .then((res) => {
         setRoomList([...res.data.roomList]);
         setRenderRoomList([...res.data.roomList]);
@@ -85,22 +103,12 @@ function Speedoodle() {
     getRoomList();
   }, []);
 
+  // 모드 셀렉터에 따른 랜더링되는 방 변경
   useEffect(() => {
     handleRenderRoomList(activeMode);
   }, [activeMode]);
 
-  const inputOption = options.map((option, idx) => (
-    <option value={option.value} key={idx}>
-      {option.name}
-    </option>
-  ));
-
-  const modeOption = modeOptions.map((option, idx) => (
-    <option value={option.value} key={idx}>
-      {option.name}
-    </option>
-  ));
-
+  // 방 컴포넌트
   const rooms = renderRoomList?.slice(offset, offset + limit).map((room) => (
     <Room
       color={room.mode === 0 ? colors.gameBlue100 : colors.gamePink200}
@@ -192,18 +200,35 @@ function Speedoodle() {
 
   // 방만들기 모달창 오픈
   const openModal = () => {
+    // 방만들기 모달 열때 값 리셋
+    setMakeTitle('');
+    setMakeMode(0);
+    setMakeCode('');
     setIsLock(false);
+    // 방만들기 모달 오픈
     setCreateModalShow(true);
   };
 
+  // 방만들기 방제목 값
+  const handleMakeTitle = (e) => {
+    setMakeTitle(e.target.value);
+  };
+
   // 방만들기 모달에서 모드 변경
-  const handleCreateRoomMode = () => {
-    setIsHard((prev) => !prev);
+  const handleCreateRoomMode = (mode) => {
+    if (makeMode !== mode) {
+      makeMode ? setMakeMode(0) : setMakeMode(1);
+    }
   };
 
   // 방만들기 모달에서 비밀방 클릭 여부
   const handleChangeIsLock = () => {
     setIsLock((prev) => !prev);
+  };
+
+  // 방만들기 비밀번호 값
+  const handleMakeCode = (e) => {
+    setMakeCode(e.target.value);
   };
 
   // 비밀번호 생성 및 입력시 6자리로 제한
@@ -242,6 +267,33 @@ function Speedoodle() {
     } else setWrongCode(true);
   };
 
+  // 방 만들기 api
+
+  const makeRoom = async () => {
+    axios
+      .post(
+        `${API_URL}/doodle/room`,
+        {
+          code: makeCode,
+          leaderId: user.userId,
+          mode: makeMode,
+          name: makeTitle,
+        },
+        {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+            'Content-Type': `application/json`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
     <>
       {/* speedoodle 방생성 모달 */}
@@ -260,8 +312,8 @@ function Speedoodle() {
               font='2.5'
               fontColor={colors.gameBlue500}
               color={colors.gameBlue100}
-              border={isHard ? 'none' : `3px solid ${colors.gameBlue500}`}
-              onClick={handleCreateRoomMode}
+              border={makeMode ? 'none' : `3px solid ${colors.gameBlue500}`}
+              onClick={() => handleCreateRoomMode(0)}
             >
               <H4 align='center'>EASYMODE</H4>
               <P1 align='center' style={{ wordBreak: 'keep-all' }}>
@@ -277,8 +329,8 @@ function Speedoodle() {
               font='2.5'
               fontColor={colors.gameBlue500}
               color={colors.gamePink200}
-              border={isHard ? `3px solid ${colors.gameBlue500}` : 'none'}
-              onClick={handleCreateRoomMode}
+              border={makeMode ? `3px solid ${colors.gameBlue500}` : 'none'}
+              onClick={() => handleCreateRoomMode(1)}
             >
               <H4 align='center'>HARD MODE</H4>
               <P1 align='center'>
@@ -298,6 +350,7 @@ function Speedoodle() {
             font='1.2'
             border={'none'}
             placeholder='방제목을 입력하세요.'
+            onChange={handleMakeTitle}
           />
           <FlexContainer>
             <div
@@ -336,6 +389,7 @@ function Speedoodle() {
               font='1.2'
               placeholder='비밀번호 숫자 6자리'
               onInput={handleOnInputLength}
+              onChange={handleMakeCode}
             />
           </FlexContainer>
           <div style={{ marginTop: '2rem' }}>
@@ -357,6 +411,7 @@ function Speedoodle() {
               font='1.5'
               fontColor={colors.white}
               color={colors.gameBlue500}
+              onClick={() => makeRoom()}
             >
               <H4>확인</H4>
             </CommonBtn>

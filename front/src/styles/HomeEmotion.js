@@ -29,7 +29,11 @@ export const HomeSentencyContainer = styled.div`
   width: 100%;
   height: 100vh;
   padding: 0 10%;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
   box-sizing: border-box;
 `;
 
@@ -56,7 +60,6 @@ export const HomeSpeedoodleContainer = styled.div`
 export const Divider = styled.div`
   width: 100%;
   height: 5px;
-  background-color: ${colors.gray400};
 `;
 
 export const HeroScrollMsg = styled.div`

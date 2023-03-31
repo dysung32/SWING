@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -74,17 +74,15 @@ export const MyPageProfile = styled.img`
   object-fit: cover;
 `;
 
-export const FileInput = styled.div`
+export const FilePreview = styled.img`
   width: 10rem;
   height: 10rem;
   border-radius: 50%;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(${(props) => props.imgSrc});
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: ${colors.white};
-  font-size: 2rem;
-  line-height: 10rem;
+  filter: brightness(70%);
+  object-fit: cover;
+  // color: ${colors.white};
+  // font-size: 2rem;
+  // line-height: 10rem;
   cursor: pointer;
 `;
 
@@ -189,8 +187,7 @@ export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) =>
-    props.border ? `2px solid ${colors.gameBlue500}` : ""};
+  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: 700;

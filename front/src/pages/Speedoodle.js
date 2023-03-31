@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useRecoilValue } from 'recoil';
 import { userState } from '../recoil';
+import { useRecoilValue } from 'recoil';
 
 import {
   SpeedoodleWrapper,
@@ -20,7 +20,7 @@ import { H1, H2, H3, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import Pagination from '../components/PaginatorBar';
 import ModalClosable from '../components/ModalClosable';
-import { API_URL, getCookie, delCookie } from '.././config';
+import { API_URL, getCookie } from '.././config';
 import {
   ArrowClockwise,
   AwardFill,
@@ -55,8 +55,8 @@ function Speedoodle() {
   const [Ppage, setPpage] = useState(1);
   const [offset, setOffset] = useState(0);
   // 리코일에서 가져온 유저 정보
-  // const user = useRecoilValue(userState);
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useRecoilValue(userState);
+  // const user = JSON.parse(window.localStorage.getItem('user'));
 
   useEffect(() => {
     const newOffset = (page - 1 + 5 * (Ppage - 1)) * limit;
@@ -140,7 +140,7 @@ function Speedoodle() {
         fontColor={colors.gameBlue500}
         border='none'
         font='1'
-        onClick={() => enterRoom(room.roomId, room.code)}
+        onClick={() => handleEnterRoom(room.roomId, room.code)}
       >
         {room.code !== '' ? (
           <LockFill style={{ fontSize: '24px' }} />
@@ -151,8 +151,7 @@ function Speedoodle() {
     </Room>
   ));
 
-  // 필터에 따른 랜더될 room data 변경
-
+  // 모드 선택에 따라 랜더될 room data 변경
   const handleRenderRoomList = (mode) => {
     if (mode === '0') {
       setRenderRoomList(roomList.filter((room) => room.mode === 0));
@@ -168,15 +167,17 @@ function Speedoodle() {
     setType(() => e.target.value);
   };
 
+  // 검색창 입력 받아오기
   const handleSearchInput = (e) => {
     setSearchInput(() => e.target.value);
   };
 
+  // 검색창 입력 전달
   const handleSearch = () => {
     handleSearchRoomList([type, searchInput]);
     setSearchInput(() => '');
   };
-
+  // 검색창 입력에 따른 결과 반환
   const handleSearchRoomList = (condition) => {
     const type = condition[0];
     const search = condition[1];
@@ -205,6 +206,7 @@ function Speedoodle() {
     setMakeMode(0);
     setMakeCode('');
     setIsLock(false);
+
     // 방만들기 모달 오픈
     setCreateModalShow(true);
   };
@@ -231,6 +233,24 @@ function Speedoodle() {
     setMakeCode(e.target.value);
   };
 
+  // 방만들기 api
+  const makeRoom = async () => {
+    axios
+      .post(`${API_URL}/doodle/room`, {
+        code: makeCode,
+        leaderId: user.userId,
+        mode: makeMode,
+        name: makeTitle,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res);
+          navigate(`/speedoodle/room/${res.data.roomId}`);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   // 비밀번호 생성 및 입력시 6자리로 제한
   const handleOnInputLength = (e) => {
     if (e.target.value.length > e.target.maxLength)
@@ -242,15 +262,32 @@ function Speedoodle() {
     getRoomList();
   };
 
+  //방 입장 api
+  const enterRoom = (id) => {
+    axios
+      .post(`${API_URL}/doodle/room/enter/${id}/${user.userId}`, null, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+          'Content-Type': `application/json`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          navigate(`/speedoodle/room/${id}`);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   // 방 입장버튼 눌렀을 때 비밀방 여부에 따라 라우터제공
-  const enterRoom = (id, code) => {
+  const handleEnterRoom = (id, code) => {
     if (code !== '') {
       setWrongCode(false);
       setCodeModalShow(true);
       setCompareCode(code);
       setRoomId(id);
     } else {
-      navigate(`/speedoodle/room/${id}`);
+      enterRoom(id);
     }
   };
 
@@ -263,35 +300,8 @@ function Speedoodle() {
   const handleCompareCode = () => {
     if (compareCode === inputCode) {
       setWrongCode(false);
-      navigate(`/speedoodle/room/${roomId}`);
+      enterRoom(roomId);
     } else setWrongCode(true);
-  };
-
-  // 방 만들기 api
-
-  const makeRoom = async () => {
-    axios
-      .post(
-        `${API_URL}/doodle/room`,
-        {
-          code: makeCode,
-          leaderId: user.userId,
-          mode: makeMode,
-          name: makeTitle,
-        },
-        {
-          headers: {
-            'Access-Token': getCookie('accessToken'),
-            'Content-Type': `application/json`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          navigate(`/speedoodle/room/${res.data.roomId}`);
-        }
-      })
-      .catch((err) => console.error(err));
   };
 
   return (

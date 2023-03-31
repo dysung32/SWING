@@ -20,7 +20,7 @@ import SpeedoodleGame from '../components/SpeedoodleGame';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
-import { AI_API_URL, API_URL } from '../config';
+import { API_URL, getCookie } from '.././config';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
@@ -29,7 +29,7 @@ function SpeedoodleGameInfo(props) {
   const [isMode, setIsMode] = useState('');
   const [bgColor, setBgColor] = useState(null);
   const [limits, setLimits] = useState('');
-
+  const user = JSON.parse(window.localStorage.getItem('user'));
   useEffect(() => {
     getRoomDetail();
   }, []);
@@ -57,14 +57,36 @@ function SpeedoodleGameInfo(props) {
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
     handleChangeMode();
-    setTimeout(() => {
-      props.setIsGameStart(true);
-      setBgColor(`${colors.gameBlue100}`);
-    }, 2000);
+    //방 잠금 설정
+    axios
+      .put(`${API_URL}/doodle/start/${props.roomId}`, null, {
+        // headers: {
+        //   'Access-Token': '',
+        // },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('방시작! 잠굴게요!');
+          handleGameInfo();
+          setTimeout(() => {
+            setBgColor(`${colors.gameBlue100}`);
+            props.setIsGameStart(true);
+          }, 1000);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+  // 게임 시작(게임정보가져오기)
+  const handleGameInfo = async () => {
+    // await axios
+    // .get(`${API_URL}`)
   };
 
   //방 나가기
   const exitRoom = () => {
+    // axios
+    //   .delete(`${API_URL}/doodle/rooms/${props.roomId}/${user.userId}`, {})
+    //   .then((res) => console.log(res));
     navigate('/speedoodle');
   };
   // 보낼 메세지 저장해놓기
@@ -73,7 +95,7 @@ function SpeedoodleGameInfo(props) {
   };
   // 저장해둔 메세지 보내기
   const sendMessage = () => {
-    if(props.chatInput !== ''){
+    if (props.chatInput !== '') {
       props.SendMessage();
       props.setChatInput('');
     }
@@ -81,9 +103,12 @@ function SpeedoodleGameInfo(props) {
 
   //모드 변경 api 전달
   const handleChangeMode = () => {
-    // axios.put(`${API_URL}/doodle/room/}`);
-
-    console.log(isMode, limits);
+    axios
+      .put(`${API_URL}/doodle/room/${props.roomId}/${isMode}`, null, {})
+      .then((res) => {
+        console.log('모드', res);
+      })
+      .catch((err) => console.error(err));
   };
   return (
     <>
@@ -93,6 +118,7 @@ function SpeedoodleGameInfo(props) {
             style={{ width: '100%', height: '100%' }}
             isMode={isMode}
             limits={limits}
+            isSetGameStart={props.setIsGameStart}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>
@@ -187,18 +213,20 @@ function SpeedoodleGameInfo(props) {
               </RoomInfo>
               <Chat>
                 <ChattingContainer useRef={chatWindowRef}>
-                  {
-                    props.chatData.map((item,idx) => {
-                      return (
-                        <P2 key={idx}>{item[0]}: {item[1]}</P2>
-                      )
-                    })
-                  }
+                  {props.chatData.map((item, idx) => {
+                    return (
+                      <P2 key={idx}>
+                        {item[0]}: {item[1]}
+                      </P2>
+                    );
+                  })}
                 </ChattingContainer>
                 <ChattingInputContainer>
-                  <ChatInput onChange={saveMessage} 
-                  value={props.chatInput} 
-                  onKeyDown={(e) => e.key==='Enter'&&sendMessage()}/>
+                  <ChatInput
+                    onChange={saveMessage}
+                    value={props.chatInput}
+                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                  />
                   <button
                     style={{
                       all: 'unset',
@@ -206,7 +234,6 @@ function SpeedoodleGameInfo(props) {
                       color: `${colors.gameBlue500}`,
                     }}
                     onClick={sendMessage}
-
                   >
                     <SendFill />
                   </button>

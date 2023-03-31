@@ -216,11 +216,11 @@ function Home() {
             </HeroScrollIconContainer>
           </HeroScrollMsg>
         </HomeHeroContainer>
-        <Divider></Divider>
+        <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
         <HomeSentencyContainer></HomeSentencyContainer>
-        <Divider></Divider>
+        <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer></HomeHiFiveContainer>
-        <Divider></Divider>
+        <Divider style={{ backgroundColor: `${colors.gameBlue300}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>
       </HomeWrapper>
     </>

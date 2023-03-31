@@ -288,7 +288,7 @@ function Speedoodle() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.lo(res);
+          console.log(res);
         }
       })
       .catch((err) => console.error(err));

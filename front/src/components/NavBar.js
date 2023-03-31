@@ -130,15 +130,6 @@ function NavBar() {
       <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
       {isLogin ? (
         <>
-          <NavItem onClick={onClickLogIn}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
-              LogIn
-            </H4>
-          </NavItem>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}
             onMouseEnter={() => setHoverProfile(() => true)}

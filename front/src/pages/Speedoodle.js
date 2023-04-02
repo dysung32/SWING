@@ -234,7 +234,7 @@ function Speedoodle() {
   };
 
   // 방만들기 api
-  const makeRoom = async () => {
+  const makeRoom = () => {
     axios
       .post(`${API_URL}/doodle/room`, {
         code: makeCode,

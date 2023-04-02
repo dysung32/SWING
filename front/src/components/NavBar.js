@@ -69,22 +69,42 @@ function NavBar() {
   };
 
   const Logout = async () => {
-    await axios
-      .get(`${API_URL}/logout/${user.userId}`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          delCookie('accessToken');
-          delCookie('refreshToken');
-          setUser('');
-          setIsLogin(false);
-          navigate('/');
-        }
-      })
-      .catch((e) => console.error(e));
+    const currentUrl = window.location.href;
+    if (currentUrl.indexOf('localhost') == -1) {
+      await axios
+        .get(`${API_URL}/user/logout/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            delCookie('accessToken');
+            delCookie('refreshToken');
+            setUser('');
+            setIsLogin(false);
+            navigate('/');
+          }
+        })
+        .catch((e) => console.error(e));
+    } else {
+      await axios
+        .get(`http://localhost:3000/user/logout/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            delCookie('accessToken');
+            delCookie('refreshToken');
+            setUser('');
+            setIsLogin(false);
+            navigate('/');
+          }
+        })
+        .catch((e) => console.error(e));
+    }
   };
 
   return (

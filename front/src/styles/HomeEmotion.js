@@ -1,6 +1,6 @@
 // import styled from '@emotion/styled/macro';
-import styled, { keyframes } from 'styled-components';
-import { colors } from '../styles/ColorPalette';
+import styled, { keyframes } from "styled-components";
+import { colors } from "../styles/ColorPalette";
 
 export const HomeWrapper = styled.div`
   display: flex;
@@ -91,7 +91,7 @@ export const UserInfoBox = styled.div`
   position: fixed;
   top: 10rem;
   right: 3%;
-  width: 14rem;
+  width: 18rem;
   padding: 2rem;
   border-radius: 1rem;
   background-color: ${colors.studyBlue500};
@@ -99,6 +99,16 @@ export const UserInfoBox = styled.div`
 
   .userInfo {
     align-items: center;
+  }
+
+  .nickname {
+    color: ${colors.white};
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 

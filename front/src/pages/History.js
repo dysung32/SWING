@@ -9,61 +9,15 @@ import { GameTitle } from "../styles/CommonEmotion";
 import { H1 } from "../styles/Fonts";
 import { colors } from "../styles/ColorPalette";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../config";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil";
 
 function History() {
   const navigate = useNavigate();
-  const historyList = [
-    {
-      date: "2023.03.27",
-      title: "나랑 같이 놀 사람",
-      rank: 2,
-    },
-    {
-      date: "2023.03.27",
-      title: "공부합시다",
-      rank: 3,
-    },
-    {
-      date: "2023.03.26",
-      title: "놀자아",
-      rank: 1,
-    },
-    {
-      date: "2023.03.25",
-      title: "오빠 차 있어?",
-      rank: 2,
-    },
-    {
-      date: "2023.03.23",
-      title: "빠삥빠삥 지뢰찾기",
-      rank: 1,
-    },
-    {
-      date: "2023.03.20",
-      title: "취뽀하고 싶다",
-      rank: 1,
-    },
-    {
-      date: "2023.03.20",
-      title: "뽀삐야 나랑 놀자",
-      rank: 1,
-    },
-    {
-      date: "2023.03.19",
-      title: "스피두들 할 사람?",
-      rank: 1,
-    },
-    {
-      date: "2023.03.16",
-      title: "응 내가 일등이야",
-      rank: 1,
-    },
-    {
-      date: "2023.03.05",
-      title: "빨리 들어와.",
-      rank: 1,
-    },
-  ];
+  const [user, setUser] = useRecoilState(userState);
+  const [historyList, setHistoryList] = useState([]);
 
   const renderHistoryList = historyList.map((history, idx) => {
     return (
@@ -81,6 +35,24 @@ function History() {
       </SingleHistoryList>
     );
   });
+
+  const getHistoryList = async () => {
+    await axios
+      .get(`${API_URL}/doodle/history/${user.userId}`, {
+        headers: {
+          "Access-Token":
+            "Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setHistoryList(res.data.gameHistoryList);
+      });
+  };
+
+  useState(() => {
+    getHistoryList();
+  }, []);
 
   return (
     <>
@@ -101,7 +73,13 @@ function History() {
             <div className="roomname">방제목</div>
             <div className="rank">등수</div>
           </HistoryHeader>
-          <HistoryContent>{renderHistoryList}</HistoryContent>
+          <HistoryContent>
+            {historyList.length > 0 ? (
+              renderHistoryList
+            ) : (
+              <div className="no-history">히스토리 목록이 없습니다.</div>
+            )}
+          </HistoryContent>
         </HistoryContentContainer>
       </MyPageWrapper>
     </>

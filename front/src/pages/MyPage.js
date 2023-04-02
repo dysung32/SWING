@@ -31,6 +31,8 @@ import ModalClosable from "../components/ModalClosable";
 import { API_URL, BasicProfile } from "../config";
 import axios from "axios";
 import { SingleHistoryList } from "../styles/HistoryEmotion";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil";
 
 function MyPage() {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ function MyPage() {
   const nickNameRef = useRef();
   const fileInput = useRef(null);
 
-  const [nickname, setNickname] = useState("");
+  const [user, setUser] = useRecoilState(userState);
   const [nicknameRegExpTest, setNicknameRegExpTest] = useState();
   const [confirmed, setConfirmed] = useState(false);
   const [allowedMsg, setAllowedMsg] = useState(
@@ -47,9 +49,8 @@ function MyPage() {
 
   const [tmpProfileImg, setTmpProfileImg] = useState(BasicProfile);
   const [imgChanged, setImgChanged] = useState(false);
-  const tmpnickName = "Player1";
+  const tmpnickName = user.userId;
 
-  const [userId, setUserId] = useState("black");
   const coupon = 3;
   const historyList = [
     {
@@ -90,10 +91,6 @@ function MyPage() {
   ];
 
   const [profileEditModalShow, setProfileEditModalShow] = useState(false);
-
-  useEffect(() => {
-    setNickname(tmpnickName);
-  }, []);
 
   const renderList = historyList.map((history, idx) => {
     return (
@@ -149,8 +146,8 @@ function MyPage() {
     const formData = new FormData();
 
     const userInfo = {
-      userId: userId,
-      nickname: nickname,
+      userId: user.userId,
+      nickname: user.nickname,
       defaultImage: false,
     };
 
@@ -317,7 +314,7 @@ function MyPage() {
               ref={nickNameRef}
               onChange={changeNickname}
               className="inputBox"
-              defaultValue={nickname}
+              defaultValue={user.nickname}
               placeholder="닉네임을 입력하세요."
             />
             <CommonBtn
@@ -382,7 +379,7 @@ function MyPage() {
           <MyPageMainConatiner>
             <MyPageIntroConatiner>
               <div className="flex-column">
-                <H3>Hi, {nickname}!</H3>
+                <H3>Hi, {user.nickname}!</H3>
                 <P1 padding="0.5rem 0 0 0">
                   <span className="swing-bold">SWING</span>을 즐기고 계신가요?
                   <br /> 마이페이지에서는 SpeeDoodle 히스토리 상세조회와 <br />
@@ -407,7 +404,7 @@ function MyPage() {
             <MyPageProfileConatiner>
               <MyPageProfile src={BasicProfile} />
               <MyPageProfileNickname>
-                <div className="nickname">{nickname}</div>
+                <div className="nickname">{user.nickname}</div>
                 <CommonBtn
                   width={"7rem"}
                   height={32}

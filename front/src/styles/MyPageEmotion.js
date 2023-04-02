@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -187,7 +187,8 @@ export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
+  border-bottom: ${(props) =>
+    props.border ? `2px solid ${colors.gameBlue500}` : ""};
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: 700;
@@ -206,18 +207,18 @@ export const HistoryHeader = styled.div`
     text-align: end;
   }
 `;
-export const MyPageHistoryList = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-top: 0.5rem;
-  border-bottom: 2px solid ${colors.gameBlue500};
-  cursor: pointer;
-  box-sizing: border-box;
+// export const MyPageHistoryList = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   padding-top: 0.5rem;
+//   border-bottom: 2px solid ${colors.gameBlue500};
+//   cursor: pointer;
+//   box-sizing: border-box;
 
-  &:hover {
-    background-color: #f4f6ff;
-  }
-`;
+//   &:hover {
+//     background-color: #f4f6ff;
+//   }
+// `;
 
 export const NickNameEditBox = styled.div`
   padding: 4rem 5rem 0 5rem;

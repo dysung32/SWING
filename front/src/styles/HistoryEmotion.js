@@ -13,12 +13,13 @@ export const HistoryContentContainer = styled.div`
 export const HistoryContent = styled.div`
   display: flex;
   flex-direction: column;
+  height: calc(100% - 2rem);
 `;
 
 export const SingleHistoryList = styled.div`
   display: flex;
   width: 100%;
-  height: 3rem;
+  height: 100%;
   justify-content: space-between;
   padding-top: 0.5rem;
   border-bottom: 2px solid ${colors.gameBlue500};

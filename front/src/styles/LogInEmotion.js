@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import logInExpImg from '../assets/login_expImg.png';
+import styled from "@emotion/styled";
+import logInExpImg from "../assets/login_expImg.png";
 
 export const LogInWrapper = styled.div`
   display: flex;
@@ -43,7 +43,7 @@ export const LogoImg = styled.div`
 export const LogInBtnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   grid-row-start: 5;
   grid-row-end: 7;
   grid-column-start: 7;
@@ -55,10 +55,10 @@ export const LogInBtn = styled.div`
   position: relative;
   width: 100%;
   padding: 1.2rem 1rem 1.2rem 3.5rem;
-  border: ${(props) => (props.border ? `1px solid ${props.border}` : 'none')};
+  border: ${(props) => (props.border ? `1px solid ${props.border}` : "none")};
   border-radius: 0.5rem;
   box-sizing: border-box;
-  background-color: ${(props) => (props.color ? `${props.color}` : '#ffffff')};
+  background-color: ${(props) => (props.color ? `${props.color}` : "#ffffff")};
   text-align: center;
   font-size: 1.5rem;
   cursor: pointer;

@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 
 import {
   LogInWrapper,
@@ -10,37 +13,59 @@ import {
   LogInBtnContainer,
   LogInBtn,
   SocialLogoImg,
-} from "../styles/LogInEmotion";
-import { RoundLogo } from "../styles/CommonEmotion";
-import { colors } from "../styles/ColorPalette";
-import { H5 } from "../styles/Fonts";
-import Google from "../assets/google_icon.png";
-import Kakao from "../assets/kakaotalk_icon.png";
-import { API_URL } from "../config";
+} from '../styles/LogInEmotion';
+import { RoundLogo } from '../styles/CommonEmotion';
+import { colors } from '../styles/ColorPalette';
+import { H5 } from '../styles/Fonts';
+import Google from '../assets/google_icon.png';
+import Kakao from '../assets/kakaotalk_icon.png';
+import { API_URL, setCookie, getCookie } from '../config';
 
 function LogIn() {
   const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
   const onClickLogo = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const kakaoLogin = async (e) => {
-    // 프론트에서 카카오 로그인 처리하고 백으로 POST /user/socialLogin url로
-    // userDto{ userId, nickname }만 넘겨주기
-    //
-    // axios
-    //   .post(`${API_URL}/user/socialLogin/${userId}/${nickname}`, null, {
-    //     headers: {
-    //       "Access-Token":
-    //         "Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D",
-    //     },
-    //   })
-    //   .then((resp) => {
-    //     console.log(resp);
-    //   })
-    //   .catch((err) => {
-    //     console.log("오답 저장 중 오류 발생!");
-    //   });
+    window.Kakao.Auth.login({
+      scope: 'profile_nickname',
+      success: getProfile(),
+    });
+  };
+
+  const getProfile = () => {
+    window.Kakao.API.request({
+      url: '/v2/user/me',
+      success: (res) => {
+        const userId = 'kakao' + res.id;
+        const userNickname = res.properties.nickname;
+
+        // 프론트에서 카카오 로그인 처리하고 백으로 POST /user/socialLogin url로
+        // userDto{ userId, nickname }만 넘겨주기
+        axios
+          .post(`${API_URL}/user/socialLogin/`, {
+            nickname: userNickname,
+            userId: userId,
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              const userSave = {
+                userId: res.data.userId,
+                nickname: res.data.nickname,
+              };
+              setUser(userSave);
+              setCookie('accessToken', res.data['access-token'], 1);
+              setCookie('refreshToken', res.data['refresh-token'], 1);
+              navigate('/');
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      },
+    });
   };
 
   return (
@@ -49,12 +74,12 @@ function LogIn() {
         <LogInContainer>
           <ExpImg />
           <LogoImg>
-            <RoundLogo alt="logo" onClick={onClickLogo} size="70%" />
+            <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
           </LogoImg>
           <LogInBtnContainer>
-            <LogInBtn color="#F7E600" onClick={kakaoLogin}>
-              <SocialLogoImg src={Kakao} alt="kakao" />
-              <H5 align="center">카카오로 시작하기</H5>
+            <LogInBtn color='#F7E600' onClick={kakaoLogin}>
+              <SocialLogoImg src={Kakao} alt='kakao' />
+              <H5 align='center'>카카오로 시작하기</H5>
             </LogInBtn>
           </LogInBtnContainer>
         </LogInContainer>

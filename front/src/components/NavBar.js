@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { userState } from '../recoil';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { API_URL, getCookie, delCookie } from '.././config';
 
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
@@ -23,6 +23,7 @@ function NavBar() {
   const [isLogin, setIsLogin] = useState(false);
   const [hoverGame, setHoverGame] = useState(false);
   const [hoverProfile, setHoverProfile] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     setIsLogin(IsLogin());
@@ -68,22 +69,42 @@ function NavBar() {
   };
 
   const Logout = async () => {
-    await axios
-      .get(`${API_URL}/logout`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          delCookie('accessToken');
-          delCookie('refreshToken');
-          window.localStorage.setItem('user', '');
-          setIsLogin(false);
-          navigate('/');
-        }
-      })
-      .catch((e) => console.error(e));
+    const currentUrl = window.location.href;
+    if (currentUrl.indexOf('localhost') == -1) {
+      await axios
+        .get(`${API_URL}/user/logout/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            delCookie('accessToken');
+            delCookie('refreshToken');
+            setUser('');
+            setIsLogin(false);
+            navigate('/');
+          }
+        })
+        .catch((e) => console.error(e));
+    } else {
+      await axios
+        .get(`http://localhost:3000/user/logout/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            delCookie('accessToken');
+            delCookie('refreshToken');
+            setUser('');
+            setIsLogin(false);
+            navigate('/');
+          }
+        })
+        .catch((e) => console.error(e));
+    }
   };
 
   return (

@@ -14,13 +14,22 @@ export const HistoryContent = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100% - 2rem);
+
+  .no-history {
+    height: 100%;
+    font-size: 1.5rem;
+    color: ${colors.gameBlue500};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const SingleHistoryList = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  justify-content: space-between;
+  align-items: center;
   padding-top: 0.5rem;
   border-bottom: 2px solid ${colors.gameBlue500};
   cursor: pointer;

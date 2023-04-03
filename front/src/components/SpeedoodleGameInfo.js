@@ -23,25 +23,26 @@ import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { API_URL, getCookie } from '../config';
 import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
+import ExitRoom from './ExitRoom';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
   const chatWindowRef = useRef(null);
   const [isMode, setIsMode] = useState(props.gameInfo.mode);
+  const [roomInfo, setRoomInfo] = useState(props.gameInfo);
   const [bgColor, setBgColor] = useState(null);
-  const [limits, setLimits] = useState('');
+  const [gameData, setGameData] = useState({});
+
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
-  // const user = JSON.parse(window.localStorage.getItem('user'));
+  const [user, setUser] = useRecoilState(userState);
 
   // 모드 변경
   const onClickEasyMode = () => {
     setIsMode(0);
-    setLimits(2);
   };
   const onClickHardMode = () => {
     setIsMode(1);
-    setLimits(3);
   };
 
   const linkCopy = () => {
@@ -54,11 +55,7 @@ function SpeedoodleGameInfo(props) {
     handleChangeMode();
     //방 잠금 설정
     axios
-      .put(`${API_URL}/doodle/start/${props.roomId}`, null, {
-        // headers: {
-        //   'Access-Token': '',
-        // },
-      })
+      .put(`${API_URL}/doodle/start/${roomInfo.roomId}`, null, {})
       .then((res) => {
         if (res.status === 200) {
           console.log('방시작! 잠굴게요!');
@@ -73,16 +70,18 @@ function SpeedoodleGameInfo(props) {
   };
   // 게임 시작(게임정보가져오기)
   const handleGameInfo = async () => {
-    // await axios
-    // .get(`${API_URL}`)
+    await axios
+      .get(`${API_URL}/doodle/start/${roomInfo.name}`)
+      .then((res) => {
+        console.log('게임시작 정보', res);
+        setGameData(res.data);
+      })
+      .catch((err) => console.error(err));
   };
 
   //방 나가기
   const exitRoom = () => {
-    // axios
-    //   .delete(`${API_URL}/doodle/rooms/${props.roomId}/${user.userId}`, {})
-    //   .then((res) => console.log(res));
-    navigate('/speedoodle');
+    ExitRoom(roomInfo.roomId, user.userId);
   };
   // 보낼 메세지 저장해놓기
   const saveMessage = (e) => {
@@ -99,7 +98,7 @@ function SpeedoodleGameInfo(props) {
   //모드 변경 api 전달
   const handleChangeMode = () => {
     axios
-      .put(`${API_URL}/doodle/room/${props.roomId}/${isMode}`, null, {})
+      .put(`${API_URL}/doodle/room/${roomInfo.roomId}/${isMode}`, null, {})
       .then((res) => {
         console.log('모드', res);
       })
@@ -112,7 +111,8 @@ function SpeedoodleGameInfo(props) {
           <SpeedoodleGame
             style={{ width: '100%', height: '100%' }}
             isMode={isMode}
-            limits={limits}
+            limits={isMode ? 3 : 2}
+            keywords={gameData?.roundInfoList}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>

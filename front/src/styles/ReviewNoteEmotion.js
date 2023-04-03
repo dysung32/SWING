@@ -34,7 +34,7 @@ export const WrongBox = styled.div`
   flex-direction: column;
 
   .no-wrongs {
-    height: calc(100vh - 25rem);
+    height: calc(100vh - 26rem);
     display: flex;
     justify-content: center;
     align-items: center;

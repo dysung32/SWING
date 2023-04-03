@@ -144,7 +144,7 @@ function ReviewNote() {
         .then((res) => {
           axios({
             method: 'get',
-            url: `${API_URL}/note/sentence/red/0`,
+            url: `${API_URL}/note/sentence/${user.userId}/0`,
           })
             .then((res) => {
               setSentenceArray([...res.data.sentenceNoteList]);

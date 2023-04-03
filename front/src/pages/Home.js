@@ -17,9 +17,9 @@ import {
   UserCouponBox,
   UserBtnBox,
 } from '../styles/HomeEmotion';
-import { H4, H5 } from '../styles/Fonts';
+import { H1, H3, H4, H5 } from '../styles/Fonts';
 import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
-import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
+import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
@@ -196,7 +196,14 @@ function Home() {
           </HeroScrollMsg>
         </HomeHeroContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
-        <HomeSentencyContainer></HomeSentencyContainer>
+        <HomeSentencyContainer>
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            SENTENCY
+          </H1>
+          <div>
+            <H4 color={colors.white}>랭킹</H4>
+          </div>
+        </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer></HomeHiFiveContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>

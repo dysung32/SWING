@@ -6,13 +6,7 @@ import { useRecoilState } from 'recoil';
 import { API_URL, getCookie, delCookie } from '.././config';
 
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
-import {
-  Nav,
-  NavItemGroup,
-  NavItem,
-  NavSubItems,
-  NavLeaderItem,
-} from '../styles/NavEmotion';
+import { Nav, NavItemGroup, NavItem, NavSubItems, NavLeaderItem } from '../styles/NavEmotion';
 import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { BasicProfile } from '../config';
@@ -119,29 +113,17 @@ function NavBar() {
         </NavLeaderItem>
         <NavSubItems hover={hoverGame} top='70%' left='10%'>
           <NavItem onClick={onClickSentency}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Sentency
             </H4>
           </NavItem>
           <NavItem onClick={onClickHifive}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Hi-Five
             </H4>
           </NavItem>
           <NavItem onClick={onClickSpeedoodle}>
-            <H4
-              color={colors.white}
-              outlineWeight='2'
-              outline={colors.gameBlue500}
-            >
+            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
               Speedoodle
             </H4>
           </NavItem>
@@ -156,7 +138,7 @@ function NavBar() {
             onMouseEnter={() => setHoverProfile(() => true)}
           >
             <PlayerProfile
-              src={BasicProfile}
+              src={user.profileImageUrl}
               width='3'
               height='3'
               alt='user profile image'
@@ -190,11 +172,7 @@ function NavBar() {
         </>
       ) : (
         <NavItem onClick={onClickLogIn}>
-          <H4
-            color={colors.white}
-            outlineWeight='2'
-            outline={colors.gameBlue500}
-          >
+          <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
             LogIn
           </H4>
         </NavItem>

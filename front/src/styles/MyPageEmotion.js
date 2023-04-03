@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const MyPageWrapper = styled.div`
   display: flex;
@@ -92,6 +92,8 @@ export const MyPageProfileNickname = styled.div`
   padding-top: 1rem;
 
   .nickname {
+    width: 100%;
+    text-align: center;
     font-size: 1.5rem;
     font-weight: 700;
     color: ${colors.black};
@@ -183,8 +185,7 @@ export const HistoryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: ${(props) =>
-    props.border ? `2px solid ${colors.gameBlue500}` : ""};
+  border-bottom: ${(props) => (props.border ? `2px solid ${colors.gameBlue500}` : '')};
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: 700;

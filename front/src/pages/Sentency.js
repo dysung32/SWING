@@ -531,6 +531,7 @@ function Sentency() {
                 height={55}
                 font={1.5}
                 color={colors.gameBlue300}
+                hoverColor={colors.gameBlue400}
                 fontColor={colors.white}
                 border={'none'}
                 padding={'12px 36px'}

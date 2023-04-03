@@ -145,6 +145,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             margin={'0 4rem 0 0'}
@@ -156,6 +157,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gamePink400}
+            hoverColor={colors.gamePink500}
             fontColor={colors.white}
             border={'none'}
             onClick={handleExit}
@@ -200,6 +202,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             margin={'0 4rem 0 0'}
@@ -211,6 +214,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gamePink400}
+            hoverColor={colors.gamePink500}
             fontColor={colors.white}
             border={'none'}
             onClick={handleExit}
@@ -255,6 +259,7 @@ function SentenceTest() {
             height={55}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             padding={'12px 36px'}

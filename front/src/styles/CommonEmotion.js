@@ -40,6 +40,7 @@ export const CommonBtn = styled.button`
   font-size: ${(props) => props.font}rem;
   font-weight: ${(props) => props.fontWeight};
   cursor: pointer;
+  -webkit-transition-duration: 0.5s;
   &:hover {
     background-color: ${(props) => props.hoverColor};
   }
@@ -113,6 +114,7 @@ export const ModalBody = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 50%;
   position: absolute;
   padding: 3rem 5rem;
   text-align: center;
@@ -184,9 +186,13 @@ export const PlayerMedal = styled.img`
 `;
 
 export const PlayerName = styled.div`
+  width: ${(props) => props.width}rem;
   font-size: ${(props) => props.font};
   font-weight: ${(props) => props.fontWeight};
-  color: ${(props) => props.fontColor};)}
+  color: ${(props) => props.fontColor};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const PlayerScore = styled.div`

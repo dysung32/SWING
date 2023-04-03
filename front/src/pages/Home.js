@@ -24,14 +24,21 @@ import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from '../assets/main_coupon.svg';
-import { API_URL, BasicProfile, getCookie } from '../config';
+import {
+  API_URL,
+  BasicProfile,
+  setCookie,
+  getCookie,
+  delCookie,
+} from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 
 function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
-
+  const [successRefresh, setSuccessRefresh] = useState(false);
+  const [passAccess, setPassAccess] = useState(false);
   const [coupon, setCoupon] = useState();
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
@@ -50,8 +57,76 @@ function Home() {
       });
   };
 
+  const checkRefreshToken = () => {
+    let result;
+    console.log('리프레시 하러옴?');
+    axios
+      .post(
+        `${API_URL}/user/refresh`,
+        {
+          userId: user.userId,
+        },
+        {
+          headers: {
+            'Refresh-Token': getCookie('refreshToken'),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data['access-token'], '어세스 가져옴');
+          setCookie('accessToken', res.data['access-token'], 1);
+          setSuccessRefresh(() => true);
+        } else if (res.status === 202) {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setUser('');
+          navigate('/');
+          setSuccessRefresh(false);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const checkAccessToken = () => {
+    console.log('어세스토큰 검사중');
+    axios
+      .post(`${API_URL}/user/check`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('토큰 유효함');
+          setPassAccess(true);
+        } else if (res.status === 202) {
+          console.log('토큰 유효 안함');
+          if (checkRefreshToken()) {
+            if (successRefresh) {
+              setPassAccess(true);
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   useEffect(() => {
-    getCouponCnt();
+    if (user !== '' && user !== null) {
+      checkAccessToken();
+      console.log(passAccess, '어세스갱신됨?');
+      if (passAccess) {
+        console.log('쿠폰 확인');
+        getCouponCnt();
+      }
+    }
+
+    // getCouponCnt();
     const wheelHandler = (e) => {
       e.preventDefault();
       const { deltaY } = e;
@@ -133,10 +208,10 @@ function Home() {
     scrollRefCurrent.addEventListener('wheel', wheelHandler);
     return () => {
       scrollRefCurrent.removeEventListener('wheel', wheelHandler);
+      setPassAccess(false);
+      setSuccessRefresh(false);
     };
   }, []);
-
-  console.log(user);
 
   return (
     <>
@@ -144,7 +219,12 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
+              <PlayerProfile
+                width={5}
+                height={5}
+                src={user.profileImageUrl}
+                onClick={() => navigate('/my-page')}
+              />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>

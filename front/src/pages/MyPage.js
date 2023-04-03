@@ -454,7 +454,7 @@ function MyPage() {
               height='42'
               border='none'
               color={colors.gray400}
-              font='1.25'
+              font={1}
               fontColor={colors.white}
               hoverColor={colors.gray500}
               padding='0.5rem 1.5rem '

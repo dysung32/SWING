@@ -197,6 +197,7 @@ function ReviewNote() {
             </div>
             <CommonBtn
               color={colors.studyYellow400}
+              hoverColor={colors.studyYellow500}
               onClick={startTest}
               width='14.8rem'
               font={1.5}

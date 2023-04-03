@@ -15,7 +15,7 @@ import Coupon from '../assets/coupon.png';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, getCookie } from '../config';
 import { useRecoilState } from 'recoil';
 import { userState } from '../recoil';
 
@@ -23,6 +23,8 @@ function WordTest() {
   const navigate = useNavigate();
 
   const [user, setUser] = useRecoilState(userState);
+
+  const [coupon, setCoupon] = useState();
   const [wordList, setWordList] = useState([]);
   const [inputList, setInputList] = useState(['', '', '', '', '']);
   const [correctList, setCorrectList] = useState([false, false, false, false, false]);
@@ -44,6 +46,7 @@ function WordTest() {
           navigate('/review-note', { state: 1 });
           return;
         }
+        setCoupon(res.data.coupon);
         setWordList(res.data.wordNoteList);
       });
   };
@@ -74,11 +77,26 @@ function WordTest() {
     console.log('답안 제출!');
   };
 
+  const updateCoupon = (curCoupon) => {
+    axios
+      .put(`${API_URL}/user/coupon/${user.userId}/${curCoupon + 1}`, null, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        console.log('쿠폰 획득 +1 완료!');
+      });
+  };
+
   // 단어 복습 테스트 점수 계산하는 함수
   const calcScore = () => {
     let score = 0;
     for (let i = 0; i < inputList.length; i++) {
       if (inputList[i].toLowerCase() === wordList[i].content.replace('_', ' ').toLowerCase()) {
+        // 쿠폰 지급
+        updateCoupon(coupon);
         // 해당 단어가 맞았다는 axios delete 요청 보내기
         axios
           .delete(`${API_URL}/note/word/${wordList[i].wordNoteId}`, {

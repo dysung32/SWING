@@ -92,12 +92,15 @@ export const MyPageProfileNickname = styled.div`
   padding-top: 1rem;
 
   .nickname {
-    width: 100%;
+    width: 15vw;
     text-align: center;
     font-size: 1.5rem;
     font-weight: 700;
     color: ${colors.black};
     padding-bottom: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 

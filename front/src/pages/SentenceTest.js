@@ -26,10 +26,9 @@ function SentenceTest() {
   const [failModalShow, setFailModalShow] = useState(false);
 
   const [answer, setAnswer] = useState('');
-
   const [sentence, setSentence] = useState('');
-
   const sentenceInput = useRef();
+  const [coupon, setCoupon] = useState();
 
   const [user, setUser] = useRecoilState(userState);
 
@@ -48,6 +47,7 @@ function SentenceTest() {
           return;
         }
         setAnswer(res.data.sentenceNoteList[0]);
+        setCoupon(res.data.coupon);
         // setTranslation(res.data.sentenceNoteList[0].meaningKr);
         // setImgURL(res.data.sentenceNoteList[0].sentenceImageUrl);
       });
@@ -55,6 +55,19 @@ function SentenceTest() {
 
   const onChangeInput = (e) => {
     setSentence(e.target.value.trim());
+  };
+
+  const updateCoupon = (curCoupon) => {
+    axios
+      .put(`${API_URL}/user/coupon/${user.userId}/${curCoupon + 1}`, null, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        console.log('쿠폰 획득 +1 완료!');
+      });
   };
 
   const handleSubmit = () => {
@@ -65,6 +78,8 @@ function SentenceTest() {
       console.log(tmpSentence);
     }
     if (tmpSentence.toLowerCase() === answer.content.toLowerCase()) {
+      // 쿠폰 지급
+      updateCoupon(coupon);
       // 맞춘 문장은 오답노트에서 삭제
       axios
         .delete(`${API_URL}/note/sentence/${answer.sentenceNoteId}`, {
@@ -145,6 +160,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             margin={'0 4rem 0 0'}
@@ -156,6 +172,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gamePink400}
+            hoverColor={colors.gamePink500}
             fontColor={colors.white}
             border={'none'}
             onClick={handleExit}
@@ -200,6 +217,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             margin={'0 4rem 0 0'}
@@ -211,6 +229,7 @@ function SentenceTest() {
             padding={'1rem 3rem'}
             font={1.5}
             color={colors.gamePink400}
+            hoverColor={colors.gamePink500}
             fontColor={colors.white}
             border={'none'}
             onClick={handleExit}
@@ -255,6 +274,7 @@ function SentenceTest() {
             height={55}
             font={1.5}
             color={colors.gameBlue300}
+            hoverColor={colors.gameBlue400}
             fontColor={colors.white}
             border={'none'}
             padding={'12px 36px'}

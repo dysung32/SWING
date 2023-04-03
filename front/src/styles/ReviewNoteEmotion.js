@@ -32,6 +32,18 @@ export const WrongBox = styled.div`
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
+
+  .no-wrongs {
+    height: calc(100vh - 25rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem 1rem 2rem;
+    box-sizing: border-box;
+    background-color: ${colors.white};
+  }
 `;
 
 export const ReviewBtnContainer = styled.div`

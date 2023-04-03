@@ -18,6 +18,8 @@ import { CommonBtn } from '../styles/CommonEmotion';
 import Stopwatch from './Stopwatch';
 import ReadyText from './ReadyText';
 import ModalBasic from './ModalBasic';
+import { useRecoilState } from 'recoil';
+import { userState, speedoodleGameState } from '../recoil';
 
 function SpeedoodleGame(props) {
   const navigate = useNavigate();
@@ -29,6 +31,9 @@ function SpeedoodleGame(props) {
   const [finalResultModalShow, setFinalResultModalShow] = useState(false);
   const [readyGame, setReadyGame] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
+  // const [keyword, setKeyword] = useState(props.keywords[0].content);
+  const [keywordIdx, setKeywordIdx] = useState(0);
+  const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -144,6 +149,7 @@ function SpeedoodleGame(props) {
       if (roundCnt > 1) {
         setFinish(false);
         setRoundCnt((prev) => prev - 1);
+        setKeywordIdx((prev) => prev + 1);
         setTimeout(() => {
           setReadyGame(false);
         }, 1000);
@@ -158,7 +164,7 @@ function SpeedoodleGame(props) {
     setTimeout(() => {
       setFinalResultModalShow(false);
       // 다시 대기방 상태로 회귀
-      props.isSetGameStart(false);
+      setIsGameStart(false);
     }, 3000);
   };
   // readyText 가 끝났을 때 타이머 handle하는 함수
@@ -193,58 +199,7 @@ function SpeedoodleGame(props) {
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
         <H4>1등 ***</H4>
-        <div>
-          <div style={{ display: 'flex', marginBottom: '1rem' }}>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-                marginRight: '1rem',
-              }}
-            ></div>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-                marginRight: '1rem',
-              }}
-            ></div>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-              }}
-            ></div>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-                marginRight: '1rem',
-              }}
-            ></div>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-                marginRight: '1rem',
-              }}
-            ></div>
-            <div
-              style={{
-                width: '7vw',
-                height: '7vw',
-                backgroundColor: 'skyblue',
-              }}
-            ></div>
-          </div>
-        </div>
+        <div style={{ width: '24vw', height: '24vw' }}></div>
         <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
       </ModalBasic>
       <GameContainer>
@@ -281,7 +236,7 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'>키워드</H4>
+            <H4 align='center'></H4>
           </Keyword>
           <div
             style={{
@@ -303,15 +258,6 @@ function SpeedoodleGame(props) {
             margin='0 2rem 0 0'
           >
             <P1>지우기</P1>
-          </CommonBtn>
-          <CommonBtn
-            onClick={exitGame}
-            color={colors.gray400}
-            fontColor={colors.white}
-            padding='0.5rem 1.5rem'
-            font='0.75'
-          >
-            <P1>나가기</P1>
           </CommonBtn>
         </BtnContainer>
       </GameContainer>

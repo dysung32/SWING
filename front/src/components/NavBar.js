@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { userState } from '../recoil';
+import { userState, speedoodleGameState } from '../recoil';
 import { useRecoilState } from 'recoil';
 import { API_URL, getCookie, delCookie } from '.././config';
 
@@ -17,6 +17,7 @@ import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { BasicProfile } from '../config';
 import IsLogin from '../auth/IsLogin';
+import ExitRoom from './ExitRoom';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -24,14 +25,35 @@ function NavBar() {
   const [hoverGame, setHoverGame] = useState(false);
   const [hoverProfile, setHoverProfile] = useState(false);
   const [user, setUser] = useRecoilState(userState);
+  const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 
   useEffect(() => {
     setIsLogin(IsLogin());
   }, []);
 
   const onClickLogo = () => {
+    const currentUrl = window.location.href;
+    if (currentUrl.indexOf('speedoodle/room') !== -1) {
+      const roomUrl = new URL(window.location.href).pathname.split('/');
+      const lengthUrl = roomUrl.length;
+      const roomId = roomUrl[lengthUrl - 1];
+      setIsGameStart(false);
+      axios
+        .delete(`${API_URL}/doodle/room/leave/${roomId}/${user.userId}`)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log('방퇴장합니다!');
+          }
+        })
+        .catch((err) => console.error(err));
+    }
     navigate('/');
   };
+
+  // const exitRoom = () => {
+
+  //   ExitRoom(roomId, user.userId);
+  // };
 
   const onClickSentency = () => {
     if (isLogin) {

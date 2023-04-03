@@ -38,10 +38,9 @@ function SpeedoodleRoom() {
 
   const getRoomInfo = async () => {
     await axios
-      .get(`${API_URL}//doodle/room/info/${room_id}`)
+      .get(`${API_URL}/doodle/room/info/${room_id}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
           setGameRoomInfo(() => res.data);
         }
       })
@@ -49,14 +48,6 @@ function SpeedoodleRoom() {
         console.error(err);
       });
   };
-
-  useEffect(() => {
-    console.log('save', gameRoomInfo);
-  }, [gameRoomInfo]);
-
-  // const handleGameRoomInfo = async (info) => {
-  //   setGameRoomInfo(info);
-  // };
 
   const stompConnect = () => {
     try {
@@ -115,6 +106,34 @@ function SpeedoodleRoom() {
 
     console.log(stompRef.current.connected);
     return () => {};
+  }, []);
+
+  const preventClose = (e) => {
+    e.preventDefault();
+    e.returnValue = ''; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    (() => {
+      window.addEventListener('beforeunload', preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener('beforeunload', preventClose);
+    };
+  }, []);
+
+  const preventGoBack = () => {
+    window.history.pushState(null, '', window.location.href);
+  };
+
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', preventGoBack);
+
+    return () => {
+      window.removeEventListener('popstate', preventGoBack);
+    };
   }, []);
 
   return (

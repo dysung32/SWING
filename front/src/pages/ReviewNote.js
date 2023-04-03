@@ -14,11 +14,15 @@ import { colors } from '../styles/ColorPalette';
 import { CheckCircle, CheckCircleFill } from 'react-bootstrap-icons';
 import Pagination from '../components/PaginatorBar';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, getCookie } from '../config';
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 
 function ReviewNote() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [user, setUser] = useRecoilState(userState);
 
   const [wordArray, setWordArray] = useState([]);
   const [sentenceArray, setSentenceArray] = useState([]);
@@ -30,21 +34,28 @@ function ReviewNote() {
   const [wordReview, setwordReview] = useState(null);
 
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: `${API_URL}/note/word/black/0`,
-    })
+    axios
+      .get(`${API_URL}/note/word/${user.userId}/0`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
       .then((res) => {
+        console.log(res);
         setWordArray([...res.data.wordNoteList]);
       })
       .catch((err) => {
         console.log(err);
       });
-    axios({
-      method: 'get',
-      url: `${API_URL}/note/sentence/black/0`,
-    })
+
+    axios
+      .get(`${API_URL}/note/sentence/${user.userId}/0`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
       .then((res) => {
+        console.log(res);
         setSentenceArray([...res.data.sentenceNoteList]);
       })
       .catch((err) => {
@@ -133,7 +144,7 @@ function ReviewNote() {
         .then((res) => {
           axios({
             method: 'get',
-            url: `${API_URL}/note/sentence/red/0`,
+            url: `${API_URL}/note/sentence/${user.userId}/0`,
           })
             .then((res) => {
               setSentenceArray([...res.data.sentenceNoteList]);
@@ -153,7 +164,7 @@ function ReviewNote() {
       <ReviewNoteWrapper>
         <ReviewNoteWrapperColor>
           <div className='noteTitle'>
-            <H2 color={colors.black}>My오답노트</H2>
+            <H2 color={colors.black}>My 오답노트</H2>
           </div>
           <ReviewBtnContainer>
             <div className='selectButton'>
@@ -197,36 +208,40 @@ function ReviewNote() {
             </CommonBtn>
           </ReviewBtnContainer>
           <WrongBox>
-            {posts.slice(offset, offset + limit).map((item, idx) => (
-              <WrongThingBox key={idx}>
-                <div className='contentBox'>
-                  <H4 margin='0 0 1rem 0'>{item.content}</H4>
-                  <ThingMean>{item.meaningKr}</ThingMean>
-                  <div className='thingMean' display={wordReview === true ? 'block' : 'none'}>
-                    {item.meaningEn}
+            {posts.length ? (
+              posts.slice(offset, offset + limit).map((item, idx) => (
+                <WrongThingBox key={idx}>
+                  <div className='contentBox'>
+                    <H4 margin='0 0 1rem 0'>{item.content}</H4>
+                    <ThingMean>{item.meaningKr}</ThingMean>
+                    <div className='thingMean' display={wordReview === true ? 'block' : 'none'}>
+                      {item.meaningEn}
+                    </div>
                   </div>
-                </div>
-                <div className='checkBtn'>
-                  {wordReview === true ? (
-                    posts[idx + (page - 1) * limit].checked === 1 ? (
+                  <div className='checkBtn'>
+                    {wordReview === true ? (
+                      posts[idx + (page - 1) * limit].checked === 1 ? (
+                        <CheckCircleFill
+                          onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)}
+                          color={colors.studyBlue300}
+                        />
+                      ) : (
+                        <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)} />
+                      )
+                    ) : posts[idx + (page - 1) * limit].checked === 1 ? (
                       <CheckCircleFill
-                        onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)}
+                        onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)}
                         color={colors.studyBlue300}
                       />
                     ) : (
-                      <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)} />
-                    )
-                  ) : posts[idx + (page - 1) * limit].checked === 1 ? (
-                    <CheckCircleFill
-                      onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)}
-                      color={colors.studyBlue300}
-                    />
-                  ) : (
-                    <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)} />
-                  )}
-                </div>
-              </WrongThingBox>
-            ))}
+                      <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)} />
+                    )}
+                  </div>
+                </WrongThingBox>
+              ))
+            ) : (
+              <div className='no-wrongs'>오답 목록이 없습니다.</div>
+            )}
           </WrongBox>
 
           {posts.length !== 0 && (

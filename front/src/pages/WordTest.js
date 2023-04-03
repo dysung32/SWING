@@ -16,36 +16,13 @@ import { useNavigate } from 'react-router-dom';
 import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 
 function WordTest() {
   const navigate = useNavigate();
-  // const [wordList, setWordList] = useState([
-  //   {
-  //     word: 'apple',
-  //     meaning: 'a round fruit with red, yellow, or green skin and firm white flesh',
-  //   },
-  //   {
-  //     word: 'dentist',
-  //     meaning: `a person whose job is to care for people's teeth`,
-  //   },
-  //   {
-  //     word: 'swing',
-  //     meaning: 'to move backward and forward or from side to side while hanging from something',
-  //   },
-  //   {
-  //     word: 'amazing',
-  //     meaning: 'causing great surprise or wonder, causing amazement',
-  //   },
-  //   {
-  //     word: 'chocolate',
-  //     meaning:
-  //       'a food that is made from cacao beans and that is eaten as candy or used as a flavoring ingredient in other sweet foods',
-  //   },
-  // ]);
 
-  // userId는 추후에 recoil 설정 후 삭제 예정
-  const [userId, setUserId] = useState('black');
-
+  const [user, setUser] = useRecoilState(userState);
   const [wordList, setWordList] = useState([]);
   const [inputList, setInputList] = useState(['', '', '', '', '']);
   const [correctList, setCorrectList] = useState([false, false, false, false, false]);
@@ -54,7 +31,7 @@ function WordTest() {
 
   const getRandomFiveWords = async () => {
     await axios
-      .get(`${API_URL}/note/word/${userId}/1`, {
+      .get(`${API_URL}/note/word/${user.userId}/1`, {
         headers: {
           'Access-Token':
             'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
@@ -63,7 +40,7 @@ function WordTest() {
       .then((res) => {
         // console.log(res);
         if (res.data.wordNoteList.length !== 5) {
-          alert('최소 5개의 단어가 오답노트에 존재해야만 테스트를 응시할 수 있습니다!');
+          alert('오답노트에 최소 5개의 단어가 존재해야만 테스트를 응시할 수 있습니다!');
           navigate('/review-note', { state: 1 });
           return;
         }

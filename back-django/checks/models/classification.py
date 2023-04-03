@@ -1,40 +1,45 @@
 import os
+import cv2
 import numpy as np
 from PIL import Image, ImageChops
 from tensorflow.keras.models import load_model
+import tensorflow as tf
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 NOW_DIR = os.path.dirname(os.path.realpath(__file__)) + '/'
 
-def crop(im):
+def crop(im_np):
+    im = Image.fromarray(im_np)
     im_np = np.array(im)
     area = im_np.shape[0] * im_np.shape[1]
     background = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     diff = ImageChops.difference(im, background)
     diff = ImageChops.add(diff, diff, 2.0, -35)
     bbox = diff.getbbox()
-    if bbox and (area//2 > (bbox[2] * bbox[3])):
+    if bbox and (area//2.5 > (bbox[2] * bbox[3])):
         # print('cropped!')
-        return im.crop(bbox)
+        return np.array(im.crop(bbox)).astype('float32')
     else:
-        return im
+        return np.array(im).astype('float32')
 
-model1_name = 'weights/cnn/doodle_final_96.h5'
-class1_name = 'weights/cnn/doodle_final_classes_96.txt'
+model1 = load_model(NOW_DIR + 'weights/cnn/quick_draw_mobilenet_100.h5', compile=False)
+model2 = load_model(NOW_DIR + 'weights/cnn/quick_draw_mobilenet_200.h5', compile=False)
 
-model2_name = 'weights/cnn/doodle_final_200.h5'
-class2_name = 'weights/cnn/doodle_final_classes_200.txt'
-
-model1 = load_model(NOW_DIR + model1_name)
-model2 = load_model(NOW_DIR + model2_name)
-
+model1.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                  metrics=['accuracy'])
+model2.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                  metrics=['accuracy'])
 models = [model1, model2]
 
+class1_name = NOW_DIR + 'weights/cnn/quick_draw_mobilenet_100_classes.txt'
+class2_name = NOW_DIR + 'weights/cnn/quick_draw_mobilenet_200_classes.txt'
 class_names = []
 for c in [class1_name, class2_name]:
     temp = []
-    with open(NOW_DIR + c, 'r') as f:
+    with open(c, 'r') as f:
         while True:
             text = f.readline()
             if not text:
@@ -45,28 +50,43 @@ for c in [class1_name, class2_name]:
         f.close()
     class_names.append(temp)
 
-def get_class(image_path):
-    image = Image.open(image_path)
+kernel = np.ones((3, 3), np.uint8)
+def get_class(image, suggested):
+    if type(image) == str:
+        image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+    else:
+        image = cv2.imdecode(np.fromstring(image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
     image = crop(image)
-    image = image.resize((128, 128), Image.LANCZOS)
-    try:
-        image_np = np.array(image)[:, :, 0]
-    except:
-        image_np = np.array(image)[:, :]
-    image_np = 255 - image_np
-    image_np = np.expand_dims(image_np, axis=-1)
-
-    results = []
-    for i in range(len(models)):
-        pred = models[i].predict(np.expand_dims(image_np, axis=0))[0]
-        target_value = pred.max()
-        target_idx = (-pred).argsort()[0]
-        results.append([target_value, class_names[i][target_idx]])
-    return sorted(results, reverse=True)[0][1]
+    image = cv2.erode(image, kernel, iterations=10)
+    image = cv2.resize(image, (32, 32), cv2.INTER_AREA)
+    image = np.array(image).astype('float')
+    image = 255 - image
+    image /= 255.0
+    predictions = np.array([model.predict(np.expand_dims(image, axis=0)) for model in models])
+    predictions = np.reshape(predictions, (200,))
+    
+    
+    # 예측값 기준 내림차순 정렬
+    predictions_sorted = np.argsort(predictions, axis=0)[::-1]
+    idx = 0
+    while True:
+        now_class = predictions_sorted[idx]
+        # 첫 번째 모델
+        if now_class < 100: 
+            class_name = class_names[0][now_class]
+        else:
+        # 두 번째 모델
+            class_name = class_names[1][now_class-100]
+        if class_name not in suggested:
+            break
+        else:
+            idx += 1
+    
+    return class_name
 
 
 # 서버가 켜질 때 model을 한 번 구동하여 api 요청 시 바로 값을 return하도록 만듦
-temp = get_class(NOW_DIR + 'weights/cnn/umbrella.png')
+temp = get_class(NOW_DIR + 'weights/cnn/umbrella.png', [])
 del temp
 
 # if __name__ == '__main__':

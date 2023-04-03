@@ -48,8 +48,8 @@ def five(request):
 def doodle(request):
     # 유저 그림
     answer = request.FILES['answer']
-
-    result = get_class(answer)
+    answered = request.POST['answered']
+    result = get_class(answer, answered)
 
     message = 'success'
 

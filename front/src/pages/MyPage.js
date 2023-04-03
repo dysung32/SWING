@@ -292,6 +292,19 @@ function MyPage() {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  const deleteUser = () => {
+    axios
+      .delete(`${API_URL}/user/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log('회원탈퇴 완료!');
+      })
+      .catch((err) => {});
+  };
+
   useState(() => {
     getCouponCnt();
   }, []);
@@ -445,6 +458,7 @@ function MyPage() {
               fontColor={colors.white}
               hoverColor={colors.gray500}
               padding='0.5rem 1.5rem '
+              onClick={deleteUser}
             >
               회원탈퇴
             </CommonBtn>

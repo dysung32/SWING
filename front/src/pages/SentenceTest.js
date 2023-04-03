@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, getCookie } from '../config';
 
 import { H1, H2, H4 } from '../styles/Fonts';
 import {
@@ -37,8 +37,7 @@ function SentenceTest() {
     await axios
       .get(`${API_URL}/note/sentence/${user.userId}/1`, {
         headers: {
-          'Access-Token':
-            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+          'Access-Token': getCookie('accessToken'),
         },
       })
       .then((res) => {
@@ -70,8 +69,7 @@ function SentenceTest() {
       axios
         .delete(`${API_URL}/note/sentence/${answer.sentenceNoteId}`, {
           headers: {
-            'Access-Token':
-              'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+            'Access-Token': getCookie('accessToken'),
           },
         })
         .then((res) => {

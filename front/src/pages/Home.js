@@ -24,19 +24,34 @@ import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from '../assets/main_coupon.svg';
-import { BasicProfile } from '../config';
+import { API_URL, BasicProfile, getCookie } from '../config';
 import IsLogin from '../auth/IsLogin';
+import axios from 'axios';
 
 function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
 
-  const [coupon, setCoupon] = useState(0);
+  const [coupon, setCoupon] = useState();
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();
 
+  const getCouponCnt = () => {
+    axios
+      .get(`${API_URL}/user/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setCoupon(res.data.user.coupon);
+      });
+  };
+
   useEffect(() => {
+    getCouponCnt();
     const wheelHandler = (e) => {
       e.preventDefault();
       const { deltaY } = e;
@@ -129,7 +144,7 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile width={5} height={5} src={user.profileImageUrl} />
+              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>

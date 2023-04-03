@@ -175,6 +175,7 @@ export const PlayerProfile = styled.img`
   border-radius: 50%;
   margin: ${(props) => props.margin}rem;
   object-fit: cover;
+  cursor: pointer;
 `;
 
 export const PlayerMedal = styled.img`

@@ -23,9 +23,9 @@ import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
-import Coupon from "../assets/main_coupon.svg";
-import { BasicProfile } from "../config";
-import IsLogin from "../auth/IsLogin";
+import Coupon from '../assets/main_coupon.svg';
+import { BasicProfile } from '../config';
+import IsLogin from '../auth/IsLogin';
 
 function Home() {
   const navigate = useNavigate();
@@ -128,14 +128,14 @@ function Home() {
       <HomeWrapper ref={scrollRef}>
         {IsLogin() ? (
           <UserInfoBox>
-            <div className="flex userInfo">
-              <PlayerProfile width={5} height={5} src={BasicProfile} />
-              <div className="nickname">{user.nickname}</div>
+            <div className='flex userInfo'>
+              <PlayerProfile width={5} height={5} src={user.profileImageUrl} />
+              <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>
-              <CouponImg src={Coupon} alt="coupon" width={3.5} />
-              <div className="couponInfo">
-                쿠폰 <span className="couponCnt">{coupon}</span>
+              <CouponImg src={Coupon} alt='coupon' width={3.5} />
+              <div className='couponInfo'>
+                쿠폰 <span className='couponCnt'>{coupon}</span>
               </div>
             </UserCouponBox>
             <UserBtnBox>
@@ -143,16 +143,18 @@ function Home() {
                 color={colors.studyPink200}
                 hoverColor={colors.studyPink300}
                 font={1}
-                padding="0.5rem 1rem"
-                onClick={() => navigate("/review-note")}>
+                padding='0.5rem 1rem'
+                onClick={() => navigate('/review-note')}
+              >
                 오답노트
               </CommonBtn>
               <CommonBtn
                 color={colors.studyBlue100}
                 hoverColor={colors.studyBlue200}
                 font={1}
-                padding="0.5rem 1rem"
-                onClick={() => navigate("/history")}>
+                padding='0.5rem 1rem'
+                onClick={() => navigate('/history')}
+              >
                 히스토리
               </CommonBtn>
             </UserBtnBox>

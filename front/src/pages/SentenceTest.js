@@ -16,6 +16,8 @@ import Coupon from '../assets/coupon.png';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import ModalBasic from '../components/ModalBasic';
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 
 function SentenceTest() {
   const navigate = useNavigate();
@@ -24,18 +26,16 @@ function SentenceTest() {
   const [failModalShow, setFailModalShow] = useState(false);
 
   const [answer, setAnswer] = useState('');
-  // const [translation, setTranslation] = useState('');
-  // const [imgURL, setImgURL] = useState('');
+
   const [sentence, setSentence] = useState('');
 
   const sentenceInput = useRef();
 
-  // userId는 추후에 recoil 설정 후 삭제 예정
-  const [userId, setUserId] = useState('black');
+  const [user, setUser] = useRecoilState(userState);
 
   const getRandomSentence = async () => {
     await axios
-      .get(`${API_URL}/note/sentence/${userId}/1`, {
+      .get(`${API_URL}/note/sentence/${user.userId}/1`, {
         headers: {
           'Access-Token':
             'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',

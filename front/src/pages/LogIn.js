@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-import { useRecoilState } from "recoil";
-import { userState } from "../recoil";
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 
 import {
   LogInWrapper,
@@ -13,33 +13,33 @@ import {
   LogInBtnContainer,
   LogInBtn,
   SocialLogoImg,
-} from "../styles/LogInEmotion";
-import { RoundLogo } from "../styles/CommonEmotion";
-import { colors } from "../styles/ColorPalette";
-import { H5 } from "../styles/Fonts";
-import Google from "../assets/google_icon.png";
-import Kakao from "../assets/kakaotalk_icon.png";
-import { API_URL, setCookie, getCookie } from "../config";
+} from '../styles/LogInEmotion';
+import { RoundLogo } from '../styles/CommonEmotion';
+import { colors } from '../styles/ColorPalette';
+import { H5 } from '../styles/Fonts';
+import Google from '../assets/google_icon.png';
+import Kakao from '../assets/kakaotalk_icon.png';
+import { API_URL, setCookie, getCookie } from '../config';
 
 function LogIn() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
   const onClickLogo = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const kakaoLogin = async (e) => {
     window.Kakao.Auth.login({
-      scope: "profile_nickname",
+      scope: 'profile_nickname',
       success: getProfile(),
     });
   };
 
   const getProfile = () => {
     window.Kakao.API.request({
-      url: "/v2/user/me",
+      url: '/v2/user/me',
       success: (res) => {
-        const userId = "kakao" + res.id;
+        const userId = 'kakao' + res.id;
         const userNickname = res.properties.nickname;
 
         // 프론트에서 카카오 로그인 처리하고 백으로 POST /user/socialLogin url로
@@ -56,10 +56,11 @@ function LogIn() {
                 nickname: res.data.nickname,
                 profileImageUrl: res.data.profileImageUrl,
               };
+
               setUser(userSave);
-              setCookie("accessToken", res.data["access-token"], 1);
-              setCookie("refreshToken", res.data["refresh-token"], 1);
-              navigate("/");
+              setCookie('accessToken', res.data['access-token'], 1);
+              setCookie('refreshToken', res.data['refresh-token'], 1);
+              navigate('/');
             }
           })
           .catch((err) => {
@@ -75,12 +76,12 @@ function LogIn() {
         <LogInContainer>
           <ExpImg />
           <LogoImg>
-            <RoundLogo alt="logo" onClick={onClickLogo} size="70%" />
+            <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
           </LogoImg>
           <LogInBtnContainer>
-            <LogInBtn color="#F7E600" onClick={kakaoLogin}>
-              <SocialLogoImg src={Kakao} alt="kakao" />
-              <H5 align="center">카카오로 시작하기</H5>
+            <LogInBtn color='#F7E600' onClick={kakaoLogin}>
+              <SocialLogoImg src={Kakao} alt='kakao' />
+              <H5 align='center'>카카오로 시작하기</H5>
             </LogInBtn>
           </LogInBtnContainer>
         </LogInContainer>

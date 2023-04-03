@@ -28,7 +28,7 @@ import { colors } from '../styles/ColorPalette';
 
 import { PencilSquare } from 'react-bootstrap-icons';
 import ModalClosable from '../components/ModalClosable';
-import { API_URL, BasicProfile } from '../config';
+import { API_URL, BasicProfile, getCookie } from '../config';
 import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -47,11 +47,11 @@ function MyPage() {
   const [confirmed, setConfirmed] = useState(false);
   const [allowedMsg, setAllowedMsg] = useState('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
 
-  const [tmpProfileImg, setTmpProfileImg] = useState(BasicProfile);
+  const [tmpProfileImg, setTmpProfileImg] = useState(user.profileImageUrl);
   const [imgChanged, setImgChanged] = useState(false);
-  const tmpnickName = user.userId;
+  const tmpnickName = user.nickname;
 
-  const coupon = 3;
+  const [coupon, setCoupon] = useState();
   const historyList = [
     {
       date: '2023.03.01',
@@ -109,6 +109,19 @@ function MyPage() {
     );
   });
 
+  const getCouponCnt = () => {
+    axios
+      .get(`${API_URL}/user/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setCoupon(res.data.user.coupon);
+      });
+  };
+
   const changeNickname = () => {
     setAllowedMsg('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
     const changedNickname = nickNameRef.current.value;
@@ -128,8 +141,7 @@ function MyPage() {
     await axios
       .get(`${API_URL}/user/nickname/${nickNameRef.current.value}`, {
         headers: {
-          'Access-Token':
-            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+          'Access-Token': getCookie('accessToken'),
         },
       })
       .then((res) => {
@@ -218,14 +230,13 @@ function MyPage() {
       .put(`${API_URL}/user`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Access-Token':
-            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+          'Access-Token': getCookie('accessToken'),
         },
       })
-      .then(async (res) => {
+      .then((res) => {
         console.log(res);
         // 리뉴얼된 프로필 정보 받아와서 recoil update
-        await getNewProfile();
+        getNewProfile();
         alert('프로필 수정이 완료되었습니다!');
         setProfileEditModalShow(false);
         console.log(user);
@@ -239,8 +250,7 @@ function MyPage() {
     await axios
       .get(`${API_URL}/user/${user.userId}`, {
         headers: {
-          'Access-Token':
-            'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+          'Access-Token': getCookie('accessToken'),
         },
       })
       .then((res) => {
@@ -281,6 +291,10 @@ function MyPage() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+
+  useState(() => {
+    getCouponCnt();
+  }, []);
 
   return (
     <>

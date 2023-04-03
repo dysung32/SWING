@@ -22,16 +22,18 @@ import Coupon from '../assets/coupon.png';
 import { HeartFill } from 'react-bootstrap-icons';
 import ModalBasic from '../components/ModalBasic';
 import LeaderBoard from '../components/LeaderBoard';
-import { AI_API_URL, API_URL } from '../config';
+import { AI_API_URL, API_URL, getCookie } from '../config';
 import Loading from '../components/Loading';
+import { userState } from '../recoil';
+import { useRecoilState } from 'recoil';
 
 function Sentency() {
   const navigate = useNavigate();
 
   const inputRef = useRef();
   const nextRef = useRef();
-  // userId는 추후에 recoil 설정 후 삭제 예정
-  const [userId, setUserId] = useState('black');
+
+  const [user, setUser] = useRecoilState(userState);
 
   const [resultModalShow, setResultModalShow] = useState(false);
   const [retryModalShow, setRetryModalShow] = useState(false);
@@ -95,9 +97,9 @@ function Sentency() {
     setSimilarity(0);
     axios
       .get(`${API_URL}/sentency`, {
-        // headers: {
-        //   'Access-Token': '',
-        // },
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
       })
       .then((res) => {
         // 새로운 이미지 설정
@@ -153,10 +155,10 @@ function Sentency() {
     if (coupon > 0) {
       // 쿠폰 사용하는 API 보내고
       axios
-        .put(`${API_URL}/user/coupon/${userId}/${coupon - 1}`, null, {
-          // headers: {
-          //   'Access-Token': '',
-          // },
+        .put(`${API_URL}/user/coupon/${user.userId}/${coupon - 1}`, null, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
         })
         .then((res) => {
           console.log(res);
@@ -248,10 +250,10 @@ function Sentency() {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/user/sentency/${userId}`, {
-        // headers: {
-        //   'Access-Token': '',
-        // },
+      .get(`${API_URL}/user/sentency/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -262,7 +264,7 @@ function Sentency() {
           getQuizContent();
           // 하루 sentency 횟수 차감 API
           axios
-            .put(`${API_URL}/user/sentency/${userId}/${res.data.sentencyCnt - 1}`, null, {
+            .put(`${API_URL}/user/sentency/${user.userId}/${res.data.sentencyCnt - 1}`, null, {
               // headers: {
               //   'Access-Token': '',
               // },
@@ -287,10 +289,9 @@ function Sentency() {
       // 결과 전송 API
       const sendSentencyResult = async () => {
         await axios
-          .put(`${API_URL}/sentency/${userId}/${score}`, null, {
+          .put(`${API_URL}/sentency/${user.userId}/${score}`, null, {
             headers: {
-              'Access-Token':
-                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+              'Access-Token': getCookie('accessToken'),
             },
           })
           .then((res) => {
@@ -302,10 +303,9 @@ function Sentency() {
       // 랭킹 받아오기
       const getSentencyRank = async () => {
         await axios
-          .get(`${API_URL}/sentency/${userId}`, {
+          .get(`${API_URL}/sentency/${user.userId}`, {
             headers: {
-              'Access-Token':
-                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+              'Access-Token': getCookie('accessToken'),
             },
           })
           .then((res) => {
@@ -321,10 +321,9 @@ function Sentency() {
       // 오답 문장 오답노트에 저장하기
       const addWrongAnswer = async () => {
         axios
-          .post(`${API_URL}/note/sentence/${userId}/${sentenceId}`, null, {
+          .post(`${API_URL}/note/sentence/${user.userId}/${sentenceId}`, null, {
             headers: {
-              'Access-Token':
-                'Ry7rohoVUjw3GA5W1GC3DaJ5Rzfec8-S2SHOE8xcnlh-VbeDGJr-Hu4t2mN2LuE-3nzucAo9cuoAAAGHLCzlKw&state=8_bprj_QaKc6mIzvlC972kiYByGkGAQT8ym9hvYNl9A%3D',
+              'Access-Token': getCookie('accessToken'),
             },
           })
           .then((resp) => {

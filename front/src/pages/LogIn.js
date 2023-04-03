@@ -54,6 +54,7 @@ function LogIn() {
               const userSave = {
                 userId: res.data.userId,
                 nickname: res.data.nickname,
+                profileImageUrl: res.data.profileImageUrl,
               };
               setUser(userSave);
               setCookie('accessToken', res.data['access-token'], 1);

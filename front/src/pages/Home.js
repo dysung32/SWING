@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { useRecoilState } from "recoil";
-import { userState } from "../recoil";
-import { setCookie, getCookie } from ".././config";
-import GoogleLogin from "../auth/GoogleLogin";
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
 import {
   HomeWrapper,
   HomeHeroContainer,
@@ -18,63 +16,25 @@ import {
   UserInfoBox,
   UserCouponBox,
   UserBtnBox,
-} from "../styles/HomeEmotion";
-import { H4, H5 } from "../styles/Fonts";
-import { Mouse, ChevronDoubleDown } from "react-bootstrap-icons";
-import { CommonBtn, PlayerProfile } from "../styles/CommonEmotion";
-import { colors } from "../styles/ColorPalette";
-import { CouponImg } from "../styles/MyPageEmotion";
+} from '../styles/HomeEmotion';
+import { H4, H5 } from '../styles/Fonts';
+import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
+import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
+import { colors } from '../styles/ColorPalette';
+import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from "../assets/main_coupon.svg";
 import { BasicProfile } from "../config";
+import IsLogin from "../auth/IsLogin";
 
 function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
 
-  // const [userNickname, setUserNickname] = useRecoilState(userNicknameState);
-  // const [userImg, setUserImg] = useRecoilState(userImgState);
-
   const [coupon, setCoupon] = useState(0);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();
-
-  // useEffect(() => {
-  //   const reg = /[()]/gi;
-  //   if (window.location.href.includes('kakao')) {
-  //     const accessToken = new URL(window.location.href).searchParams.get(
-  //       'access-token'
-  //     );
-  //     const refreshToken = new URL(window.location.href).searchParams.get(
-  //       'refresh-token'
-  //     );
-  //     let user = new URL(window.location.href).searchParams.get('user');
-  //     user = user.replace('UserDto', '');
-  //     user = user.replace(reg, '');
-  //     user = user.split(', ');
-  //     const userSave = {};
-  //     user.forEach((str) => {
-  //       const tmpArr = str.split('=');
-  //       if (
-  //         tmpArr[0] === 'userId' ||
-  //         tmpArr[0] === 'nickname' ||
-  //         tmpArr[0] === 'profileImageUrl'
-  //       ) {
-  //         userSave[tmpArr[0]] = tmpArr[1];
-  //       }
-  //     });
-  //     setUser(userSave);
-  //     setCookie('accessToken', accessToken, 1);
-  //     setCookie('refreshToken', refreshToken, 1);
-
-  //     navigate('/');
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
 
   useEffect(() => {
     const wheelHandler = (e) => {
@@ -89,7 +49,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 2);
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
@@ -97,7 +57,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 3);
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
@@ -105,7 +65,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 3 + DIVIDER_HEIGHT * 3,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 4);
         } else if (scrollTop >= pageHeight * 3) {
@@ -113,7 +73,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 1);
         }
@@ -124,7 +84,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 1);
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
@@ -132,7 +92,7 @@ function Home() {
           window.scrollTo({
             top: 0,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 1);
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
@@ -140,7 +100,7 @@ function Home() {
           window.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 2);
         } else if (scrollTop >= pageHeight * 3) {
@@ -148,69 +108,72 @@ function Home() {
           window.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
             left: 0,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
           setScrollIndex(() => 3);
         }
       }
     };
     const scrollRefCurrent = scrollRef.current;
-    scrollRefCurrent.addEventListener("wheel", wheelHandler);
+    scrollRefCurrent.addEventListener('wheel', wheelHandler);
     return () => {
-      scrollRefCurrent.removeEventListener("wheel", wheelHandler);
+      scrollRefCurrent.removeEventListener('wheel', wheelHandler);
     };
   }, []);
+
+  console.log(user);
 
   return (
     <>
       <HomeWrapper ref={scrollRef}>
-        <UserInfoBox>
-          <div className="flex userInfo">
-            <PlayerProfile width={5} height={5} src={BasicProfile} />
-            <H5 padding="0 0 0 1rem" color={colors.white}>
-              Player1
-            </H5>
-          </div>
-          <UserCouponBox>
-            <CouponImg src={Coupon} alt="coupon" width={3.5} />
-            <div className="couponInfo">
-              쿠폰 <span className="couponCnt">{coupon}</span>
+        {IsLogin() ? (
+          <UserInfoBox>
+            <div className="flex userInfo">
+              <PlayerProfile width={5} height={5} src={BasicProfile} />
+              <div className="nickname">{user.nickname}</div>
             </div>
-          </UserCouponBox>
-          <UserBtnBox>
-            <CommonBtn
-              color={colors.studyPink200}
-              font={1}
-              padding="0.5rem 1rem"
-              onClick={() => navigate("/review-note")}
-            >
-              오답노트
-            </CommonBtn>
-            <CommonBtn
-              color={colors.studyBlue100}
-              font={1}
-              padding="0.5rem 1rem"
-              onClick={() => navigate("/history")}
-            >
-              히스토리
-            </CommonBtn>
-          </UserBtnBox>
-        </UserInfoBox>
+            <UserCouponBox>
+              <CouponImg src={Coupon} alt="coupon" width={3.5} />
+              <div className="couponInfo">
+                쿠폰 <span className="couponCnt">{coupon}</span>
+              </div>
+            </UserCouponBox>
+            <UserBtnBox>
+              <CommonBtn
+                color={colors.studyPink200}
+                hoverColor={colors.studyPink300}
+                font={1}
+                padding="0.5rem 1rem"
+                onClick={() => navigate("/review-note")}>
+                오답노트
+              </CommonBtn>
+              <CommonBtn
+                color={colors.studyBlue100}
+                hoverColor={colors.studyBlue200}
+                font={1}
+                padding="0.5rem 1rem"
+                onClick={() => navigate("/history")}>
+                히스토리
+              </CommonBtn>
+            </UserBtnBox>
+          </UserInfoBox>
+        ) : null}
+
         <HomeHeroContainer>
           <HeroScrollMsg>
             <H4>Scroll Down for Games</H4>
             <HeroScrollIconContainer>
               <HeroScrollIconAni>
-                <ChevronDoubleDown style={{ fontSize: "36px" }} />
+                <ChevronDoubleDown style={{ fontSize: '36px' }} />
               </HeroScrollIconAni>
               <Mouse
                 style={{
-                  fontSize: "48px",
-                  padding: "0.5rem",
+                  fontSize: '48px',
+                  padding: '0.5rem',
                 }}
               />
               <HeroScrollIconAni>
-                <ChevronDoubleDown style={{ fontSize: "36px" }} />
+                <ChevronDoubleDown style={{ fontSize: '36px' }} />
               </HeroScrollIconAni>
             </HeroScrollIconContainer>
           </HeroScrollMsg>

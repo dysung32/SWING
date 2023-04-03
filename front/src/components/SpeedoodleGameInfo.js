@@ -20,24 +20,19 @@ import SpeedoodleGame from '../components/SpeedoodleGame';
 import { CommonBtn, CommonInput } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
-import { API_URL, getCookie } from '.././config';
+import { API_URL, getCookie } from '../config';
+import { useRecoilState } from 'recoil';
+import { userState, speedoodleGameState } from '../recoil';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
   const chatWindowRef = useRef(null);
-  const [isMode, setIsMode] = useState('');
+  const [isMode, setIsMode] = useState(props.gameInfo.mode);
   const [bgColor, setBgColor] = useState(null);
   const [limits, setLimits] = useState('');
-  const user = JSON.parse(window.localStorage.getItem('user'));
-  useEffect(() => {
-    getRoomDetail();
-  }, []);
-
-  const getRoomDetail = () => {
-    // 룸상세 정보 가져오는 axios
-    // axios.get(API_URL)
-  };
+  const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+  // const user = JSON.parse(window.localStorage.getItem('user'));
 
   // 모드 변경
   const onClickEasyMode = () => {
@@ -70,7 +65,7 @@ function SpeedoodleGameInfo(props) {
           handleGameInfo();
           setTimeout(() => {
             setBgColor(`${colors.gameBlue100}`);
-            props.setIsGameStart(true);
+            setIsGameStart(true);
           }, 1000);
         }
       })
@@ -113,18 +108,17 @@ function SpeedoodleGameInfo(props) {
   return (
     <>
       <GameInfoContainer color={bgColor}>
-        {props.start ? (
+        {isGameStart ? (
           <SpeedoodleGame
             style={{ width: '100%', height: '100%' }}
             isMode={isMode}
             limits={limits}
-            isSetGameStart={props.setIsGameStart}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>
             <RoomTitle>
               <H5 align='center' color={colors.gameBlue500}>
-                제목이 들어갈 자리입니다.
+                {props.gameInfo.name}
               </H5>
             </RoomTitle>
             <RoomInfoContainer>

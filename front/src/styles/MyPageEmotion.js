@@ -32,7 +32,7 @@ export const MyPageContentContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 2rem;
   width: 100%;
-  height: 75%;
+  // height: 75%;
   box-sizing: border-box;
 `;
 
@@ -80,9 +80,6 @@ export const FilePreview = styled.img`
   border-radius: 50%;
   filter: brightness(70%);
   object-fit: cover;
-  // color: ${colors.white};
-  // font-size: 2rem;
-  // line-height: 10rem;
   cursor: pointer;
 `;
 
@@ -119,7 +116,6 @@ export const MyPageIntroConatiner = styled.div`
   position: relative;
   align-items: center;
   width: 100%;
-  height: 30%;
   padding: 1rem 1.5rem;
   background-color: ${colors.white};
   border-radius: 1rem;
@@ -159,7 +155,7 @@ export const MyPageHistoryConatiner = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(70% - 2rem);
+  height: calc(75% - 4rem);
   padding: 1rem 1.5rem;
   margin-top: 2rem;
   background-color: ${colors.white};

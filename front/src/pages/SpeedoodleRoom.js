@@ -153,6 +153,7 @@ function SpeedoodleRoom() {
           {gameRoomInfo?.roomInfo ? (
             <>
               <SpeedoodleUser
+                leader={gameRoomInfo?.roomInfo.leaderNickname}
                 data={gameRoomInfo?.chatUserList}
               ></SpeedoodleUser>
 

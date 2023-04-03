@@ -5,6 +5,7 @@ import { PlayerInfo, PlayerProfile } from '../styles/CommonEmotion';
 import { P1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 
+import { AwardFill } from 'react-bootstrap-icons';
 function SpeedoodleUser(props) {
   // props에 axios주소값 넘겨주고 거기서 받아온 user를 map으로 띄워줌
 
@@ -24,9 +25,16 @@ function SpeedoodleUser(props) {
             width='2.5'
             height='2.5'
           />
-          <P1 margin='0 0 0 1rem' color={colors.gameBlue500}>
-            {user.nickname}
-          </P1>
+          {props.leader === user.nickname ? (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <AwardFill />
+              <P1>{user.nickname}</P1>
+            </div>
+          ) : (
+            <P1 margin='0 0 0 1rem' color={colors.gameBlue500}>
+              {user.nickname}
+            </P1>
+          )}
         </PlayerInfo>
         {user.time && <P1>{user.time}</P1>}
       </UserInfo>

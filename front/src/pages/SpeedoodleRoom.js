@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { SpeedoodleWrapper } from '../styles/SpeedoodleEmotion';
@@ -16,6 +17,7 @@ import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
 
 function SpeedoodleRoom() {
+  const navigate = useNavigate();
   const [gameRoomInfo, setGameRoomInfo] = useState({});
   const [chatInput, setChatInput] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
@@ -64,14 +66,19 @@ function SpeedoodleRoom() {
           userId: changeUser.userId,
           nickname: changeUser.nickname,
           profileImageUrl: changeUser.profileImageUrl,
+          roomId: room_id,
         }
         setUserList([...userList, tempUser]);
       }
       else if(changeUser.messageType === 'LEAVE'){
         console.log('나가는거 봤다')
-        const tempList  =  userList.filter(user => user.userId !== changeUser.userId);
-
-        setUserList(tempList);
+        if(changeUser.nickname === gameRoomInfo.roomInfo.leaderNickname){
+          navigate('/speedoodle');
+        }
+        else{
+          const tempList  =  userList.filter(user => user.userId !== changeUser.userId);
+          setUserList(tempList);
+        }
       }
     }
   },[changeUser]);
@@ -87,6 +94,7 @@ function SpeedoodleRoom() {
           userId: `${user.userId}`,
           nickname: `${user.nickname}`,
           profileImageUrl: `${user.profileImageUrl}`,
+          roomId: room_id,
         }
         stompRef.current.send('/pub/send', {}, JSON.stringify(data));
         console.log('STOMP connection established');
@@ -128,6 +136,7 @@ function SpeedoodleRoom() {
         userId: `${user.userId}`,
         nickname: `${user.nickname}`,
         profileImageUrl: `${user.profileImageUrl}`,
+        roomId: room_id,
       }
       console.log(data);
       stompRef.current.send('/pub/send', {}, JSON.stringify(data));
@@ -160,6 +169,7 @@ function SpeedoodleRoom() {
     const data = {
       messageType: 'MODE',
       data: value,
+      roomId: room_id,
     }
     if (stompRef.current?.connected) {
       console.log(stompRef.current.connected);

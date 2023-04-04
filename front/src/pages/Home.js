@@ -330,6 +330,7 @@ function Home() {
             SENTENCY
           </H1>
           <HomeRankBtn onClick={handleSentencyRankBtn}>
+            <div className='text'>Click!!</div>
             <TrophyFill className='trophy' />
           </HomeRankBtn>
           <SideLeaderBoard
@@ -345,6 +346,7 @@ function Home() {
             HIFIVE
           </H1>
           <HomeRankBtn onClick={handleFiveRankBtn}>
+            <div className='text'>Click!!</div>
             <TrophyFill className='trophy' />
           </HomeRankBtn>
           <SideLeaderBoard

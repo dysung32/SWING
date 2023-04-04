@@ -219,6 +219,90 @@ export const SinglePlayerContainer = styled.div`
 export const PlayerInfo = styled.div`
   display: flex;
   align-items: center;
+
+  .profile {
+    margin: 0.5rem 0.7rem 0.5rem 0;
+  }
+
+  .nickname {
+    text-align: left;
+  }
 `;
 
-export const BackButton = styled.button``;
+export const SideLeaderBoardBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: opac 0.8s;
+  z-index: 1000;
+
+  @keyframes opac {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
+export const SideLeaderBoardWrapper = styled.div`
+  width: 22.5rem;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+
+  background-color: ${colors.black};
+  border-radius: 0 1rem 1rem 0;
+  padding: 3rem 1rem 1rem;
+
+  .title {
+    position: absolute;
+    top: -1.5rem;
+    width: calc(100% - 2rem);
+
+    text-align: center;
+    font-family: 'B612', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: ${colors.white};
+  }
+`;
+
+export const SideLeaderBoardSingleBox = styled.div`
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  border-radius: 1rem;
+  background-color: ${colors.gray100};
+
+  .rank {
+    width: 3.5rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  .nickname {
+    padding-left: 1rem;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .score {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #ffb800;
+    padding-left: 1rem;
+  }
+`;

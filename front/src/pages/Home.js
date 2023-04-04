@@ -16,10 +16,11 @@ import {
   UserInfoBox,
   UserCouponBox,
   UserBtnBox,
+  HomeRankBtn,
 } from '../styles/HomeEmotion';
-import { H4, H5 } from '../styles/Fonts';
-import { Mouse, ChevronDoubleDown } from 'react-bootstrap-icons';
-import { CommonBtn, PlayerProfile } from '../styles/CommonEmotion';
+import { H1, H3, H4, H5 } from '../styles/Fonts';
+import { Mouse, ChevronDoubleDown, TrophyFill } from 'react-bootstrap-icons';
+import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
@@ -33,13 +34,22 @@ import {
 } from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
+import SideLeaderBoard from '../components/SideLeaderBoard';
 
 function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
+
+  const [sentencyRankShow, setSentencyRankShow] = useState(false);
+  const [hifiveRankShow, setHifiveRankShow] = useState(false);
+
+  const [rankers, setRankers] = useState([]);
+  const [myRank, setMyRank] = useState([]);
+
   const [successRefresh, setSuccessRefresh] = useState(false);
   const [passAccess, setPassAccess] = useState(false);
   const [coupon, setCoupon] = useState(null);
+
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();
@@ -110,6 +120,44 @@ function Home() {
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  const handleSentencyRankBtn = async () => {
+    await axios
+      .get(`${API_URL}/sentency/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log('sentency 랭킹 불러오기');
+        console.log(res.data);
+        setRankers(res.data.sentencyRankList.slice(0, 7));
+        setMyRank(res.data.sentencyRankList.pop());
+      })
+      .catch((err) => {
+        console.log(`sentency 랭킹 호출 중 오류 발생!`);
+      });
+    await setSentencyRankShow(true);
+  };
+
+  const handleFiveRankBtn = async () => {
+    await axios
+      .get(`${API_URL}/five/${user.userId}`, {
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log('hifive 랭킹 불러오기');
+        console.log(res.data);
+        setRankers(res.data.fiveRankList.slice(0, 7));
+        setMyRank(res.data.fiveRankList.pop());
+      })
+      .catch((err) => {
+        console.log(`Hifive 랭킹 호출 중 오류 발생!`);
+      });
+    await setHifiveRankShow(true);
   };
 
   useEffect(() => {
@@ -278,9 +326,35 @@ function Home() {
           </HeroScrollMsg>
         </HomeHeroContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
-        <HomeSentencyContainer></HomeSentencyContainer>
+        <HomeSentencyContainer>
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            SENTENCY
+          </H1>
+          <HomeRankBtn onClick={handleSentencyRankBtn}>
+            <TrophyFill className='trophy' />
+          </HomeRankBtn>
+          <SideLeaderBoard
+            modalShow={sentencyRankShow}
+            setModalShow={setSentencyRankShow}
+            rankers={rankers}
+            myRank={myRank}
+          />
+        </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
-        <HomeHiFiveContainer></HomeHiFiveContainer>
+        <HomeHiFiveContainer>
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            HIFIVE
+          </H1>
+          <HomeRankBtn onClick={handleFiveRankBtn}>
+            <TrophyFill className='trophy' />
+          </HomeRankBtn>
+          <SideLeaderBoard
+            modalShow={hifiveRankShow}
+            setModalShow={setHifiveRankShow}
+            rankers={rankers}
+            myRank={myRank}
+          />
+        </HomeHiFiveContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>
       </HomeWrapper>

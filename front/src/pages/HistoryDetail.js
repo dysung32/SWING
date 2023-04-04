@@ -100,19 +100,12 @@ function HistoryDetail() {
     );
   });
 
-  // useEffect(() => {
-  //   if (swiperRef.current !== undefined) {
-  //     setRound(swiperRef.current.activeIndex + 1);
-  //     return;
-  //   }
-  // }, [swiperRef.current]);
-
   return (
     <>
       <MyPageWrapper>
         <GameTitle>
           <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
-            {date} 일자 게임 | 랭킹: {rank}등
+            {date}자 게임 | 랭킹: {rank}등
           </H1>
         </GameTitle>
         <div className='flex history-btn'>

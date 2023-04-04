@@ -264,19 +264,20 @@ function Speedoodle() {
 
   //방 입장 api
   const enterRoom = (id) => {
-    axios
-      .post(`${API_URL}/doodle/room/enter/${id}/${user.userId}`, null, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-          'Content-Type': `application/json`,
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          navigate(`/speedoodle/room/${id}`);
-        }
-      })
-      .catch((err) => console.error(err));
+    // axios
+    //   .post(`${API_URL}/doodle/room/enter/${id}/${user.userId}`, null, {
+    //     headers: {
+    //       'Access-Token': getCookie('accessToken'),
+    //       'Content-Type': `application/json`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       navigate(`/speedoodle/room/${id}`);
+    //     }
+    //   })
+    //   .catch((err) => console.error(err));
+    navigate(`/speedoodle/room/${id}`);
   };
 
   // 방 입장버튼 눌렀을 때 비밀방 여부에 따라 라우터제공

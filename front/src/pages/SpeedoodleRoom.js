@@ -43,9 +43,10 @@ function SpeedoodleRoom() {
 
   const getRoomInfo = async () => {
     await axios
-      .get(`${API_URL}/doodle/room/info/${room_id}`)
+      .get(`${API_URL}/doodle/room/info/${room_id}/${user.userId}`)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data);
           setUserList(() => res.data.chatUserList);
           setGameRoomInfo(() => res.data);
         }
@@ -62,13 +63,15 @@ function SpeedoodleRoom() {
   useEffect(() => {
     if(changeUser !== null){
       if(changeUser.messageType === 'ENTER'){
-        const tempUser = {
-          userId: changeUser.userId,
-          nickname: changeUser.nickname,
-          profileImageUrl: changeUser.profileImageUrl,
-          roomId: room_id,
+        if(changeUser.userId !== user.userId){
+          const tempUser = {
+            userId: changeUser.userId,
+            nickname: changeUser.nickname,
+            profileImageUrl: changeUser.profileImageUrl,
+            roomId: room_id,
+          }
+          setUserList([...userList, tempUser]);  
         }
-        setUserList([...userList, tempUser]);
       }
       else if(changeUser.messageType === 'LEAVE'){
         console.log('나가는거 봤다')

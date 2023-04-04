@@ -15,6 +15,14 @@ function History() {
   const [user, setUser] = useRecoilState(userState);
   const [historyList, setHistoryList] = useState([]);
 
+  const changeTimeStampToDate = (timestamp) => {
+    let date = new Date(timestamp);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDate();
+    return year + '년 ' + month + '월 ' + day + '일';
+  };
+
   const renderHistoryList = historyList.map((history, idx) => {
     return (
       // api 연결 후엔 key값 history id로 설정하기
@@ -22,12 +30,12 @@ function History() {
         key={idx}
         onClick={() =>
           navigate(`/history/${idx}`, {
-            state: { date: history.date, rank: history.rank },
+            state: { date: changeTimeStampToDate(history.playTime), rank: history.rank },
           })
         }
       >
-        <div className='history-date'>{history.date}</div>
-        <div className='history-title'>{history.title}</div>
+        <div className='history-date'>{changeTimeStampToDate(history.playTime)}</div>
+        <div className='history-title'>{history.roomName}</div>
         <div className='history-rank'>{history.rank}등</div>
       </SingleHistoryList>
     );

@@ -17,6 +17,7 @@ import {
   UserCouponBox,
   UserBtnBox,
   HomeRankBtn,
+  GlowingBtn,
 } from '../styles/HomeEmotion';
 import { H1, H3, H4, H5 } from '../styles/Fonts';
 import { Mouse, ChevronDoubleDown, TrophyFill } from 'react-bootstrap-icons';
@@ -29,6 +30,10 @@ import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../confi
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 function Home() {
   const navigate = useNavigate();
@@ -43,6 +48,9 @@ function Home() {
   const [successRefresh, setSuccessRefresh] = useState(false);
   const [passAccess, setPassAccess] = useState(false);
   const [coupon, setCoupon] = useState(null);
+
+  const sentencySwiperRef = useRef();
+  const hifiveSwiperRef = useRef();
 
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
@@ -137,7 +145,7 @@ function Home() {
       .catch((err) => {
         console.log(`sentency 랭킹 호출 중 오류 발생!`);
       });
-    await setSentencyRankShow(true);
+    setSentencyRankShow(true);
   };
 
   const handleFiveRankBtn = async () => {
@@ -161,7 +169,7 @@ function Home() {
       .catch((err) => {
         console.log(`Hifive 랭킹 호출 중 오류 발생!`);
       });
-    await setHifiveRankShow(true);
+    setHifiveRankShow(true);
   };
 
   useEffect(() => {
@@ -339,6 +347,24 @@ function Home() {
             rankers={rankers}
             myRank={myRank}
           />
+          <div className='howtoTitle'>How To PLAY ??</div>
+          <Swiper
+            modules={[Pagination]}
+            className='slideContainer'
+            spaceBetween={50}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            onSwiper={(swiper) => {
+              sentencySwiperRef.current = swiper;
+            }}
+          >
+            <SwiperSlide className='slide'>Slide 1</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 2</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 3</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 4</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 5</SwiperSlide>
+          </Swiper>
+          <GlowingBtn>PLAY</GlowingBtn>
         </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer>
@@ -355,6 +381,24 @@ function Home() {
             rankers={rankers}
             myRank={myRank}
           />
+          <div className='howtoTitle'>How To PLAY ??</div>
+          <Swiper
+            modules={[Pagination]}
+            className='slideContainer'
+            spaceBetween={50}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            onSwiper={(swiper) => {
+              hifiveSwiperRef.current = swiper;
+            }}
+          >
+            <SwiperSlide className='slide'>Slide 1</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 2</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 3</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 4</SwiperSlide>
+            <SwiperSlide className='slide'>Slide 5</SwiperSlide>
+          </Swiper>
+          <GlowingBtn>PLAY</GlowingBtn>
         </HomeHiFiveContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>

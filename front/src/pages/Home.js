@@ -25,6 +25,7 @@ import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
+import SentencyPic from '../assets/sentency.gif';
 import Coupon from '../assets/main_coupon.svg';
 import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../config';
 import IsLogin from '../auth/IsLogin';
@@ -364,7 +365,7 @@ function Home() {
             <SwiperSlide className='slide'>Slide 4</SwiperSlide>
             <SwiperSlide className='slide'>Slide 5</SwiperSlide>
           </Swiper>
-          <GlowingBtn>PLAY</GlowingBtn>
+          <GlowingBtn onClick={() => navigate('/sentency')}>PLAY</GlowingBtn>
         </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer>
@@ -398,7 +399,7 @@ function Home() {
             <SwiperSlide className='slide'>Slide 4</SwiperSlide>
             <SwiperSlide className='slide'>Slide 5</SwiperSlide>
           </Swiper>
-          <GlowingBtn>PLAY</GlowingBtn>
+          <GlowingBtn onClick={() => navigate('/hi-five')}>PLAY</GlowingBtn>
         </HomeHiFiveContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeSpeedoodleContainer></HomeSpeedoodleContainer>

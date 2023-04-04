@@ -149,7 +149,7 @@ function NavBar() {
       </NavItemGroup>
 
       <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
-      {user !== '' ? (
+      {user !== '' && user !== null ? (
         <>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}

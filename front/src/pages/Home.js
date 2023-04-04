@@ -39,7 +39,7 @@ function Home() {
   const [user, setUser] = useRecoilState(userState);
   const [successRefresh, setSuccessRefresh] = useState(false);
   const [passAccess, setPassAccess] = useState(false);
-  const [coupon, setCoupon] = useState();
+  const [coupon, setCoupon] = useState(null);
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
   const scrollRef = useRef();
@@ -52,14 +52,12 @@ function Home() {
         },
       })
       .then((res) => {
-        console.log(res);
-        setCoupon(res.data.user.coupon);
+        // console.log(res);
+        setCoupon(() => res.data.user.coupon);
       });
   };
 
   const checkRefreshToken = () => {
-    let result;
-    console.log('리프레시 하러옴?');
     axios
       .post(
         `${API_URL}/user/refresh`,
@@ -74,7 +72,6 @@ function Home() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data['access-token'], '어세스 가져옴');
           setCookie('accessToken', res.data['access-token'], 1);
           setSuccessRefresh(() => true);
         } else if (res.status === 202) {
@@ -82,7 +79,6 @@ function Home() {
           delCookie('refreshToken');
           setUser('');
           navigate('/');
-          setSuccessRefresh(false);
         }
       })
       .catch((err) => {
@@ -91,7 +87,6 @@ function Home() {
   };
 
   const checkAccessToken = () => {
-    console.log('어세스토큰 검사중');
     axios
       .post(`${API_URL}/user/check`, {
         headers: {
@@ -100,14 +95,11 @@ function Home() {
       })
       .then((res) => {
         if (res.status === 200) {
-          console.log('토큰 유효함');
-          setPassAccess(true);
+          setPassAccess(() => true);
         } else if (res.status === 202) {
-          console.log('토큰 유효 안함');
-          if (checkRefreshToken()) {
-            if (successRefresh) {
-              setPassAccess(true);
-            }
+          checkRefreshToken();
+          if (successRefresh) {
+            setPassAccess(() => true);
           }
         }
       })
@@ -119,13 +111,19 @@ function Home() {
   useEffect(() => {
     if (user !== '' && user !== null) {
       checkAccessToken();
-      console.log(passAccess, '어세스갱신됨?');
+
       if (passAccess) {
-        console.log('쿠폰 확인');
         getCouponCnt();
       }
     }
+    return () => {
+      if (coupon === null) {
+        setSuccessRefresh(false);
+      }
+    };
+  }, [successRefresh]);
 
+  useEffect(() => {
     // getCouponCnt();
     const wheelHandler = (e) => {
       e.preventDefault();
@@ -208,8 +206,8 @@ function Home() {
     scrollRefCurrent.addEventListener('wheel', wheelHandler);
     return () => {
       scrollRefCurrent.removeEventListener('wheel', wheelHandler);
-      setPassAccess(false);
-      setSuccessRefresh(false);
+      // setPassAccess(() => false);
+      // setSuccessRefresh(() => false);
     };
   }, []);
 

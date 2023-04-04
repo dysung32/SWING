@@ -53,6 +53,13 @@ function SpeedoodleGameInfo(props) {
     setIsMode(props.propMode);
   }, [props.propMode])
 
+  useEffect(() => {
+    if(props.isStart !== null){
+      setBgColor(`${colors.gameBlue100}`);
+      setIsGameStart(true);
+    }
+  },[props.isStart])
+
   // const getRoomDetail = () => {
   //   // 룸상세 정보 가져오는 axios
   //   // axios.get(API_URL)
@@ -83,10 +90,10 @@ function SpeedoodleGameInfo(props) {
         if (res.status === 200) {
           console.log('방시작! 잠굴게요!');
           handleGameInfo();
-          setTimeout(() => {
-            setBgColor(`${colors.gameBlue100}`);
-            setIsGameStart(true);
-          }, 1000);
+          // setTimeout(() => {
+          //   setBgColor(`${colors.gameBlue100}`);
+          //   setIsGameStart(true);
+          // }, 1000);
         }
       })
       .catch((err) => console.error(err));
@@ -102,6 +109,7 @@ function SpeedoodleGameInfo(props) {
       .catch((err) => console.error(err));
   };
 
+  //채팅이 칸너머 갈 경우 자동 스크롤
   const scrollToBottom = () => {
     messages.current?.scrollIntoView({behavior: 'smooth'});
   }

@@ -11,7 +11,6 @@ import { H1, H2, H4, H5, P1, P2, SmText } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { noWait } from 'recoil';
 import { API_URL, getCookie } from '../config';
 import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
@@ -26,10 +25,8 @@ function SpeedoodleRoom() {
   const [userList, setUserList] = useState([]);
   const [changeUser, setChangeUser] = useState(null);
   const [propMode, setPropMode] = useState(null);
+  const [isStart, setIsStart] = useState(null);
 
-  // const sock = new SockJS(`${API_URL}/speedoodle/room`);
-
-  // stomp.reconnect_delay(1000);
   const stompRef = useRef(null);
   const roomUrl = new URL(window.location.href).pathname.split('/');
   const lengthUrl = roomUrl.length;
@@ -47,12 +44,7 @@ function SpeedoodleRoom() {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data);
-          if(res.data.chatUserList === null) {
-            setUserList([]);
-          }
-          else{
-            setUserList(() => res.data.chatUserList);
-          }
+          setUserList(() => res.data.chatUserList);
           setGameRoomInfo(() => res.data);
         }
       })
@@ -69,15 +61,14 @@ function SpeedoodleRoom() {
     if(changeUser !== null){
       if(changeUser.messageType === 'ENTER'){
         if(changeUser.userId !== user.userId){
-          
+          const tempUser = {
+            userId: changeUser.userId,
+            nickname: changeUser.nickname,
+            profileImageUrl: changeUser.profileImageUrl,
+            roomId: room_id,
+          }
+          setUserList([...userList, tempUser]);  
         }
-        const tempUser = {
-          userId: changeUser.userId,
-          nickname: changeUser.nickname,
-          profileImageUrl: changeUser.profileImageUrl,
-          roomId: room_id,
-        }
-        setUserList([...userList, tempUser]);  
       }
       else if(changeUser.messageType === 'LEAVE'){
         console.log('나가는거 봤다')
@@ -92,6 +83,7 @@ function SpeedoodleRoom() {
     }
   },[changeUser]);
 
+  //웹소켓 오픈하고 서버에 연결
   const stompConnect = () => {
     try {
       const stomp = Stomp.over(function () {
@@ -126,6 +118,9 @@ function SpeedoodleRoom() {
             else if(msObj.messageType === 'MODE') {
               setPropMode(msObj.data);
             }
+            else if(msObj.messageType === 'START') {
+              setIsStart(true);
+            }
             console.log(msObj);
           },
           {}
@@ -137,6 +132,7 @@ function SpeedoodleRoom() {
     }
   };
 
+  //웹소켓 연결 끊기
   const stompDisconnect = () => {
     try {
       console.log("나간다")
@@ -157,6 +153,7 @@ function SpeedoodleRoom() {
     } catch (error) {}
   };
 
+  //일반 채팅 보낼때
   const SendMessage = () => {
     // stomp.debug = null;
     const data = {
@@ -174,6 +171,7 @@ function SpeedoodleRoom() {
     }
   };
 
+  //모드 변경 할 때
   const ModeMessage = (value) => {
     const data = {
       messageType: 'MODE',
@@ -189,6 +187,7 @@ function SpeedoodleRoom() {
     }
   };
 
+  //SpeedoodleRoom이 시작될때 
   useEffect(() => {
     if (!stompRef.current) {
       stompConnect();
@@ -268,6 +267,7 @@ function SpeedoodleRoom() {
                   SendMessage={SendMessage}
                   ModeMessage={ModeMessage}
                   propMode = {propMode}
+                  isStart = {isStart}
                   // isMode={isMode}
                 ></SpeedoodleGameInfo>
               )}

@@ -27,8 +27,12 @@ function NavBar() {
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 
   useEffect(() => {
-    setIsLogin(IsLogin());
-  }, []);
+    if (user !== null) {
+      setIsLogin(IsLogin());
+    } else {
+      setIsLogin(() => false);
+    }
+  }, [user]);
 
   const onClickLogo = () => {
     const currentUrl = window.location.href;
@@ -95,7 +99,7 @@ function NavBar() {
         if (res.status === 200) {
           delCookie('accessToken');
           delCookie('refreshToken');
-          setUser('');
+          setUser(null);
           setIsLogin(false);
           navigate('/');
         }
@@ -145,7 +149,7 @@ function NavBar() {
       </NavItemGroup>
 
       <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
-      {isLogin ? (
+      {user !== '' ? (
         <>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}

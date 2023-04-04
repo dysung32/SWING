@@ -9,6 +9,7 @@ import {
   LogInWrapper,
   LogInContainer,
   ExpImg,
+  RightContainer,
   LogoImg,
   LogInBtnContainer,
   LogInBtn,
@@ -17,7 +18,7 @@ import {
 import { RoundLogo } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H5 } from '../styles/Fonts';
-import Google from '../assets/google_icon.png';
+
 import Kakao from '../assets/kakaotalk_icon.png';
 import { API_URL, setCookie, getCookie } from '../config';
 
@@ -75,15 +76,17 @@ function LogIn() {
       <LogInWrapper>
         <LogInContainer>
           <ExpImg />
-          <LogoImg>
-            <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
-          </LogoImg>
-          <LogInBtnContainer>
-            <LogInBtn color='#F7E600' onClick={kakaoLogin}>
+          <RightContainer>
+            <LogoImg>
+              <RoundLogo alt='logo' onClick={onClickLogo} size='70%' />
+            </LogoImg>
+            <LogInBtn onClick={kakaoLogin}>
               <SocialLogoImg src={Kakao} alt='kakao' />
-              <H5 align='center'>카카오로 시작하기</H5>
+              <H5 align='center' margin='0 0 0 1rem'>
+                카카오로 시작하기
+              </H5>
             </LogInBtn>
-          </LogInBtnContainer>
+          </RightContainer>
         </LogInContainer>
       </LogInWrapper>
     </>

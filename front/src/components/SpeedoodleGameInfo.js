@@ -109,15 +109,16 @@ function SpeedoodleGameInfo(props) {
   //방 나가기
   const exitRoom = () => {
     setIsGameStart(false);
-    axios
-      .delete(`${API_URL}/doodle/room/leave/${roomInfo.roomId}/${user.userId}`)
-      .then((res) => {
-        if (res.status === 200) {
-          props.stompDisconnect();
-          console.log('방퇴장합니다!');
-        }
-      })
-      .catch((err) => console.error(err));
+    // axios
+    //   .delete(`${API_URL}/doodle/room/leave/${roomInfo.roomId}/${user.userId}`)
+    //   .then((res) => {
+    //     if (res.status === 200) {
+          
+    //     }
+    //   })
+    //   .catch((err) => console.error(err));
+    props.stompDisconnect();
+    console.log('방퇴장합니다!');
     navigate('/speedoodle');
   };
   // 보낼 메세지 저장해놓기

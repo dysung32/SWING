@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { SpeedoodleWrapper } from '../styles/SpeedoodleEmotion';
@@ -16,11 +17,15 @@ import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
 
 function SpeedoodleRoom() {
+  const navigate = useNavigate();
   const [gameRoomInfo, setGameRoomInfo] = useState({});
   const [chatInput, setChatInput] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
   const [chatData, setChatData] = useState([]);
   const [user, setUser] = useRecoilState(userState);
+  const [userList, setUserList] = useState([]);
+  const [changeUser, setChangeUser] = useState(null);
+  const [propMode, setPropMode] = useState(null);
 
   // const sock = new SockJS(`${API_URL}/speedoodle/room`);
 
@@ -38,9 +43,16 @@ function SpeedoodleRoom() {
 
   const getRoomInfo = async () => {
     await axios
-      .get(`${API_URL}/doodle/room/info/${room_id}`)
+      .get(`${API_URL}/doodle/room/info/${room_id}/${user.userId}`)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data);
+          if(res.data.chatUserList === null) {
+            setUserList([]);
+          }
+          else{
+            setUserList(() => res.data.chatUserList);
+          }
           setGameRoomInfo(() => res.data);
         }
       })
@@ -49,22 +61,72 @@ function SpeedoodleRoom() {
       });
   };
 
+  useEffect(() => {
+    console.log(userList);
+  }, [userList]);
+
+  useEffect(() => {
+    if(changeUser !== null){
+      if(changeUser.messageType === 'ENTER'){
+        if(changeUser.userId !== user.userId){
+          
+        }
+        const tempUser = {
+          userId: changeUser.userId,
+          nickname: changeUser.nickname,
+          profileImageUrl: changeUser.profileImageUrl,
+          roomId: room_id,
+        }
+        setUserList([...userList, tempUser]);  
+      }
+      else if(changeUser.messageType === 'LEAVE'){
+        console.log('나가는거 봤다')
+        if(changeUser.nickname === gameRoomInfo.roomInfo.leaderNickname){
+          navigate('/speedoodle');
+        }
+        else{
+          const tempList  =  userList.filter(user => user.userId !== changeUser.userId);
+          setUserList(tempList);
+        }
+      }
+    }
+  },[changeUser]);
+
   const stompConnect = () => {
     try {
       const stomp = Stomp.over(function () {
         return new SockJS(`${API_URL}/speedoodle/room`);
       });
       stomp.connect({}, (message) => {
-        console.log(message);
+        const data = {
+          messageType: 'ENTER',
+          userId: `${user.userId}`,
+          nickname: `${user.nickname}`,
+          profileImageUrl: `${user.profileImageUrl}`,
+          roomId: room_id,
+        }
+        stompRef.current.send('/pub/send', {}, JSON.stringify(data));
         console.log('STOMP connection established');
         stomp.subscribe(
           `/sub/${room_id}`,
           (Ms) => {
             const msObj = JSON.parse(Ms.body);
-            setChatData((chatData) => [
-              ...chatData,
-              [msObj.publisher, msObj.message],
-            ]);
+            if(msObj.messageType ==='ENTER') {
+              setChangeUser(msObj);
+            }
+            else if(msObj.messageType === 'LEAVE') {
+              setChangeUser(msObj);
+            }
+            else if(msObj.messageType === 'COMMON') {
+              setChatData((chatData) => [
+                ...chatData,
+                [msObj.publisher, msObj.message],
+              ]);
+            }
+            else if(msObj.messageType === 'MODE') {
+              setPropMode(msObj.data);
+            }
+            console.log(msObj);
           },
           {}
         );
@@ -77,19 +139,47 @@ function SpeedoodleRoom() {
 
   const stompDisconnect = () => {
     try {
-      stompRef.disconnect(() => {
-        stompRef.unsubscribe(`sub/${room_id}`);
-      }, {});
+      console.log("나간다")
+      const data = {
+        messageType: 'LEAVE',
+        userId: `${user.userId}`,
+        nickname: `${user.nickname}`,
+        profileImageUrl: `${user.profileImageUrl}`,
+        roomId: room_id,
+      }
+      console.log(data);
+      stompRef.current.send('/pub/send', {}, JSON.stringify(data));
+      stompRef.current.disconnect(() => {
+      console.log('STOMP connection closed');
+    }, {
+      subscriptionId: `sub/${room_id}`
+    });
     } catch (error) {}
   };
 
   const SendMessage = () => {
     // stomp.debug = null;
     const data = {
+      messageType: 'COMMON',
       roomId: room_id,
       publisher: user.nickname,
       message: chatInput,
     };
+    if (stompRef.current?.connected) {
+      console.log(stompRef.current.connected);
+      stompRef.current.send('/pub/send', {}, JSON.stringify(data));
+    } else {
+      console.log(stompRef.current.connected);
+      console.log('STOMP connection is not open');
+    }
+  };
+
+  const ModeMessage = (value) => {
+    const data = {
+      messageType: 'MODE',
+      data: value,
+      roomId: room_id,
+    }
     if (stompRef.current?.connected) {
       console.log(stompRef.current.connected);
       stompRef.current.send('/pub/send', {}, JSON.stringify(data));
@@ -105,7 +195,9 @@ function SpeedoodleRoom() {
     }
 
     console.log(stompRef.current.connected);
-    return () => {};
+    return () => {
+      
+    };
   }, []);
 
   const preventClose = (e) => {
@@ -153,7 +245,8 @@ function SpeedoodleRoom() {
           {gameRoomInfo?.roomInfo ? (
             <>
               <SpeedoodleUser
-                data={gameRoomInfo?.chatUserList}
+                leader={gameRoomInfo?.roomInfo.leaderNickname}
+                data={userList}
               ></SpeedoodleUser>
 
               {isGameStart ? (
@@ -168,10 +261,13 @@ function SpeedoodleRoom() {
                   gameInfo={gameRoomInfo.roomInfo}
                   // start={isGameStart}
                   // setIsGameStart={setIsGameStart}
-                  SendMessage={SendMessage}
                   chatInput={chatInput}
                   setChatInput={setChatInput}
                   chatData={chatData}
+                  stompDisconnect = {stompDisconnect}
+                  SendMessage={SendMessage}
+                  ModeMessage={ModeMessage}
+                  propMode = {propMode}
                   // isMode={isMode}
                 ></SpeedoodleGameInfo>
               )}

@@ -6,12 +6,17 @@ import { useRecoilState } from 'recoil';
 import { API_URL, getCookie, delCookie } from '.././config';
 
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
-import { Nav, NavItemGroup, NavItem, NavSubItems, NavLeaderItem } from '../styles/NavEmotion';
+import {
+  Nav,
+  NavItemGroup,
+  NavItem,
+  NavSubItems,
+  NavLeaderItem,
+} from '../styles/NavEmotion';
 import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { BasicProfile } from '../config';
 import IsLogin from '../auth/IsLogin';
-import ExitRoom from './ExitRoom';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -22,8 +27,12 @@ function NavBar() {
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 
   useEffect(() => {
-    setIsLogin(IsLogin());
-  }, []);
+    if (user !== null) {
+      setIsLogin(IsLogin());
+    } else {
+      setIsLogin(() => false);
+    }
+  }, [user]);
 
   const onClickLogo = () => {
     const currentUrl = window.location.href;
@@ -43,11 +52,6 @@ function NavBar() {
     }
     navigate('/');
   };
-
-  // const exitRoom = () => {
-
-  //   ExitRoom(roomId, user.userId);
-  // };
 
   const onClickSentency = () => {
     if (isLogin) {
@@ -85,8 +89,6 @@ function NavBar() {
   };
 
   const Logout = async () => {
-    // const currentUrl = window.location.href;
-    // if (currentUrl.indexOf('localhost') == -1) {
     await axios
       .get(`${API_URL}/user/logout/${user.userId}`, {
         headers: {
@@ -97,30 +99,12 @@ function NavBar() {
         if (res.status === 200) {
           delCookie('accessToken');
           delCookie('refreshToken');
-          setUser('');
+          setUser(null);
           setIsLogin(false);
           navigate('/');
         }
       })
       .catch((e) => console.error(e));
-    // } else {
-    //   await axios
-    //     .get(`http://localhost:3000/user/logout/${user.userId}`, {
-    //       headers: {
-    //         'Access-Token': getCookie('accessToken'),
-    //       },
-    //     })
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //         delCookie('accessToken');
-    //         delCookie('refreshToken');
-    //         setUser('');
-    //         setIsLogin(false);
-    //         navigate('/');
-    //       }
-    //     })
-    //     .catch((e) => console.error(e));
-    // }
   };
 
   return (
@@ -135,17 +119,29 @@ function NavBar() {
         </NavLeaderItem>
         <NavSubItems hover={hoverGame} top='70%' left='10%'>
           <NavItem onClick={onClickSentency}>
-            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
+            <H4
+              color={colors.white}
+              outlineWeight='2'
+              outline={colors.gameBlue500}
+            >
               Sentency
             </H4>
           </NavItem>
           <NavItem onClick={onClickHifive}>
-            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
+            <H4
+              color={colors.white}
+              outlineWeight='2'
+              outline={colors.gameBlue500}
+            >
               Hi-Five
             </H4>
           </NavItem>
           <NavItem onClick={onClickSpeedoodle}>
-            <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
+            <H4
+              color={colors.white}
+              outlineWeight='2'
+              outline={colors.gameBlue500}
+            >
               Speedoodle
             </H4>
           </NavItem>
@@ -153,7 +149,7 @@ function NavBar() {
       </NavItemGroup>
 
       <RoundLogo alt='logo' onClick={onClickLogo} size='7rem' />
-      {isLogin ? (
+      {user !== '' && user !== null ? (
         <>
           <NavItemGroup
             onMouseLeave={() => setHoverProfile(() => false)}
@@ -194,7 +190,11 @@ function NavBar() {
         </>
       ) : (
         <NavItem onClick={onClickLogIn}>
-          <H4 color={colors.white} outlineWeight='2' outline={colors.gameBlue500}>
+          <H4
+            color={colors.white}
+            outlineWeight='2'
+            outline={colors.gameBlue500}
+          >
             LogIn
           </H4>
         </NavItem>

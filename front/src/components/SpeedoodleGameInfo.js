@@ -23,7 +23,6 @@ import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { API_URL, getCookie } from '../config';
 import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
-import ExitRoom from './ExitRoom';
 
 import { SendFill } from 'react-bootstrap-icons';
 function SpeedoodleGameInfo(props) {
@@ -33,16 +32,40 @@ function SpeedoodleGameInfo(props) {
   const [roomInfo, setRoomInfo] = useState(props.gameInfo);
   const [bgColor, setBgColor] = useState(null);
   const [gameData, setGameData] = useState({});
-
+  
+  const [limits, setLimits] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+
   const [user, setUser] = useRecoilState(userState);
+
+  // const user = JSON.parse(window.localStorage.getItem('user'));
+  const messages = useRef(null);
+
+  // useEffect(() => {
+  //   getRoomDetail();
+  // }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [props.chatData])
+  
+  useEffect(() => {
+    setIsMode(props.propMode);
+  }, [props.propMode])
+
+  // const getRoomDetail = () => {
+  //   // 룸상세 정보 가져오는 axios
+  //   // axios.get(API_URL)
+  // };
 
   // 모드 변경
   const onClickEasyMode = () => {
     setIsMode(0);
+    props.ModeMessage(0);
   };
   const onClickHardMode = () => {
     setIsMode(1);
+    props.ModeMessage(1);
   };
 
   const linkCopy = () => {
@@ -71,7 +94,7 @@ function SpeedoodleGameInfo(props) {
   // 게임 시작(게임정보가져오기)
   const handleGameInfo = async () => {
     await axios
-      .get(`${API_URL}/doodle/start/${roomInfo.name}`)
+      .get(`${API_URL}/doodle/start/${roomInfo.roomId}/${roomInfo.name}`)
       .then((res) => {
         console.log('게임시작 정보', res);
         setGameData(res.data);
@@ -79,9 +102,24 @@ function SpeedoodleGameInfo(props) {
       .catch((err) => console.error(err));
   };
 
+  const scrollToBottom = () => {
+    messages.current?.scrollIntoView({behavior: 'smooth'});
+  }
+
   //방 나가기
   const exitRoom = () => {
-    ExitRoom(roomInfo.roomId, user.userId);
+    setIsGameStart(false);
+    // axios
+    //   .delete(`${API_URL}/doodle/room/leave/${roomInfo.roomId}/${user.userId}`)
+    //   .then((res) => {
+    //     if (res.status === 200) {
+          
+    //     }
+    //   })
+    //   .catch((err) => console.error(err));
+    props.stompDisconnect();
+    console.log('방퇴장합니다!');
+    navigate('/speedoodle');
   };
   // 보낼 메세지 저장해놓기
   const saveMessage = (e) => {
@@ -140,36 +178,79 @@ function SpeedoodleGameInfo(props) {
                     기록이 됩니다.)
                   </P2>
                 </GameExplain>
-                <GameModeContainer>
-                  <GameMode
-                    fontColor={colors.gameBlue500}
-                    color={colors.gameBlue100}
-                    border={
-                      isMode === 1 ? 'none' : `3px solid ${colors.gameBlue500}`
-                    }
-                    onClick={onClickEasyMode}
-                  >
-                    <H6 align='center'>EASY MODE</H6>
-                    <P2 align='center' style={{ wordBreak: 'keep-all' }}>
-                      EASY MODE는 키워드가 영단어로 제시됩니다.
-                      <br /> 제한시간 20초
-                    </P2>
-                  </GameMode>
-                  <GameMode
-                    fontColor={colors.gameBlue500}
-                    color={colors.gamePink200}
-                    border={
-                      isMode === 1 ? `3px solid ${colors.gameBlue500}` : 'none'
-                    }
-                    onClick={onClickHardMode}
-                  >
-                    <H6 align='center'>HARD MODE</H6>
-                    <P2 align='center'>
-                      HARD MODE는 키워드가 영영사전의 뜻으로 제시됩니다. <br />
-                      제한시간 30초
-                    </P2>
-                  </GameMode>
-                </GameModeContainer>
+
+                {props.gameInfo.leaderNickname === user.nickname ? (
+                  <GameModeContainer>
+                    <GameMode
+                      fontColor={colors.gameBlue500}
+                      color={colors.gameBlue100}
+                      border={
+                        isMode === 1
+                          ? 'none'
+                          : `3px solid ${colors.gameBlue500}`
+                      }
+                      onClick={onClickEasyMode}
+                    >
+                      <H6 align='center'>EASY MODE</H6>
+                      <P2 align='center' style={{ wordBreak: 'keep-all' }}>
+                        EASY MODE는 키워드가 영단어로 제시됩니다.
+                        <br /> 제한시간 20초
+                      </P2>
+                    </GameMode>
+                    <GameMode
+                      fontColor={colors.gameBlue500}
+                      color={colors.gamePink200}
+                      border={
+                        isMode === 1
+                          ? `3px solid ${colors.gameBlue500}`
+                          : 'none'
+                      }
+                      onClick={onClickHardMode}
+                    >
+                      <H6 align='center'>HARD MODE</H6>
+                      <P2 align='center'>
+                        HARD MODE는 키워드가 영영사전의 뜻으로 제시됩니다.{' '}
+                        <br />
+                        제한시간 30초
+                      </P2>
+                    </GameMode>
+                  </GameModeContainer>
+                ) : (
+                  <GameModeContainer>
+                    <GameMode
+                      fontColor={colors.gameBlue500}
+                      color={colors.gameBlue100}
+                      border={
+                        isMode === 1
+                          ? 'none'
+                          : `3px solid ${colors.gameBlue500}`
+                      }
+                    >
+                      <H6 align='center'>EASY MODE</H6>
+                      <P2 align='center' style={{ wordBreak: 'keep-all' }}>
+                        EASY MODE는 키워드가 영단어로 제시됩니다.
+                        <br /> 제한시간 20초
+                      </P2>
+                    </GameMode>
+                    <GameMode
+                      fontColor={colors.gameBlue500}
+                      color={colors.gamePink200}
+                      border={
+                        isMode === 1
+                          ? `3px solid ${colors.gameBlue500}`
+                          : 'none'
+                      }
+                    >
+                      <H6 align='center'>HARD MODE</H6>
+                      <P2 align='center'>
+                        HARD MODE는 키워드가 영영사전의 뜻으로 제시됩니다.{' '}
+                        <br />
+                        제한시간 30초
+                      </P2>
+                    </GameMode>
+                  </GameModeContainer>
+                )}
+
                 <BtnContainer>
                   <div style={{ width: '60%' }}>
                     <CommonBtn
@@ -194,26 +275,38 @@ function SpeedoodleGameInfo(props) {
                       <P1 align='center'>나가기</P1>
                     </CommonBtn>
                   </div>
-                  <CommonBtn
-                    color={colors.gameBlue500}
-                    fontColor={colors.white}
-                    width='calc(40% - 1rem)'
-                    font='0.75'
-                    onClick={handleGameStart}
-                  >
-                    <H4 align='center'>시작하기</H4>
-                  </CommonBtn>
+
+                  {props.gameInfo.leaderNickname === user.nickname ? (
+                    <CommonBtn
+                      color={colors.gameBlue500}
+                      fontColor={colors.white}
+                      width='calc(40% - 1rem)'
+                      font='0.75'
+                      onClick={handleGameStart}
+                    >
+                      <H4 align='center'>시작하기</H4>
+                    </CommonBtn>
+                  ) : (
+                    <CommonBtn
+                      color={colors.gray500}
+                      fontColor={colors.white}
+                      width='calc(40% - 1rem)'
+                      font='0.75'
+                    >
+                      <H4 align='center'>시작하기</H4>
+                    </CommonBtn>
+                  )}
                 </BtnContainer>
               </RoomInfo>
               <Chat>
                 <ChattingContainer useRef={chatWindowRef}>
-                  {props.chatData.map((item, idx) => {
-                    return (
-                      <P2 key={idx}>
-                        {item[0]}: {item[1]}
-                      </P2>
-                    );
-                  })}
+                  {
+                    props.chatData.map((item,idx) => {
+                      return (
+                        <P2 ref={messages} key={idx}>{item[0]}: {item[1]}</P2>
+                      )
+                    })
+                  }
                 </ChattingContainer>
                 <ChattingInputContainer>
                   <ChatInput

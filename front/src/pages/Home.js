@@ -25,7 +25,13 @@ import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from '../assets/main_coupon.svg';
-import { API_URL, BasicProfile, getCookie } from '../config';
+import {
+  API_URL,
+  BasicProfile,
+  setCookie,
+  getCookie,
+  delCookie,
+} from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
@@ -34,13 +40,15 @@ function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useRecoilState(userState);
 
-  const [coupon, setCoupon] = useState();
-
   const [sentencyRankShow, setSentencyRankShow] = useState(false);
   const [hifiveRankShow, setHifiveRankShow] = useState(false);
 
   const [rankers, setRankers] = useState([]);
   const [myRank, setMyRank] = useState([]);
+
+  const [successRefresh, setSuccessRefresh] = useState(false);
+  const [passAccess, setPassAccess] = useState(false);
+  const [coupon, setCoupon] = useState(null);
 
   const [scrollIndex, setScrollIndex] = useState(1);
   const DIVIDER_HEIGHT = 5;
@@ -55,7 +63,62 @@ function Home() {
       })
       .then((res) => {
         console.log(res);
-        setCoupon(res.data.user.coupon);
+        setCoupon(() => res.data.user.coupon);
+      });
+  };
+
+  const checkRefreshToken = () => {
+    axios
+      .post(
+        `${API_URL}/user/refresh`,
+        {
+          userId: user.userId,
+        },
+        {
+          headers: {
+            'Refresh-Token': getCookie('refreshToken'),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setCookie('accessToken', res.data['access-token'], 1);
+          setSuccessRefresh(() => true);
+        } else if (res.status === 202) {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setUser(null);
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const checkAccessToken = () => {
+    axios
+      .post(
+        `${API_URL}/user/check`,
+        {},
+        {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.message === 'success') {
+          setPassAccess(() => true);
+        } else if (res.data.message === 'fail') {
+          checkRefreshToken();
+          if (successRefresh) {
+            setPassAccess(() => true);
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -98,7 +161,22 @@ function Home() {
   };
 
   useEffect(() => {
-    getCouponCnt();
+    if (user !== '' && user !== null) {
+      checkAccessToken();
+
+      if (passAccess) {
+        getCouponCnt();
+      }
+    }
+    return () => {
+      if (coupon === null && passAccess === false) {
+        setSuccessRefresh(() => false);
+      }
+    };
+  }, [successRefresh, passAccess]);
+
+  useEffect(() => {
+    // getCouponCnt();
     const wheelHandler = (e) => {
       e.preventDefault();
       const { deltaY } = e;
@@ -180,10 +258,10 @@ function Home() {
     scrollRefCurrent.addEventListener('wheel', wheelHandler);
     return () => {
       scrollRefCurrent.removeEventListener('wheel', wheelHandler);
+      // setPassAccess(() => false);
+      // setSuccessRefresh(() => false);
     };
   }, []);
-
-  console.log(user);
 
   return (
     <>
@@ -191,7 +269,12 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
+              <PlayerProfile
+                width={5}
+                height={5}
+                src={user.profileImageUrl}
+                onClick={() => navigate('/my-page')}
+              />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>

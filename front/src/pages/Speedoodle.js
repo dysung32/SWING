@@ -14,6 +14,7 @@ import {
   RoomIconContainer,
   CreateRoomContainer,
   FlexContainer,
+  HmmGif,
 } from '../styles/SpeedoodleEmotion';
 import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
 import { H1, H2, H3, H4, H5, P1, P2, SmText } from '../styles/Fonts';
@@ -536,8 +537,23 @@ function Speedoodle() {
               <H4>방만들기</H4>
             </CommonBtn>
           </FlexContainer>
-
-          <RoomContainer>{rooms}</RoomContainer>
+          {renderRoomList.length > 0 ? (
+            <RoomContainer>{rooms}</RoomContainer>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '25vh',
+              }}
+            >
+              <H3 align='center' color={colors.white}>
+                방 목록이 없습니다.
+              </H3>
+              <HmmGif />
+            </div>
+          )}
         </SpeedoodleContentContainer>
         <Pagination
           total={renderRoomList.length}

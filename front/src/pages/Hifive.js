@@ -19,11 +19,14 @@ import { colors } from "../styles/ColorPalette"
 import ModalBasic from "../components/ModalBasic"
 import { HeartFill } from 'react-bootstrap-icons';
 import LeaderBoard from '../components/LeaderBoard';
+import { AI_API_URL, API_URL, getCookie } from '../config';
+import { useRecoilState } from 'recoil';
+import { userState } from '../recoil';
+import axios from 'axios';
 
 function Hifive() {
   const navigate = useNavigate();
 
-  const score = [100, 100, 100, 1];
   const [imageSet, setImageSet] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isVibrating, setIsVibrating] = useState(false);
@@ -33,26 +36,76 @@ function Hifive() {
   const [answerStack, setAnswerStack] = useState([]);
   const [scoreStack, setScoreStack] = useState(0);
   const [wrongWords, setWrongWords] = useState([]);
-  const [resultValue,setresultValue] = useState(); 
+  const [resultValue,setresultValue] = useState();
+  const [chanceCnt, setChanceCnt] = useState(null); 
+  const [finalValue, setFinalValue] = useState(null);
+  const [userData, setUserData] = useRecoilState(userState);
+  const [modalLoading, setModalLoading] = useState(false);
 
-  // imageSet에 이미지를 저장
+  const [otherRank, setOtherRank] = useState();
+  const [mine, setMine] = useState();
+
+  const [tryCnt, setTryCnt] = useState(0);
+  const [corCnt, setCorCnt] = useState(0);
+
+  // 페이지가 렌더링 될 때 유저의 횟수를 호출
   useEffect(() => {
-    getImage()
-    .then((data) => {
-      console.log(data.wordList);
-      setImageSet(data.wordList);
+    axios({ 
+      url: `${API_URL}/user/five/${userData.userId}`,
+      method: 'GET',
+      headers: {
+        'Access-Token': getCookie('accessToken'),
+      }
+    })  
+    .then((res) => {
+      console.log(res.data);
+      setChanceCnt(res.data.fiveCnt);
     })
     .catch((err) => {
       console.log(err);
     })
   }, [])
 
+  // 유저의 횟수가 남아있는가 여부에 따라 값이 달라진다.
+  useEffect(() => {
+    if(chanceCnt === 0){
+      getResult();
+    }
+    else{
+      axios({
+        url: `${API_URL}/five`,
+        method: 'GET',
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setImageSet(res.data.wordList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  },[chanceCnt]);
+
   // 유저가 답을 작성하면 발생하는 함수
   const handleSubmit = (e) => {
     e.preventDefault();
-    getSimilarity()
-    .then((data) => {
-      handleAnswer(data.similarity);
+    let URL = `${AI_API_URL}/five/check?`;
+    imageSet.forEach(element => {
+      const content = element.content.replace('_',' ');        
+      URL += `solution=${content}&`;
+    });
+    URL += `answer=${inputValue}`;
+    setTryCnt(tryCnt+1);
+    
+    axios({
+      url: URL,
+      method: 'GET',
+    })
+    .then((res) => {
+      handleAnswer(res.data.similarity);
     })
     setInputValue('');
   }
@@ -79,6 +132,7 @@ function Hifive() {
       setBorderColor(colors.gamePink500);
       
       if(lifeStack - 1 === 0){
+        setLifeStack(lifeStack - 1);
         handleFailModal(tempSet);
       }else{
         setLifeStack(lifeStack-1);
@@ -102,7 +156,13 @@ function Hifive() {
       temp[idx][0] = Math.ceil(temp[idx][0]*maxSimilar);
       setImageCheck(temp);
       setBorderColor(colors.gamePink500);
-      setLifeStack(lifeStack-1);
+      
+      if(lifeStack - 1 === 0){
+        setLifeStack(lifeStack - 1);
+        handleFailModal(tempSet);
+      }else{
+        setLifeStack(lifeStack-1);
+      }
 
       const timeoutId = setTimeout(() => {
         temp[idx][1] = false;
@@ -113,22 +173,25 @@ function Hifive() {
       return () => clearTimeout(timeoutId);
     }
     else{
+      setCorCnt(corCnt+1);
       console.log(maxSimilar);
       const idx = imageSet.findIndex(obj => obj.content === maxKey);
       const answer = tempSet.splice(idx, 1);
       const answerCheck = temp.splice(idx, 1);
+      console.log(answerCheck);
       answerStack.push([answer[0].content, answer[0].meaningKr]);
       
       setScoreStack(scoreStack+answerCheck[0][0])
       setBorderColor(colors.gameBlue300);
       setImageSet(tempSet);
       setImageCheck(temp);
-      
-      if(imageSet.length - 1 === 0) {
-        setresultValue(true);
-      }
 
       const timeoutId = setTimeout(() => {
+        console.log(scoreStack);
+        if(imageSet.length-1 === 0) {
+          sendResult();
+        }
+
         setBorderColor("white");
       }, 500);
 
@@ -139,41 +202,101 @@ function Hifive() {
   //목숨이 다했을때 모달 띄우는 함수
   const handleFailModal = (tempSet) => {
     setWrongWords(tempSet);
-    setresultValue(false);
+    sendResult();
   }
 
-  // django로 api 호출을 하여 입력한 단어와 정답간에 유사도 판별
-  async function getSimilarity() {
-    try {
-
-      let URL = "http://j8a405.p.ssafy.io:8000/api/five/check?";
-      imageSet.forEach(element => {
-        const content = element.content.replace('_',' ');        
-        URL += `solution=${content}&`;
-      });
-      URL += `answer=${inputValue}`;
-      // console.log(URL);
-      const promise = await fetch(URL,{method: 'GET'});
-      const data = await promise.json();
-      return data;
+  // 유저가 결과를 전송할때 사용하는 함수
+  const sendResult = () => {
+    const FiveResultDto = {
+      userId: userData.userId,
+      dayScore: scoreStack,
+      dayTry: tryCnt,
+      dayCorrect: corCnt
     }
-    catch (error) {
-      console.log(error);
-      throw new Error("Api 호출 실패");
-    }
+    axios({
+      url: `${API_URL}/five`,
+      method: 'PUT',
+      data: FiveResultDto,
+      headers:{
+        'Access-Token': getCookie('accessToken'),
+      }
+    })
+    .then(() => {
+      getResult();
+    })
   }
 
-  async function getImage() {
-    try {
-      const promise = await fetch("http://j8a405.p.ssafy.io:8080/api/five",{method: 'GET'});
-      const data = await promise.json();
-      return data;
-    }
-    catch (error) {
-      console.log(error);
-      throw new Error("Api 호출 실패");
-    }
+  //서버로부터 오늘 결과 수신
+  const getResult = () => {
+    axios({
+      url:`${API_URL}/five/${userData.userId}`,
+      method:'GET',
+      headers:{
+        'Access-Token': getCookie('accessToken'),
+      }
+    })
+    .then((res) => {
+      console.log(res.data);
+      const others = res.data.fiveRankList;
+      const myRank = others.pop();
+      setOtherRank(others);
+      setMine(myRank);
+      setFinalValue(res.data.fiveStat);
+      console.log(others);
+      console.log(myRank);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
+
+  //finalValue에 변화가 생긴다는 뜻은 getResult가 호출되었다는 뜻
+  //모달을 불러오는 타이밍이 되었다는 뜻
+  useEffect(() => {
+    if(finalValue !== null){
+      if(finalValue.streak === 0){
+        setresultValue(false);
+        setModalLoading(true);
+      }
+      else{
+        setresultValue(true);
+        setModalLoading(true);
+      }
+    }
+  },[finalValue])
+
+  // // django로 api 호출을 하여 입력한 단어와 정답간에 유사도 판별
+  // async function getSimilarity() {
+  //   try {
+
+  //     let URL = "http://j8a405.p.ssafy.io:8000/api/five/check?";
+  //     imageSet.forEach(element => {
+  //       const content = element.content.replace('_',' ');        
+  //       URL += `solution=${content}&`;
+  //     });
+  //     URL += `answer=${inputValue}`;
+  //     // console.log(URL);
+  //     const promise = await fetch(URL,{method: 'GET'});
+  //     const data = await promise.json();
+  //     return data;
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     throw new Error("Api 호출 실패");
+  //   }
+  // }
+
+  // async function getImage() {
+  //   try {
+  //     const promise = await fetch("http://j8a405.p.ssafy.io:8080/api/five",{method: 'GET'});
+  //     const data = await promise.json();
+  //     return data;
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     throw new Error("Api 호출 실패");
+  //   }
+  // }
 
   return (
     <>
@@ -182,28 +305,30 @@ function Hifive() {
         <H1 color={colors.gamePink500}
         padding={"0rem 0rem 2rem 0rem"}>SUCCESS</H1>
         <HifiveModalContainer>
-          <LeaderBoard/>
-            <HifiveStatistics width={25} color={colors.gameBlue200}>
-              <H2 color={colors.gameBlue500}>통계</H2>
-              <div className='resultBox'>
-                <div className='resultValue'>
-                  <H3 color={colors.gameBlue500}>점수</H3>
-                  <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+        {modalLoading && <LeaderBoard others={otherRank} mine={mine} />}
+            { modalLoading && 
+              <HifiveStatistics width={25} color={colors.gameBlue200}>
+                <H2 color={colors.gameBlue500}>통계</H2>
+                <div className='resultBox'>
+                  <div className='resultValue'>
+                    <H3 color={colors.gameBlue500}>점수</H3>
+                    <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+                  </div>
+                  <div className='resultValue'>
+                  <H3 color={colors.gameBlue500}>누적 점수</H3>
+                  <H3 color={colors.gameBlue500}>{finalValue.totalScore}점</H3>
+                  </div>
+                  <div className='resultValue'>
+                  <H3 color={colors.gameBlue500}>누적 정답률</H3>
+                  <H3 color={colors.gameBlue500}>{Math.round((finalValue.totalCorrect / finalValue.totalTry) * 100)}%</H3>
+                  </div>
+                  <div className='resultValue'>
+                    <H3 color={colors.gameBlue500}>연속 성공 횟수</H3>
+                    <H3 color={colors.gameBlue500}>{finalValue.streak}회</H3>
+                  </div>
                 </div>
-                <div className='resultValue'>
-                <H3 color={colors.gameBlue500}>누적 점수</H3>
-                <H3 color={colors.gameBlue500}>{score[1]}점</H3>
-                </div>
-                <div className='resultValue'>
-                <H3 color={colors.gameBlue500}>정답률</H3>
-                <H3 color={colors.gameBlue500}>{score[2]}%</H3>
-                </div>
-                <div className='resultValue'>
-                  <H3 color={colors.gameBlue500}>연속 성공 횟수</H3>
-                  <H3 color={colors.gameBlue500}>{score[3]}회</H3>
-                </div>
-              </div>
-          </HifiveStatistics>
+            </HifiveStatistics> 
+          }
         </HifiveModalContainer>
         <CommonBtn width="34.7%"
         onClick={() => navigate('/')}
@@ -220,28 +345,30 @@ function Hifive() {
         <H1 color={colors.gamePink500}
         padding={"0rem 0rem 2rem 0rem"}>FAILED</H1>
         <HifiveModalContainer>
-          <LeaderBoard/>
-            <HifiveStatistics width={25} color={colors.gameBlue200}>
-              <H2 color={colors.gameBlue500}>통계</H2>
-              <div className='resultBox'>
-                <div className='resultValue'>
-                  <H3 color={colors.gameBlue500}>점수</H3>
-                  <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+          {modalLoading && <LeaderBoard others={otherRank} mine={mine} />}
+            { modalLoading && 
+              <HifiveStatistics width={25} color={colors.gameBlue200}>
+                <H2 color={colors.gameBlue500}>통계</H2>
+                <div className='resultBox'>
+                  <div className='resultValue'>
+                    <H3 color={colors.gameBlue500}>점수</H3>
+                    <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+                  </div>
+                  <div className='resultValue'>
+                  <H3 color={colors.gameBlue500}>누적 점수</H3>
+                  <H3 color={colors.gameBlue500}>{finalValue.totalScore}점</H3>
+                  </div>
+                  <div className='resultValue'>
+                  <H3 color={colors.gameBlue500}>누적 정답률</H3>
+                  <H3 color={colors.gameBlue500}>{Math.round((finalValue.totalCorrect / finalValue.totalTry) * 100)}%</H3>
+                  </div>
+                  <div className='resultValue'>
+                    <H3 color={colors.gameBlue500}>연속 성공 횟수</H3>
+                    <H3 color={colors.gameBlue500}>{finalValue.streak}회</H3>
+                  </div>
                 </div>
-                <div className='resultValue'>
-                <H3 color={colors.gameBlue500}>누적 점수</H3>
-                <H3 color={colors.gameBlue500}>{score[1]}점</H3>
-                </div>
-                <div className='resultValue'>
-                <H3 color={colors.gameBlue500}>정답률</H3>
-                <H3 color={colors.gameBlue500}>{score[2]}%</H3>
-                </div>
-                <div className='resultValue'>
-                  <H3 color={colors.gameBlue500}>연속 성공 횟수</H3>
-                  <H3 color={colors.gameBlue500}>{score[3]}회</H3>
-                </div>
-              </div>
-          </HifiveStatistics>
+            </HifiveStatistics> 
+          }
           {/* 실패했을 때의 모달 */}
           <HifiveStatistics width={12} color={colors.gameBlue200}>
             <H2 color={colors.gameBlue500}>오답</H2>

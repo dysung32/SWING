@@ -32,16 +32,40 @@ function SpeedoodleGameInfo(props) {
   const [roomInfo, setRoomInfo] = useState(props.gameInfo);
   const [bgColor, setBgColor] = useState(null);
   const [gameData, setGameData] = useState({});
-
+  
+  const [limits, setLimits] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+
   const [user, setUser] = useRecoilState(userState);
+
+  // const user = JSON.parse(window.localStorage.getItem('user'));
+  const messages = useRef(null);
+
+  // useEffect(() => {
+  //   getRoomDetail();
+  // }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [props.chatData])
+  
+  useEffect(() => {
+    setIsMode(props.propMode);
+  }, [props.propMode])
+
+  // const getRoomDetail = () => {
+  //   // 룸상세 정보 가져오는 axios
+  //   // axios.get(API_URL)
+  // };
 
   // 모드 변경
   const onClickEasyMode = () => {
     setIsMode(0);
+    props.ModeMessage(0);
   };
   const onClickHardMode = () => {
     setIsMode(1);
+    props.ModeMessage(1);
   };
 
   const linkCopy = () => {
@@ -78,6 +102,10 @@ function SpeedoodleGameInfo(props) {
       .catch((err) => console.error(err));
   };
 
+  const scrollToBottom = () => {
+    messages.current?.scrollIntoView({behavior: 'smooth'});
+  }
+
   //방 나가기
   const exitRoom = () => {
     setIsGameStart(false);
@@ -85,6 +113,7 @@ function SpeedoodleGameInfo(props) {
       .delete(`${API_URL}/doodle/room/leave/${roomInfo.roomId}/${user.userId}`)
       .then((res) => {
         if (res.status === 200) {
+          props.stompDisconnect();
           console.log('방퇴장합니다!');
         }
       })
@@ -270,13 +299,13 @@ function SpeedoodleGameInfo(props) {
               </RoomInfo>
               <Chat>
                 <ChattingContainer useRef={chatWindowRef}>
-                  {props.chatData.map((item, idx) => {
-                    return (
-                      <P2 key={idx}>
-                        {item[0]}: {item[1]}
-                      </P2>
-                    );
-                  })}
+                  {
+                    props.chatData.map((item,idx) => {
+                      return (
+                        <P2 ref={messages} key={idx}>{item[0]}: {item[1]}</P2>
+                      )
+                    })
+                  }
                 </ChattingContainer>
                 <ChattingInputContainer>
                   <ChatInput

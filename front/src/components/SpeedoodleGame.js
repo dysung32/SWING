@@ -31,7 +31,7 @@ function SpeedoodleGame(props) {
   const [finalResultModalShow, setFinalResultModalShow] = useState(false);
   const [readyGame, setReadyGame] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
-  // const [keyword, setKeyword] = useState(props.keywords[0].content);
+  const [keyword, setKeyword] = useState(props.keywords[0].content);
   const [keywordIdx, setKeywordIdx] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 

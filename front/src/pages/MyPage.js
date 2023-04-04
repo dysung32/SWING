@@ -28,13 +28,7 @@ import { colors } from '../styles/ColorPalette';
 
 import { PencilSquare } from 'react-bootstrap-icons';
 import ModalClosable from '../components/ModalClosable';
-import {
-  API_URL,
-  BasicProfile,
-  setCookie,
-  getCookie,
-  delCookie,
-} from '../config';
+import { API_URL, BasicProfile, getCookie } from '../config';
 import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -48,9 +42,6 @@ function MyPage() {
 
   const [user, setUser] = useRecoilState(userState);
   const setUserRecoilState = useSetRecoilState(userState);
-
-  const [successRefresh, setSuccessRefresh] = useState(false);
-  const [passAccess, setPassAccess] = useState(false);
 
   const [nicknameRegExpTest, setNicknameRegExpTest] = useState();
   const [confirmed, setConfirmed] = useState(false);
@@ -119,63 +110,6 @@ function MyPage() {
       </SingleHistoryList>
     );
   });
-
-  // access-token 유효성 검사
-
-  const checkRefreshToken = () => {
-    axios
-      .post(
-        `${API_URL}/user/refresh`,
-        {
-          userId: user.userId,
-        },
-        {
-          headers: {
-            'Refresh-Token': getCookie('refreshToken'),
-          },
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setCookie('accessToken', res.data['access-token'], 1);
-          setSuccessRefresh(() => true);
-        } else if (res.status === 202) {
-          delCookie('accessToken');
-          delCookie('refreshToken');
-          setUser(null);
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const checkAccessToken = () => {
-    axios
-      .post(
-        `${API_URL}/user/check`,
-        {},
-        {
-          headers: {
-            'Access-Token': getCookie('accessToken'),
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.message === 'success') {
-          setPassAccess(() => true);
-        } else if (res.data.message === 'fail') {
-          checkRefreshToken();
-          if (successRefresh) {
-            setPassAccess(() => true);
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   const getCouponCnt = () => {
     axios
@@ -391,20 +325,9 @@ function MyPage() {
       .catch((err) => {});
   };
 
-  useEffect(() => {
-    if (user !== '' && user !== null) {
-      checkAccessToken();
-
-      if (passAccess) {
-        getCouponCnt();
-      }
-    }
-    return () => {
-      if (coupon === null && passAccess === false) {
-        setSuccessRefresh(() => false);
-      }
-    };
-  }, [successRefresh, passAccess]);
+  useState(() => {
+    getCouponCnt();
+  }, []);
 
   return (
     <>

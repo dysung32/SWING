@@ -145,6 +145,30 @@ export const HomeRankBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: bounce 1s infinite;
+
+  .text {
+    position: absolute;
+    top: -2rem;
+    font-size: 1.5rem;
+    color: ${colors.white};
+  }
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      -webkit-transform: translateY(0);
+    }
+    40% {
+      -webkit-transform: translateY(-0.5rem);
+    }
+    60% {
+      -webkit-transform: translateY(-0.25rem);
+    }
+  }
 
   &:hover {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);

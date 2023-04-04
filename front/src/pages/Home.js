@@ -25,13 +25,7 @@ import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
 import Coupon from '../assets/main_coupon.svg';
-import {
-  API_URL,
-  BasicProfile,
-  setCookie,
-  getCookie,
-  delCookie,
-} from '../config';
+import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
@@ -78,7 +72,7 @@ function Home() {
           headers: {
             'Refresh-Token': getCookie('refreshToken'),
           },
-        }
+        },
       )
       .then((res) => {
         if (res.status === 200) {
@@ -105,7 +99,7 @@ function Home() {
           headers: {
             'Access-Token': getCookie('accessToken'),
           },
-        }
+        },
       )
       .then((res) => {
         if (res.data.message === 'success') {
@@ -123,6 +117,11 @@ function Home() {
   };
 
   const handleSentencyRankBtn = async () => {
+    if (!user) {
+      alert('로그인 후 랭킹 조회가 가능합니다.');
+      navigate('/login');
+      return;
+    }
     await axios
       .get(`${API_URL}/sentency/${user.userId}`, {
         headers: {
@@ -142,6 +141,11 @@ function Home() {
   };
 
   const handleFiveRankBtn = async () => {
+    if (!user) {
+      alert('로그인 후 랭킹 조회가 가능합니다.');
+      navigate('/login');
+      return;
+    }
     await axios
       .get(`${API_URL}/five/${user.userId}`, {
         headers: {
@@ -269,12 +273,7 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile
-                width={5}
-                height={5}
-                src={user.profileImageUrl}
-                onClick={() => navigate('/my-page')}
-              />
+              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>
@@ -331,6 +330,7 @@ function Home() {
             SENTENCY
           </H1>
           <HomeRankBtn onClick={handleSentencyRankBtn}>
+            <div className='text'>Click!!</div>
             <TrophyFill className='trophy' />
           </HomeRankBtn>
           <SideLeaderBoard
@@ -346,6 +346,7 @@ function Home() {
             HIFIVE
           </H1>
           <HomeRankBtn onClick={handleFiveRankBtn}>
+            <div className='text'>Click!!</div>
             <TrophyFill className='trophy' />
           </HomeRankBtn>
           <SideLeaderBoard

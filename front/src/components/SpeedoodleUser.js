@@ -27,8 +27,16 @@ function SpeedoodleUser(props) {
           />
           {props.leader === user.nickname ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <AwardFill />
-              <P1>{user.nickname}</P1>
+              <AwardFill
+                style={{
+                  marginLeft: '1rem',
+                  color: `${colors.gamePink500}`,
+                  fontSize: '24px',
+                }}
+              />
+              <P1 margin='0 0 0 1rem' color={colors.gamePink500}>
+                {user.nickname}
+              </P1>
             </div>
           ) : (
             <P1 margin='0 0 0 1rem' color={colors.gameBlue500}>

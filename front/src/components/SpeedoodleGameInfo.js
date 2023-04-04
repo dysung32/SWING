@@ -94,7 +94,7 @@ function SpeedoodleGameInfo(props) {
   // 게임 시작(게임정보가져오기)
   const handleGameInfo = async () => {
     await axios
-      .get(`${API_URL}/doodle/start/${roomInfo.name}`)
+      .get(`${API_URL}/doodle/start/${roomInfo.roomId}/${roomInfo.name}`)
       .then((res) => {
         console.log('게임시작 정보', res);
         setGameData(res.data);

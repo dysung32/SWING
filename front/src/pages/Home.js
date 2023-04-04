@@ -52,7 +52,7 @@ function Home() {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         setCoupon(() => res.data.user.coupon);
       });
   };
@@ -77,7 +77,7 @@ function Home() {
         } else if (res.status === 202) {
           delCookie('accessToken');
           delCookie('refreshToken');
-          setUser('');
+          setUser(null);
           navigate('/');
         }
       })
@@ -88,15 +88,19 @@ function Home() {
 
   const checkAccessToken = () => {
     axios
-      .post(`${API_URL}/user/check`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
+      .post(
+        `${API_URL}/user/check`,
+        {},
+        {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        }
+      )
       .then((res) => {
-        if (res.status === 200) {
+        if (res.data.message === 'success') {
           setPassAccess(() => true);
-        } else if (res.status === 202) {
+        } else if (res.data.message === 'fail') {
           checkRefreshToken();
           if (successRefresh) {
             setPassAccess(() => true);
@@ -117,11 +121,11 @@ function Home() {
       }
     }
     return () => {
-      if (coupon === null) {
-        setSuccessRefresh(false);
+      if (coupon === null && passAccess === false) {
+        setSuccessRefresh(() => false);
       }
     };
-  }, [successRefresh]);
+  }, [successRefresh, passAccess]);
 
   useEffect(() => {
     // getCouponCnt();

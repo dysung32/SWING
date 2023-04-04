@@ -68,6 +68,7 @@ function SpeedoodleRoom() {
         setUserList([...userList, tempUser]);
       }
       else if(changeUser.messageType === 'LEAVE'){
+        console.log('나가는거 봤다')
         const tempList  =  userList.filter(user => user.userId !== changeUser.userId);
 
         setUserList(tempList);
@@ -122,16 +123,19 @@ function SpeedoodleRoom() {
   const stompDisconnect = () => {
     try {
       console.log("나간다")
-      stompRef.disconnect(() => {
-        const data = {
-          messageType: 'LEAVE',
-          userId: `${user.userId}`,
-          nickname: `${user.nickname}`,
-          profileImageUrl: `${user.profileImageUrl}`,
-        }
-        stompRef.current.send('/pub/send', {}, JSON.stringify(data));
-        stompRef.unsubscribe(`sub/${room_id}`);
-      }, {});
+      const data = {
+        messageType: 'LEAVE',
+        userId: `${user.userId}`,
+        nickname: `${user.nickname}`,
+        profileImageUrl: `${user.profileImageUrl}`,
+      }
+      console.log(data);
+      stompRef.current.send('/pub/send', {}, JSON.stringify(data));
+      stompRef.current.disconnect(() => {
+      console.log('STOMP connection closed');
+    }, {
+      subscriptionId: `sub/${room_id}`
+    });
     } catch (error) {}
   };
 
@@ -181,10 +185,6 @@ function SpeedoodleRoom() {
     e.preventDefault();
     e.returnValue = ''; //Chrome에서 동작하도록; deprecated
   };
-
-  const disconnectBeforeunload = () => {
-    stompDisconnect();
-  }
 
   useEffect(() => {
     (() => {

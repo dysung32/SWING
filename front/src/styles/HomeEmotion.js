@@ -1,7 +1,7 @@
 // import styled from '@emotion/styled/macro';
 import styled, { keyframes } from 'styled-components';
 import { colors } from '../styles/ColorPalette';
-
+import HeroImg from '../assets/main.gif';
 export const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,11 +15,12 @@ export const HomeWrapper = styled.div`
 
 export const HomeHeroContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
-  background-color: ${colors.gameBlue100};
+  background-color: #bbd4f2;
   box-sizing: border-box;
 `;
 
@@ -30,7 +31,11 @@ export const HomeSentencyContainer = styled.div`
   height: 100vh;
   padding: 0 10%;
   padding-top: 13rem;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
   box-sizing: border-box;
 `;
 
@@ -59,9 +64,13 @@ export const Divider = styled.div`
   height: 5px;
 `;
 
-export const HeroScrollMsg = styled.div`
-  margin: 80vh auto 0;
+export const HeroGif = styled.div`
+  width: 50%;
+  height: 100%;
+  background: center / contain no-repeat url(${HeroImg});
 `;
+
+export const HeroScrollMsg = styled.div``;
 
 export const HeroScrollIconContainer = styled.div`
   display: flex;

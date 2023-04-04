@@ -1,6 +1,6 @@
 // import styled from '@emotion/styled/macro';
-import styled, { keyframes } from "styled-components";
-import { colors } from "../styles/ColorPalette";
+import styled, { keyframes } from 'styled-components';
+import { colors } from '../styles/ColorPalette';
 
 export const HomeWrapper = styled.div`
   display: flex;
@@ -25,24 +25,21 @@ export const HomeHeroContainer = styled.div`
 
 export const HomeSentencyContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  padding-top: 13rem;
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
   box-sizing: border-box;
 `;
 
 export const HomeHiFiveContainer = styled.div`
   display: flex;
-  align-items: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
+  padding-top: 13rem;
   background-color: ${colors.gameBlue200};
   box-sizing: border-box;
 `;
@@ -91,7 +88,7 @@ export const UserInfoBox = styled.div`
   position: fixed;
   top: 10rem;
   right: 3%;
-  width: 18rem;
+  width: 16rem;
   padding: 2rem;
   border-radius: 1rem;
   background-color: ${colors.studyBlue500};
@@ -105,7 +102,7 @@ export const UserInfoBox = styled.div`
     color: ${colors.white};
     font-weight: 700;
     font-size: 1.2rem;
-    padding: 0 1rem;
+    padding: 0 0 0 1rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -132,4 +129,24 @@ export const UserCouponBox = styled.div`
 export const UserBtnBox = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+export const HomeRankBtn = styled.div`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+  background-color: ${colors.black};
+  font-size: 2.5rem;
+  color: ${colors.gameYellow200};
+  cursor: pointer;
+
+  position: absolute;
+  left: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  }
 `;

@@ -52,7 +52,7 @@ function Home() {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         setCoupon(() => res.data.user.coupon);
       });
   };
@@ -117,8 +117,8 @@ function Home() {
       }
     }
     return () => {
-      if (coupon === null) {
-        setSuccessRefresh(false);
+      if (coupon === null && passAccess === false) {
+        setSuccessRefresh(() => false);
       }
     };
   }, [successRefresh]);

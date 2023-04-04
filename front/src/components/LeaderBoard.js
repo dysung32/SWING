@@ -69,8 +69,8 @@ function LeaderBoard(ranks, mine) {
                 <SinglePlayerContainer margin={'0 0 0.5rem 0'} key={idx}>
                   <PlayerInfo>
                     <H5 color={colors.gameBlue400}>{subRanker.rank}</H5>
-                    <PlayerProfile src={subRanker.profileImageUrl} width={2.5} height={2.5} margin={0.5} />
-                    <PlayerName width={8} font={'1rem'} fontWeight={500}>
+                    <PlayerProfile src={subRanker.profileImageUrl} width={2.5} height={2.5} className='profile' />
+                    <PlayerName width={8} font={'1rem'} fontWeight={500} className='nickname'>
                       {subRanker.nickname}
                     </PlayerName>
                   </PlayerInfo>
@@ -83,8 +83,8 @@ function LeaderBoard(ranks, mine) {
           <SinglePlayerContainer>
             <PlayerInfo>
               <H5 color={colors.gameBlue400}>{myRankInfo.rank}</H5>
-              <PlayerProfile src={myRankInfo.profileImageUrl} width={2.5} height={2.5} margin={0.5} />
-              <PlayerName width={8} font={'1rem'} fontWeight={500}>
+              <PlayerProfile src={myRankInfo.profileImageUrl} width={2.5} height={2.5} className='profile' />
+              <PlayerName width={8} font={'1rem'} fontWeight={500} className='nickname'>
                 {myRankInfo.nickname}
               </PlayerName>
             </PlayerInfo>

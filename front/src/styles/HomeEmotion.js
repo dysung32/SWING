@@ -26,20 +26,20 @@ export const HomeHeroContainer = styled.div`
 export const HomeSentencyContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
+  padding-top: 13rem;
   background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
   box-sizing: border-box;
 `;
 
 export const HomeHiFiveContainer = styled.div`
   display: flex;
-  align-items: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
+  padding-top: 13rem;
   background-color: ${colors.gameBlue200};
   box-sizing: border-box;
 `;
@@ -129,4 +129,24 @@ export const UserCouponBox = styled.div`
 export const UserBtnBox = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+export const HomeRankBtn = styled.div`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+  background-color: ${colors.black};
+  font-size: 2.5rem;
+  color: ${colors.gameYellow200};
+  cursor: pointer;
+
+  position: absolute;
+  left: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  }
 `;

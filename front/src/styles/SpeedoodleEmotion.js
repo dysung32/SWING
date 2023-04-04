@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { colors } from './ColorPalette';
+import HmmImg from '../assets/hmm.gif';
 
 export const SpeedoodleWrapper = styled.div`
   display: flex;
@@ -49,6 +50,12 @@ export const Room = styled.div`
   background-color: ${(props) => props.color};
   color: ${colors.gameBlue500};
   border-radius: 1.5rem;
+`;
+
+export const HmmGif = styled.div`
+  width: 7vw;
+  height: 7vh;
+  background: center / contain no-repeat url(${HmmImg});
 `;
 
 export const RoomTitleContainer = styled.div`

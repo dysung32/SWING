@@ -17,6 +17,7 @@ import {
   UserCouponBox,
   UserBtnBox,
   HomeRankBtn,
+  HeroGif,
   GlowingBtn,
 } from '../styles/HomeEmotion';
 import { H1, H3, H4, H5 } from '../styles/Fonts';
@@ -27,7 +28,13 @@ import { CouponImg } from '../styles/MyPageEmotion';
 
 import SentencyPic from '../assets/sentency.gif';
 import Coupon from '../assets/main_coupon.svg';
-import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../config';
+import {
+  API_URL,
+  BasicProfile,
+  setCookie,
+  getCookie,
+  delCookie,
+} from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
@@ -81,7 +88,7 @@ function Home() {
           headers: {
             'Refresh-Token': getCookie('refreshToken'),
           },
-        },
+        }
       )
       .then((res) => {
         if (res.status === 200) {
@@ -108,7 +115,7 @@ function Home() {
           headers: {
             'Access-Token': getCookie('accessToken'),
           },
-        },
+        }
       )
       .then((res) => {
         if (res.data.message === 'success') {
@@ -282,7 +289,12 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
+              <PlayerProfile
+                width={5}
+                height={5}
+                src={user.profileImageUrl}
+                onClick={() => navigate('/my-page')}
+              />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>
@@ -315,6 +327,7 @@ function Home() {
         ) : null}
 
         <HomeHeroContainer>
+          <HeroGif />
           <HeroScrollMsg>
             <H4>Scroll Down for Games</H4>
             <HeroScrollIconContainer>
@@ -335,7 +348,11 @@ function Home() {
         </HomeHeroContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
         <HomeSentencyContainer>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+          <H1
+            color={colors.white}
+            outline={colors.gameBlue500}
+            outlineWeight={2}
+          >
             SENTENCY
           </H1>
           <HomeRankBtn onClick={handleSentencyRankBtn}>
@@ -369,7 +386,11 @@ function Home() {
         </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+          <H1
+            color={colors.white}
+            outline={colors.gameBlue500}
+            outlineWeight={2}
+          >
             HIFIVE
           </H1>
           <HomeRankBtn onClick={handleFiveRankBtn}>

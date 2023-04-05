@@ -10,8 +10,6 @@ import {
   MyPageIntroConatiner,
   MyPageHistoryConatiner,
   HistoryHeader,
-  MyPageHistoryList,
-  FileInput,
   MyPageProfileNickname,
   MyPageProfileCoupon,
   CouponImg,
@@ -45,9 +43,7 @@ function MyPage() {
 
   const [nicknameRegExpTest, setNicknameRegExpTest] = useState();
   const [confirmed, setConfirmed] = useState(false);
-  const [allowedMsg, setAllowedMsg] = useState(
-    '올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.'
-  );
+  const [allowedMsg, setAllowedMsg] = useState('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
 
   const [tmpProfileImg, setTmpProfileImg] = useState(user.profileImageUrl);
   const [imgChanged, setImgChanged] = useState(false);
@@ -58,21 +54,26 @@ function MyPage() {
 
   const [profileEditModalShow, setProfileEditModalShow] = useState(false);
 
-  const renderList = historyList.map((history) => {
-    let yy = history.playTime.slice(0, 4);
-    let mm = history.playTime.slice(5, 7);
-    let dd = history.playTime.slice(8, 10);
+  const changeTimeStampToDate = (timestamp) => {
+    let yy = timestamp.slice(0, 4);
+    let mm = timestamp.slice(5, 7);
+    let dd = timestamp.slice(8, 10);
     const date = `${yy}년 ${mm}월 ${dd}일`;
+
+    return date;
+  };
+
+  const renderList = historyList.map((history) => {
     return (
       <SingleHistoryList
         key={history.gameId}
         onClick={() =>
           navigate(`/history/${history.gameId}`, {
-            state: { date: date, rank: history.rank },
+            state: { date: changeTimeStampToDate(history.playTime), rank: history.rank, gameId: history.gameId },
           })
         }
       >
-        <div className='history-date'>{date}</div>
+        <div className='history-date'>{changeTimeStampToDate(history.playTime)}</div>
         <div className='history-title'>{history.roomName}</div>
         <div className='history-rank'>{history.rank}등</div>
       </SingleHistoryList>
@@ -152,19 +153,13 @@ function MyPage() {
           if (tmpProfileImg === BasicProfile) {
             userInfo.defaultImage = true;
             const dump = {};
-            formData.append(
-              'image',
-              new Blob([JSON.stringify(dump)], { type: 'application/json' })
-            );
+            formData.append('image', new Blob([JSON.stringify(dump)], { type: 'application/json' }));
           }
           // 다른 이미지로 변경했을 때
           else {
             formData.append('image', fileInput.current.files[0]);
           }
-          formData.append(
-            'modifyDto',
-            new Blob([JSON.stringify(userInfo)], { type: 'application/json' })
-          );
+          formData.append('modifyDto', new Blob([JSON.stringify(userInfo)], { type: 'application/json' }));
 
           console.log(fileInput.current.files[0]);
         }
@@ -172,14 +167,8 @@ function MyPage() {
         else {
           console.log('닉네임 변경 O 사진 변경 X');
           const dump = {};
-          formData.append(
-            'image',
-            new Blob([JSON.stringify(dump)], { type: 'application/json' })
-          );
-          formData.append(
-            'modifyDto',
-            new Blob([JSON.stringify(userInfo)], { type: 'application/json' })
-          );
+          formData.append('image', new Blob([JSON.stringify(dump)], { type: 'application/json' }));
+          formData.append('modifyDto', new Blob([JSON.stringify(userInfo)], { type: 'application/json' }));
         }
       }
       // 닉네임 중복확인 미완료 시
@@ -197,19 +186,13 @@ function MyPage() {
         if (tmpProfileImg === BasicProfile) {
           const dump = {};
           userInfo.defaultImage = true;
-          formData.append(
-            'image',
-            new Blob([JSON.stringify(dump)], { type: 'application/json' })
-          );
+          formData.append('image', new Blob([JSON.stringify(dump)], { type: 'application/json' }));
         }
         // 다른 이미지로 변경했을 때
         else {
           formData.append('image', fileInput.current.files[0]);
         }
-        formData.append(
-          'modifyDto',
-          new Blob([JSON.stringify(userInfo)], { type: 'application/json' })
-        );
+        formData.append('modifyDto', new Blob([JSON.stringify(userInfo)], { type: 'application/json' }));
       }
       // 사진 변경이 없을 때
       else {
@@ -316,16 +299,18 @@ function MyPage() {
 
   return (
     <>
-      <ModalClosable
-        modalShow={profileEditModalShow}
-        setModalShow={setProfileEditModalShow}
-      >
+      <ModalClosable modalShow={profileEditModalShow} setModalShow={setProfileEditModalShow}>
         <H2 padding='0 0 3rem 0'>프로필 수정</H2>
         <FilePreview
           src={tmpProfileImg}
           onClick={() => {
             fileInput.current.click();
-            // console.log(fileInput.current);
+          }}
+        />
+        <PencilSquare
+          className='edit'
+          onClick={() => {
+            fileInput.current.click();
           }}
         />
         <input
@@ -376,9 +361,7 @@ function MyPage() {
             ) : nicknameRegExpTest ? (
               <div className='allowed'>{allowedMsg}</div>
             ) : (
-              <div className='denied'>
-                한글, 영어, 숫자 가능 (2자-30자) / 특수문자, 공백 포함 불가능
-              </div>
+              <div className='denied'>한글, 영어, 숫자 가능 (2자-30자) / 특수문자, 공백 포함 불가능</div>
             )}
           </div>
         </NickNameEditBox>
@@ -410,12 +393,7 @@ function MyPage() {
       </ModalClosable>
       <MyPageWrapper>
         <GameTitle>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-            align='center'
-          >
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
             마이페이지
           </H1>
         </GameTitle>

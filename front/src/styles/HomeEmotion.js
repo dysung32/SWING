@@ -31,43 +31,98 @@ export const HomeSentencyContainer = styled.div`
   height: 100vh;
   padding: 0 10%;
   padding-top: 13rem;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
   box-sizing: border-box;
-
-  .howtoTitle {
-    width: 50%;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: ${colors.white};
-    z-index: 999;
-  }
 
   .slideContainer {
     margin-left: 0;
     margin-bottom: 2rem;
     width: 50%;
-    height: 50vh;
-    background-color: ${colors.gray100};
+    height: 55vh;
+    border: 3px solid ${colors.gamePink500};
+    border-radius: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .slide {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+
+    padding: 2rem 3rem;
     align-items: center;
     font-size: 2rem;
-    color: ${colors.black};
+    color: ${colors.gray100};
   }
 
   .swiper-pagination-bullet {
     width: 0.7rem;
     height: 0.7rem;
     background-color: ${colors.gamePink400};
+  }
+
+  .how-to-img {
+    width: 100%;
+    max-height: 60%;
+    object-fit: contain;
+    margin: 1.5rem 0;
+  }
+
+  .order {
+    padding-right: 1rem;
+  }
+
+  .desc {
+    flex-grow: 1;
+  }
+
+  .warningBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 1.5rem 0;
+  }
+
+  .warningEmoji {
+    padding: 0 0.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    animation: swing ease-in-out 1s infinite;
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(0);
+    }
+    15% {
+      transform: rotate(5deg);
+    }
+    30% {
+      transform: rotate(-5deg);
+    }
+    45% {
+      transform: rotate(4deg);
+    }
+    60% {
+      transform: rotate(-4deg);
+    }
+    75% {
+      transform: rotate(2deg);
+    }
+    85% {
+      transform: rotate(-2deg);
+    }
+    92% {
+      transform: rotate(1deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+
+  .warningBox > .flex {
+    padding-bottom: 2rem;
   }
 `;
 
@@ -81,36 +136,46 @@ export const HomeHiFiveContainer = styled.div`
   background-color: ${colors.gameBlue200};
   box-sizing: border-box;
 
-  .howtoTitle {
-    width: 50%;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: ${colors.white};
-    z-index: 999;
-  }
-
   .slideContainer {
     margin-left: 0;
     margin-bottom: 2rem;
     width: 50%;
-    height: 50vh;
-    background-color: ${colors.gray100};
+    height: 55vh;
+    border: 3px solid ${colors.gamePink500};
+    border-radius: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .slide {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+
+    padding: 2rem 3rem;
     align-items: center;
     font-size: 2rem;
-    color: ${colors.black};
+    color: ${colors.gray100};
   }
 
   .swiper-pagination-bullet {
     width: 0.7rem;
     height: 0.7rem;
     background-color: ${colors.gamePink400};
+  }
+
+  .how-to-img {
+    width: 100%;
+    max-height: 70%;
+    object-fit: contain;
+    margin: 1.5rem 0;
+  }
+
+  .order {
+    padding-right: 1rem;
+  }
+
+  .desc {
+    flex-grow: 1;
   }
 `;
 

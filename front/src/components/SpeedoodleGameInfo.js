@@ -57,13 +57,14 @@ function SpeedoodleGameInfo(props) {
   useEffect(() => {
     if(props.gameKey !== null && gameData === null) {
       console.log("key전달 완료")
+      setIsLocked(true);
       setGameData(props.gameKey)
     }
   }, [props.gameKey]);
 
   useEffect(() => {
     if(gameData !== null){
-      console.log('드디어 시발 게임 시작')
+      console.log('드디어 게임 시작')
       console.log(gameData);
       setBgColor(`${colors.gameBlue100}`);
       setIsGameStart(true);
@@ -77,16 +78,18 @@ function SpeedoodleGameInfo(props) {
 
   useEffect(() => {
     if(isGameStart === false && isLocked === true) {
-      axios
+      if(roomInfo.leaderId === user.useId){
+        axios
       .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
       .then((res) => {
         if (res.status === 200) {
           console.log('겜끝! 풀게요!');
-          setIsLocked(false);
-          setBgColor(`${colors.white}`);
         }
       })
       .catch((err) => console.error(err));
+      }
+      setIsLocked(false);
+      setBgColor(`${colors.white}`);
     }
   },[isGameStart])
 
@@ -125,7 +128,6 @@ function SpeedoodleGameInfo(props) {
       .then((res) => {
         if (res.status === 200) {
           console.log('방시작! 잠굴게요!');
-          setIsLocked(true);
           handleGameInfo();
           // setTimeout(() => {
           //   setBgColor(`${colors.gameBlue100}`);

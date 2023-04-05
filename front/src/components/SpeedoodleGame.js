@@ -25,7 +25,7 @@ function SpeedoodleGame(props) {
   const navigate = useNavigate();
   const [running, setRunning] = useState(false);
   const [roundCnt, setRoundCnt] = useState(5);
-  const [record, setRecord] = useState([]);
+  const [record, setRecord] = useState('');
   const [finish, setFinish] = useState(false);
   const [resultModalShow, setResultModalShow] = useState(false);
   const [finalResultModalShow, setFinalResultModalShow] = useState(false);
@@ -34,6 +34,10 @@ function SpeedoodleGame(props) {
   const [keyword, setKeyword] = useState(props.keywords);
   const [keywordIdx, setKeywordIdx] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+
+  const [aiAnswer, setAiAnswer] = useState([]);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isDrawFinish, setIsDrawFinish] = useState(false);
 
   const [user, setUser] = useRecoilState(userState);
 
@@ -53,34 +57,13 @@ function SpeedoodleGame(props) {
     canvas.addEventListener('mouseup', finishDraw);
     canvas.addEventListener('mouseout', finishDraw);
     canvas.setAttribute('width', window.innerWidth * 0.49);
-    canvas.setAttribute('height', window.innerHeight * 0.4);
+    canvas.setAttribute('height', window.innerHeight * 0.43);
     ctx = canvas.getContext('2d');
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 5;
     ctx.strokeStyle = 'black';
   }, []);
-
-  const getAnswer = () => {
-    const canvas = canvasRef.current;
-    canvas.toBlob((blob) => {
-      const formdata = new FormData();
-      formdata.append('answer', blob);
-
-      axios
-        .post(`${AI_API_URL}/doodle/check`, formdata, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
-  };
 
   // const saveRoundResult = (imageData) => {
   //   const data = {
@@ -119,6 +102,7 @@ function SpeedoodleGame(props) {
   // 마우스를 떼거나, 마우스가 범위를 벗어났을 때 그림 그리는 걸 멈추는 함수
   const finishDraw = () => {
     pos = { drawable: false, X: -1, Y: -1 };
+    setIsDrawFinish(() => true);
   };
 
   // 캔버스를 전체 지우는 함수
@@ -129,11 +113,49 @@ function SpeedoodleGame(props) {
     canvas.getContext('2d').fillRect(0, 0, canvas.width, canvas.height);
   };
 
+  useEffect(() => {
+    const getAnswer = () => {
+      canvas = canvasRef.current;
+      canvas.toBlob((blob) => {
+        const formdata = new FormData();
+        formdata.append('answer', blob);
+        formdata.append('answered', aiAnswer);
+
+        axios
+          .post(`${AI_API_URL}/doodle/check`, formdata, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            console.log('ai답변들', aiAnswer);
+            console.log('키워드다', keyword[keywordIdx].content);
+            if (res.data.class === keyword[keywordIdx].content) {
+              console.log('성공');
+              setIsCorrect(() => true);
+            } else {
+              setAiAnswer((aiAnswer) => [...aiAnswer, res.data.class]);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    };
+    if (isDrawFinish) {
+      getAnswer();
+      setIsDrawFinish(() => false);
+    }
+  }, [isDrawFinish]);
+
   // 제한시간 다 끝났을 때 결과 모달 여는 useEffect
 
   useEffect(() => {
     if (finish) {
-      getAnswer();
+      if (record === '') {
+        setRecord(() => '실패' + props.limits + ': 00');
+      }
       resetCanvas();
       setTimeout(() => {
         handleResultModal();
@@ -152,6 +174,7 @@ function SpeedoodleGame(props) {
   // 결과 모달 여는 함수
 
   const handleResultModal = () => {
+    setAiAnswer(() => []);
     setResultModalShow(true);
     setTimeout(() => {
       if (roundCnt === 1) {
@@ -160,6 +183,7 @@ function SpeedoodleGame(props) {
         }, 2000);
       }
       setResultModalShow(false);
+      setRecord(() => '');
 
       if (roundCnt > 1) {
         setFinish(false);
@@ -208,7 +232,7 @@ function SpeedoodleGame(props) {
       {/* 각 라운드 결과 제공 모달 */}
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
-        <H4>1등 ***</H4>
+        <p>{record}</p>
         <div style={{ width: '24vw', height: '24vw' }}></div>
         <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
       </ModalBasic>
@@ -229,6 +253,8 @@ function SpeedoodleGame(props) {
                 setRunning={setRunning}
                 setRecord={setRecord}
                 setFinish={setFinish}
+                correct={isCorrect}
+                setIsCorrect={setIsCorrect}
               ></Stopwatch>
             ) : (
               <div

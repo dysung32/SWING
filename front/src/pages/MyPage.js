@@ -31,7 +31,7 @@ import ModalClosable from '../components/ModalClosable';
 import { API_URL, BasicProfile, getCookie } from '../config';
 import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userState } from '../recoil';
 import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 
@@ -42,7 +42,6 @@ function MyPage() {
   const fileInput = useRef(null);
 
   const [user, setUser] = useRecoilState(userState);
-  const setUserRecoilState = useSetRecoilState(userState);
 
   const [nicknameRegExpTest, setNicknameRegExpTest] = useState();
   const [confirmed, setConfirmed] = useState(false);
@@ -55,58 +54,26 @@ function MyPage() {
   const tmpnickName = user.nickname;
 
   const [coupon, setCoupon] = useState();
-  const historyList = [
-    {
-      date: '2023.03.01',
-      title: '나랑 같이 놀 사람',
-      rank: 2,
-    },
-    {
-      date: '2023.03.02',
-      title: '공부합시다',
-      rank: 3,
-    },
-    {
-      date: '2023.03.03',
-      title: '놀자아',
-      rank: 1,
-    },
-    {
-      date: '2023.03.05',
-      title: 'A405',
-      rank: 2,
-    },
-    {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
-      rank: 1,
-    },
-    {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
-      rank: 1,
-    },
-    {
-      date: '2023.03.07',
-      title: 'SSAFY 8기',
-      rank: 1,
-    },
-  ];
+  const [historyList, setHistoryList] = useState([]);
 
   const [profileEditModalShow, setProfileEditModalShow] = useState(false);
 
-  const renderList = historyList.map((history, idx) => {
+  const renderList = historyList.map((history) => {
+    let yy = history.playTime.slice(0, 4);
+    let mm = history.playTime.slice(5, 7);
+    let dd = history.playTime.slice(8, 10);
+    const date = `${yy}년 ${mm}월 ${dd}일`;
     return (
       <SingleHistoryList
-        key={idx}
+        key={history.gameId}
         onClick={() =>
-          navigate(`/history/${idx}`, {
-            state: { date: history.date, rank: history.rank },
+          navigate(`/history/${history.gameId}`, {
+            state: { date: date, rank: history.rank },
           })
         }
       >
-        <div className='history-date'>{history.date}</div>
-        <div className='history-title'>{history.title}</div>
+        <div className='history-date'>{date}</div>
+        <div className='history-title'>{history.roomName}</div>
         <div className='history-rank'>{history.rank}등</div>
       </SingleHistoryList>
     );
@@ -284,7 +251,7 @@ function MyPage() {
           nickname: res.data.user.nickname,
           profileImageUrl: res.data.user.profileImageUrl,
         };
-        setUserRecoilState(newData);
+        setUser(newData);
       });
   };
 
@@ -328,6 +295,24 @@ function MyPage() {
       })
       .catch((err) => {});
   };
+
+  const getHistoryList = () => {
+    axios
+      .get(`${API_URL}/doodle/history/${user.userId}`, {
+        headers: { 'Access-Token': getCookie('accessToken') },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.gameHistoryList);
+          setHistoryList([...res.data.gameHistoryList]);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    getHistoryList();
+  }, []);
 
   return (
     <>
@@ -441,7 +426,7 @@ function MyPage() {
                 <H3>Hi, {user.nickname}!</H3>
                 <P1 padding='0.5rem 0 0 0'>
                   <span className='swing-bold'>SWING</span>을 즐기고 계신가요?
-                  <br /> 마이페이지에서는 SpeeDoodle 히스토리 상세조회와 <br />
+                  <br /> 마이페이지에서는 Speedoodle 히스토리 상세조회와 <br />
                   프로필 편집이 가능합니다.
                 </P1>
               </div>

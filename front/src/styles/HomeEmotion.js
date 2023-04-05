@@ -27,6 +27,7 @@ export const HomeHeroContainer = styled.div`
 export const HomeSentencyContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
@@ -38,6 +39,7 @@ export const HomeSentencyContainer = styled.div`
 export const HomeHiFiveContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
@@ -242,10 +244,10 @@ export const GameInfoContainer = styled.div`
     padding: 0 0.5rem;
     width: 2.2rem;
     height: 2.2rem;
-    animation: swing ease-in-out 1s infinite;
+    animation: alarm ease-in-out 1s infinite;
   }
 
-  @keyframes swing {
+  @keyframes alarm {
     0% {
       transform: rotate(0);
     }

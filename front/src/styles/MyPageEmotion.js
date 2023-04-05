@@ -32,7 +32,7 @@ export const MyPageContentContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 2rem;
   width: 100%;
-  // height: 75%;
+  height: 75%;
   box-sizing: border-box;
 `;
 
@@ -81,6 +81,14 @@ export const FilePreview = styled.img`
   filter: brightness(70%);
   object-fit: cover;
   cursor: pointer;
+
+  & ~ .edit {
+    position: absolute;
+    top: 13.5rem;
+    font-size: 2rem;
+    color: ${colors.white};
+    cursor: pointer;
+  }
 `;
 
 export const MyPageProfileNickname = styled.div`

@@ -32,7 +32,7 @@ function LogIn() {
   const kakaoLogin = async (e) => {
     window.Kakao.Auth.login({
       scope: 'profile_nickname',
-      success: getProfile(),
+      success: getProfile,
     });
   };
 

@@ -35,8 +35,9 @@ import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper';
+import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
+import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 function Home() {
@@ -285,10 +286,11 @@ function Home() {
               myRank={myRank}
             />
             <Swiper
-              modules={[Pagination]}
+              modules={[Navigation, Pagination]}
               className='slideContainer'
               spaceBetween={50}
               slidesPerView={1}
+              navigation
               pagination={{ clickable: true }}
               onSwiper={(swiper) => {
                 sentencySwiperRef.current = swiper;
@@ -392,10 +394,11 @@ function Home() {
               myRank={myRank}
             />
             <Swiper
-              modules={[Pagination]}
+              modules={[Navigation, Pagination]}
               className='slideContainer'
               spaceBetween={50}
               slidesPerView={1}
+              navigation
               pagination={{ clickable: true }}
               onSwiper={(swiper) => {
                 hifiveSwiperRef.current = swiper;

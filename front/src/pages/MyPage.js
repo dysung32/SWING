@@ -10,8 +10,6 @@ import {
   MyPageIntroConatiner,
   MyPageHistoryConatiner,
   HistoryHeader,
-  MyPageHistoryList,
-  FileInput,
   MyPageProfileNickname,
   MyPageProfileCoupon,
   CouponImg,
@@ -56,21 +54,26 @@ function MyPage() {
 
   const [profileEditModalShow, setProfileEditModalShow] = useState(false);
 
-  const renderList = historyList.map((history) => {
-    let yy = history.playTime.slice(0, 4);
-    let mm = history.playTime.slice(5, 7);
-    let dd = history.playTime.slice(8, 10);
+  const changeTimeStampToDate = (timestamp) => {
+    let yy = timestamp.slice(0, 4);
+    let mm = timestamp.slice(5, 7);
+    let dd = timestamp.slice(8, 10);
     const date = `${yy}년 ${mm}월 ${dd}일`;
+
+    return date;
+  };
+
+  const renderList = historyList.map((history) => {
     return (
       <SingleHistoryList
         key={history.gameId}
         onClick={() =>
           navigate(`/history/${history.gameId}`, {
-            state: { date: date, rank: history.rank },
+            state: { date: changeTimeStampToDate(history.playTime), rank: history.rank, gameId: history.gameId },
           })
         }
       >
-        <div className='history-date'>{date}</div>
+        <div className='history-date'>{changeTimeStampToDate(history.playTime)}</div>
         <div className='history-title'>{history.roomName}</div>
         <div className='history-rank'>{history.rank}등</div>
       </SingleHistoryList>

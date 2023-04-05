@@ -69,7 +69,7 @@ function SpeedoodleGame(props) {
   //   const data = {
   //     userId: user.userId,
   //     roundId: keyword[keywordIdx].roundId,
-  //     image: 
+  //     image:
   //   }
   //   axios({
   //     method: 'POST',
@@ -143,11 +143,12 @@ function SpeedoodleGame(props) {
           });
       });
     };
-    if (isDrawFinish) {
+
+    if (isDrawFinish === true && isCorrect === false) {
       getAnswer();
       setIsDrawFinish(() => false);
     }
-  }, [isDrawFinish]);
+  }, [isDrawFinish, isCorrect]);
 
   // 제한시간 다 끝났을 때 결과 모달 여는 useEffect
 
@@ -272,7 +273,7 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'>{keyword&& keyword[keywordIdx].content}</H4>
+            <H4 align='center'>{keyword && keyword[keywordIdx].content}</H4>
           </Keyword>
           <div
             style={{

@@ -23,10 +23,10 @@ def crop(im_np):
         max(bbox[1]-offset, 0), 
         min(bbox[2]+offset*2, im.size[0]),
         min(bbox[3]+offset*2, im.size[1])]
-    if bbox and (area//2.5 > (bbox[2] * bbox[3])):
-        return np.array(im.crop(bbox_new)).astype('float32')
-    else:
-        return np.array(im).astype('float32')
+    # if bbox and (area//2.5 > (bbox[2] * bbox[3])):
+    return np.array(im.crop(bbox_new)).astype('float32')
+    # else:
+    #     return np.array(im).astype('float32')
 
 model1 = load_model(NOW_DIR + 'weights/cnn/quick_draw_mobilenet_100.h5', compile=False)
 model2 = load_model(NOW_DIR + 'weights/cnn/quick_draw_mobilenet_200.h5', compile=False)
@@ -62,7 +62,7 @@ def get_class(image, suggested):
     else:
         image = cv2.imdecode(np.fromstring(image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
     image = crop(image)
-    image = cv2.erode(image, kernel, iterations=10)
+    image = cv2.erode(image, kernel, iterations=5)
     image = cv2.resize(image, (32, 32), cv2.INTER_AREA)
     image = np.array(image).astype('float')
     image = 255 - image

@@ -236,7 +236,7 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'></H4>
+            <H4 align='center'>{keyword}</H4>
           </Keyword>
           <div
             style={{

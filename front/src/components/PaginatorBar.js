@@ -51,11 +51,11 @@ function Pagination({total,limit, page, setPage, Ppage, setPpage}) {
           <PaginationBox>
             <PageNumBox
             onClick={doubleleftClicked}
-            disabled={Ppage===1}>
+            disabled={Ppage===1 || total === 0}>
               <ChevronDoubleLeft />
             </PageNumBox>
             <PageNumBox onClick={leftClicked} 
-              disabled={page === 1 && Ppage === 1}>
+              disabled={(page === 1 && Ppage === 1) || total === 0}>
               <ChevronLeft/>
             </PageNumBox>
             {renderPpageNum().map((_, i) => (
@@ -68,12 +68,12 @@ function Pagination({total,limit, page, setPage, Ppage, setPpage}) {
             </PageNumBox>
           ))}
           <PageNumBox onClick={rightClicked} 
-              disabled={page === renderPpageNum().length && Ppage === numPpages}>
+              disabled={(page === renderPpageNum().length && Ppage === numPpages) || total === 0}>
               <ChevronRight/>
           </PageNumBox>
           <PageNumBox
           onClick={doublerightClicked}
-          disabled={Ppage===numPpages}>
+          disabled={Ppage===numPpages || total === 0}>
               <ChevronDoubleRight/>
           </PageNumBox>
           </PaginationBox>

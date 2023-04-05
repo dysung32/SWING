@@ -17,6 +17,7 @@ import {
   UserCouponBox,
   UserBtnBox,
   HomeRankBtn,
+  HeroIntroBox,
   HeroGif,
   GlowingBtn,
   GameInfoContainer,
@@ -29,7 +30,13 @@ import { CouponImg } from '../styles/MyPageEmotion';
 
 import alarm from '../assets/alarm.png';
 import Coupon from '../assets/main_coupon.svg';
-import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../config';
+import {
+  API_URL,
+  BasicProfile,
+  setCookie,
+  getCookie,
+  delCookie,
+} from '../config';
 import IsLogin from '../auth/IsLogin';
 import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 import axios from 'axios';
@@ -216,7 +223,12 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
+              <PlayerProfile
+                width={5}
+                height={5}
+                src={user.profileImageUrl}
+                onClick={() => navigate('/my-page')}
+              />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>
@@ -249,7 +261,54 @@ function Home() {
         ) : null}
 
         <HomeHeroContainer>
-          <HeroGif />
+          <HeroIntroBox>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                width: '40%',
+                height: '100%',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '1.5vw',
+                  fontWeight: 'bold',
+                  color: `${colors.gameBlue500}`,
+                  margin: '0',
+                }}
+              >
+                Study With Image N Game
+              </p>
+              <p
+                style={{
+                  fontSize: '5vw',
+                  fontWeight: 'bold',
+                  color: `${colors.gameBlue500}`,
+                  margin: '0',
+                }}
+              >
+                SWING
+              </p>
+              <p
+                style={{
+                  fontSize: '1.2vw',
+                  fontWeight: '400',
+                  color: `${colors.gameBlue500}`,
+                  wordBreak: 'keep-all',
+                }}
+              >
+                SWING은 즐겁게 영어 공부하고 싶은 당신을 위해 탄생했습니다. AI와
+                함께 세 가지 이미지 게임으로 놀면서 영어를 공부할 수 있다니 참
+                재밌을 것 같지 않나요? 단어, 작문을 활용한 게임으로 영어 공부에
+                몰입하고, 혼자 하는 공부가 지겨울 땐 친구들과의 그림 대결도
+                즐겨보세요!
+              </p>
+            </div>
+
+            <HeroGif />
+          </HeroIntroBox>
           <HeroScrollMsg>
             <H4>Scroll Down for Games</H4>
             <HeroScrollIconContainer>
@@ -271,7 +330,11 @@ function Home() {
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
         <HomeSentencyContainer>
           <GameInfoContainer>
-            <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            <H1
+              color={colors.white}
+              outline={colors.gameBlue500}
+              outlineWeight={2}
+            >
               SENTENCY
             </H1>
             <HomeRankBtn onClick={handleSentencyRankBtn}>
@@ -315,12 +378,16 @@ function Home() {
                   </div>
                   <div className='flex'>
                     <H4 className='order'>•</H4>
-                    <H4>유사도 검사는 AI가 문장 구조 및 단어 스펠링이 아닌 문장의 의미를 기반으로 측정합니다.</H4>
+                    <H4>
+                      유사도 검사는 AI가 문장 구조 및 단어 스펠링이 아닌 문장의
+                      의미를 기반으로 측정합니다.
+                    </H4>
                   </div>
                   <div className='flex'>
                     <H4 className='order'>•</H4>
                     <H4>
-                      오답이더라도 일부 단어가 정답 문장의 단어와 위치까지 일치할 경우, 해당 단어는 유저에게 공개됩니다.
+                      오답이더라도 일부 단어가 정답 문장의 단어와 위치까지
+                      일치할 경우, 해당 단어는 유저에게 공개됩니다.
                     </H4>
                   </div>
                 </div>
@@ -337,7 +404,8 @@ function Home() {
                 <div className='flex'>
                   <H4 className='order'>1.</H4>
                   <H4 className='desc'>
-                    게임이 시작되면 한 장의 랜덤 이미지와 해당 이미지를 설명하는 한글 문장이 유저에게 주어집니다.
+                    게임이 시작되면 한 장의 랜덤 이미지와 해당 이미지를 설명하는
+                    한글 문장이 유저에게 주어집니다.
                   </H4>
                 </div>
               </SwiperSlide>
@@ -352,7 +420,10 @@ function Home() {
                 />
                 <div className='flex'>
                   <H4 className='order'>2.</H4>
-                  <H4 className='desc'>유저는 주어진 이미지와 문장의 단어 수를 참고하여 본문을 맞춰야 합니다.</H4>
+                  <H4 className='desc'>
+                    유저는 주어진 이미지와 문장의 단어 수를 참고하여 본문을
+                    맞춰야 합니다.
+                  </H4>
                 </div>
               </SwiperSlide>
               <SwiperSlide className='slide'>
@@ -367,7 +438,8 @@ function Home() {
                 <div className='flex'>
                   <H4 className='order'>3.</H4>
                   <H4 className='desc'>
-                    유저가 입력한 문장과 정답을 비교하여 문장유사도가 90% 이상일 경우 정답으로 처리가 됩니다.
+                    유저가 입력한 문장과 정답을 비교하여 문장유사도가 90% 이상일
+                    경우 정답으로 처리가 됩니다.
                   </H4>
                 </div>
               </SwiperSlide>
@@ -378,7 +450,11 @@ function Home() {
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer>
           <GameInfoContainer>
-            <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            <H1
+              color={colors.white}
+              outline={colors.gameBlue500}
+              outlineWeight={2}
+            >
               HI-FIVE
             </H1>
             <HomeRankBtn onClick={handleFiveRankBtn}>
@@ -418,13 +494,16 @@ function Home() {
                   </div>
                   <div className='flex'>
                     <H4 className='order'>•</H4>
-                    <H4>AI가 동의어를 고려하여 유사도가 85% 이상인 경우 정답으로 처리합니다.</H4>
+                    <H4>
+                      AI가 동의어를 고려하여 유사도가 85% 이상인 경우 정답으로
+                      처리합니다.
+                    </H4>
                   </div>
                   <div className='flex'>
                     <H4 className='order'>•</H4>
                     <H4>
-                      유저가 입력한 단어와 정답의 유사도가 40% 이상 85% 미만인 물체가 있으면 해당 물체를 좌우로 흔들어
-                      힌트를 줍니다.
+                      유저가 입력한 단어와 정답의 유사도가 40% 이상 85% 미만인
+                      물체가 있으면 해당 물체를 좌우로 흔들어 힌트를 줍니다.
                     </H4>
                   </div>
                 </div>
@@ -440,7 +519,10 @@ function Home() {
                 />
                 <div className='flex'>
                   <H4 className='order'>1.</H4>
-                  <H4 className='desc'>게임이 시작되면 5장의 랜덤 물체 이미지가 겹쳐진 상태로 유저에게 주어집니다.</H4>
+                  <H4 className='desc'>
+                    게임이 시작되면 5장의 랜덤 물체 이미지가 겹쳐진 상태로
+                    유저에게 주어집니다.
+                  </H4>
                 </div>
               </SwiperSlide>
               <SwiperSlide className='slide'>
@@ -454,7 +536,9 @@ function Home() {
                 />
                 <div className='flex'>
                   <H4 className='order'>2.</H4>
-                  <H4 className='desc'>유저는 각각의 물체 이미지를 영어로 맞춰야 합니다.</H4>
+                  <H4 className='desc'>
+                    유저는 각각의 물체 이미지를 영어로 맞춰야 합니다.
+                  </H4>
                 </div>
               </SwiperSlide>
               <SwiperSlide className='slide'>
@@ -468,7 +552,9 @@ function Home() {
                 />
                 <div className='flex'>
                   <H4 className='order'>3.</H4>
-                  <H4 className='desc'>5개의 물체를 모두 맞히면 게임이 종료됩니다.</H4>
+                  <H4 className='desc'>
+                    5개의 물체를 모두 맞히면 게임이 종료됩니다.
+                  </H4>
                 </div>
               </SwiperSlide>
             </Swiper>

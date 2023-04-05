@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useInterval from '../hooks/useInterval';
 import axios from 'axios';
@@ -31,9 +31,11 @@ function SpeedoodleGame(props) {
   const [finalResultModalShow, setFinalResultModalShow] = useState(false);
   const [readyGame, setReadyGame] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
-  const [keyword, setKeyword] = useState(props.keywords[0].content);
+  const [keyword, setKeyword] = useState(props.keywords);
   const [keywordIdx, setKeywordIdx] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+
+  const [user, setUser] = useRecoilState(userState);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -64,7 +66,6 @@ function SpeedoodleGame(props) {
     canvas.toBlob((blob) => {
       const formdata = new FormData();
       formdata.append('answer', blob);
-      const url = URL.createObjectURL(blob);
 
       axios
         .post(`${AI_API_URL}/doodle/check`, formdata, {
@@ -80,6 +81,17 @@ function SpeedoodleGame(props) {
         });
     });
   };
+
+  // const saveRoundResult = (imageData) => {
+  //   const data = {
+  //     userId: user.userId,
+  //     roundId: keyword
+  //   }
+  //   axios({
+  //     method: 'POST',
+  //     url: `${API_URL}/doodle/round`
+  //   })
+  // }
 
   const getPosition = (e) => {
     return { X: e.offsetX, Y: e.offsetY };
@@ -112,6 +124,8 @@ function SpeedoodleGame(props) {
   const resetCanvas = () => {
     canvas = canvasRef.current;
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    canvas.getContext('2d').fillStyle = 'white';
+    canvas.getContext('2d').fillRect(0, 0, canvas.width, canvas.height);
   };
 
   // 제한시간 다 끝났을 때 결과 모달 여는 useEffect
@@ -174,11 +188,6 @@ function SpeedoodleGame(props) {
     }
   }, [readyGame]);
 
-  // 게임 나가는 함수
-  const exitGame = () => {
-    navigate('/speedoodle');
-  };
-
   // 타이머 작동 여부 함수
   const handleRunning = () => {
     setRunning((prev) => !prev);
@@ -236,7 +245,7 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'>{keyword}</H4>
+            <H4 align='center'>{keyword && keyword[keywordIdx].content}</H4>
           </Keyword>
           <div
             style={{
@@ -265,4 +274,3 @@ function SpeedoodleGame(props) {
   );
 }
 export default SpeedoodleGame;
-

@@ -32,10 +32,10 @@ function SpeedoodleGameInfo(props) {
   const [roomInfo, setRoomInfo] = useState(props.gameInfo);
   const [bgColor, setBgColor] = useState(null);
   const [gameData, setGameData] = useState(null);
-  
+
   const [limits, setLimits] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
-  const[isLocked, setIsLocked] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
 
   const [user, setUser] = useRecoilState(userState);
 
@@ -48,56 +48,56 @@ function SpeedoodleGameInfo(props) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [props.chatData])
-  
-  useEffect(() => {
-    setIsMode(props.propMode);
-  }, [props.propMode])
+  }, [props.chatData]);
 
   useEffect(() => {
-    if(props.gameKey !== null && gameData === null) {
-      console.log("key전달 완료")
+    setIsMode(props.propMode);
+  }, [props.propMode]);
+
+  useEffect(() => {
+    if (props.gameKey !== null && gameData === null) {
+      console.log('key전달 완료');
       setIsLocked(true);
-      setGameData(props.gameKey)
+      setGameData(props.gameKey);
     }
   }, [props.gameKey]);
 
   useEffect(() => {
-    if(gameData !== null){
-      console.log('드디어 게임 시작')
+    if (gameData !== null) {
+      console.log('드디어 게임 시작');
       console.log(gameData);
       setBgColor(`${colors.gameBlue100}`);
       setIsGameStart(true);
     }
-  }, [gameData])
+  }, [gameData]);
 
   useEffect(() => {
     setIsMode(props.gameInfo.mode);
     setRoomInfo(props.gameInfo);
-  },[props.gameInfo])
+  }, [props.gameInfo]);
 
   useEffect(() => {
-    if(isGameStart === false && isLocked === true) {
-      if(roomInfo.leaderId === user.useId){
+    if (isGameStart === false && isLocked === true) {
+      if (roomInfo.leaderId === user.useId) {
         axios
-      .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
-      .then((res) => {
-        if (res.status === 200) {
-          console.log('겜끝! 풀게요!');
-        }
-      })
-      .catch((err) => console.error(err));
+          .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
+          .then((res) => {
+            if (res.status === 200) {
+              console.log('겜끝! 풀게요!');
+            }
+          })
+          .catch((err) => console.error(err));
       }
       setIsLocked(false);
       setBgColor(`${colors.white}`);
     }
-  },[isGameStart])
+  }, [isGameStart]);
 
   useEffect(() => {
-    if(!isLocked) {
+    if (!isLocked) {
       setGameData(null);
     }
-  },[isLocked])
+  }, [isLocked]);
 
   // const getRoomDetail = () => {
   //   // 룸상세 정보 가져오는 axios
@@ -148,8 +148,8 @@ function SpeedoodleGameInfo(props) {
   };
 
   const scrollToBottom = () => {
-    messages.current?.scrollIntoView({behavior: 'smooth'});
-  }
+    messages.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   //방 나가기
   const exitRoom = () => {
@@ -158,7 +158,7 @@ function SpeedoodleGameInfo(props) {
     //   .delete(`${API_URL}/doodle/room/leave/${roomInfo.roomId}/${user.userId}`)
     //   .then((res) => {
     //     if (res.status === 200) {
-          
+
     //     }
     //   })
     //   .catch((err) => console.error(err));
@@ -195,7 +195,7 @@ function SpeedoodleGameInfo(props) {
           <SpeedoodleGame
             style={{ width: '100%', height: '100%' }}
             isMode={isMode}
-            limits={isMode ? 3 : 2}
+            limits={isMode ? 30 : 20}
             keywords={gameData}
             roomInfo={props.gameInfo.roomInfo}
           ></SpeedoodleGame>
@@ -347,13 +347,13 @@ function SpeedoodleGameInfo(props) {
               </RoomInfo>
               <Chat>
                 <ChattingContainer useRef={chatWindowRef}>
-                  {
-                    props.chatData.map((item,idx) => {
-                      return (
-                        <P2 ref={messages} key={idx}>{item[0]}: {item[1]}</P2>
-                      )
-                    })
-                  }
+                  {props.chatData.map((item, idx) => {
+                    return (
+                      <P2 ref={messages} key={idx}>
+                        {item[0]}: {item[1]}
+                      </P2>
+                    );
+                  })}
                 </ChattingContainer>
                 <ChattingInputContainer>
                   <ChatInput

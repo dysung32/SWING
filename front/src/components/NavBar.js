@@ -102,21 +102,21 @@ function NavBar() {
   }, [user]);
 
   const onClickLogo = () => {
-    // const currentUrl = window.location.href;
-    // if (currentUrl.indexOf('speedoodle/room') !== -1) {
-    //   const roomUrl = new URL(window.location.href).pathname.split('/');
-    //   const lengthUrl = roomUrl.length;
-    //   const roomId = roomUrl[lengthUrl - 1];
-    //   setIsGameStart(false);
-    //   axios
-    //     .delete(`${API_URL}/doodle/room/leave/${roomId}/${user.userId}`)
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //         console.log('방퇴장합니다!');
-    //       }
-    //     })
-    //     .catch((err) => console.error(err));
-    // }
+    const currentUrl = window.location.href;
+    if (currentUrl.indexOf('speedoodle/room') !== -1) {
+      const roomUrl = new URL(window.location.href).pathname.split('/');
+      const lengthUrl = roomUrl.length;
+      const roomId = roomUrl[lengthUrl - 1];
+      setIsGameStart(false);
+      axios
+        .delete(`${API_URL}/doodle/room/leave/${roomId}/${user.userId}`)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log('방퇴장합니다!');
+          }
+        })
+        .catch((err) => console.error(err));
+    }
     navigate('/');
   };
 

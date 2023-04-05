@@ -15,6 +15,10 @@ function Stopwatch(props) {
 
   useInterval(() => {
     if (props.running) {
+      if (props.correct) {
+        props.setRecord('성공시간' + seconds + ':' + milliseconds);
+        props.setIsCorrect(() => false);
+      }
       if (parseInt(milliseconds) > 0) {
         setMilliseconds(parseInt(milliseconds) - 1);
       }

@@ -1,7 +1,7 @@
 // import styled from '@emotion/styled/macro';
-import styled, { keyframes } from 'styled-components';
-import { colors } from '../styles/ColorPalette';
-import HeroImg from '../assets/main.gif';
+import styled, { keyframes } from "styled-components";
+import { colors } from "../styles/ColorPalette";
+import HeroImg from "../assets/main.gif";
 export const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,13 +32,19 @@ export const HomeSentencyContainer = styled.div`
   width: 100%;
   height: 100vh;
   padding: 0 10%;
-  padding-top: 13rem;
+  padding-top: 12rem;
   background: linear-gradient(
     to top right,
     rgba(236, 61, 89, 0.5),
     rgba(22, 86, 233, 0.5)
   );
   box-sizing: border-box;
+
+  .pencil {
+    position: absolute;
+    left: 5%;
+    height: 65vh;
+  }
 `;
 
 export const HomeHiFiveContainer = styled.div`
@@ -48,19 +54,35 @@ export const HomeHiFiveContainer = styled.div`
   width: 100%;
   height: 100vh;
   padding: 0 10%;
-  padding-top: 13rem;
+  padding-top: 12rem;
   background-color: ${colors.gameBlue200};
   box-sizing: border-box;
 `;
 
 export const HomeSpeedoodleContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  position: relative;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
+  padding-top: 12rem;
   background-color: ${colors.gameBlue300};
   box-sizing: border-box;
+
+  .paint1 {
+    width: 25%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  .paint2 {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
 `;
 
 export const Divider = styled.div`
@@ -202,18 +224,20 @@ export const HomeRankBtn = styled.div`
 
 export const GameInfoContainer = styled.div`
   width: 50%;
+  min-width: 30rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   .slideContainer {
     margin-left: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     width: 100%;
     height: 55vh;
     border: 3px solid ${colors.gamePink500};
     border-radius: 1rem;
     background-color: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
   }
 
   .slide {
@@ -223,8 +247,42 @@ export const GameInfoContainer = styled.div`
 
     padding: 2rem 3rem;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: ${colors.gray100};
+
+    @media screen and (max-width: 1760px) {
+      .order,
+      .desc {
+        font-size: 1.3rem !important;
+      }
+
+      .title {
+        font-size: 1.8rem !important;
+      }
+
+      .warningBox > .flex {
+        padding-bottom: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 1530px) {
+      .order,
+      .desc {
+        font-size: 1.2rem !important;
+      }
+    }
+
+    @media screen and (max-width: 1280px) {
+      .order,
+      .desc {
+        font-size: 1.1rem !important;
+      }
+    }
+  }
+
+  .slide .title {
+    font-size: 2rem;
+    font-weight: 700;
   }
 
   .swiper-pagination-bullet {
@@ -300,7 +358,7 @@ export const GameInfoContainer = styled.div`
 
 export const GlowingBtn = styled.button`
   width: 12rem;
-  height: 3.5rem;
+  height: 4rem;
   border: none;
   outline: none;
   color: ${colors.white};
@@ -313,7 +371,7 @@ export const GlowingBtn = styled.button`
   margin: 0 calc((50% - 12rem) / 2);
 
   &:before {
-    content: '';
+    content: "";
     background: linear-gradient(
       45deg,
       #ff0000,
@@ -354,7 +412,7 @@ export const GlowingBtn = styled.button`
 
   &:after {
     z-index: -1;
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;

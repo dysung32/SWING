@@ -35,6 +35,7 @@ function SpeedoodleGameInfo(props) {
   
   const [limits, setLimits] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+  const[isLocked, setIsLocked] = useState(false);
 
   const [user, setUser] = useRecoilState(userState);
 
@@ -69,6 +70,32 @@ function SpeedoodleGameInfo(props) {
     }
   }, [gameData])
 
+  useEffect(() => {
+    setIsMode(props.gameInfo.mode);
+    setRoomInfo(props.gameInfo);
+  },[props.gameInfo])
+
+  useEffect(() => {
+    if(isGameStart === false && isLocked === true) {
+      axios
+      .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('겜끝! 풀게요!');
+          setIsLocked(false);
+          setBgColor(`${colors.white}`);
+        }
+      })
+      .catch((err) => console.error(err));
+    }
+  },[isGameStart])
+
+  useEffect(() => {
+    if(!isLocked) {
+      setGameData(null);
+    }
+  },[isLocked])
+
   // const getRoomDetail = () => {
   //   // 룸상세 정보 가져오는 axios
   //   // axios.get(API_URL)
@@ -98,6 +125,7 @@ function SpeedoodleGameInfo(props) {
       .then((res) => {
         if (res.status === 200) {
           console.log('방시작! 잠굴게요!');
+          setIsLocked(true);
           handleGameInfo();
           // setTimeout(() => {
           //   setBgColor(`${colors.gameBlue100}`);
@@ -150,6 +178,7 @@ function SpeedoodleGameInfo(props) {
 
   //모드 변경 api 전달
   const handleChangeMode = () => {
+    console.log(`지금 모드는 ${isMode}`);
     axios
       .put(`${API_URL}/doodle/room/${roomInfo.roomId}/${isMode}`, null, {})
       .then((res) => {
@@ -166,6 +195,7 @@ function SpeedoodleGameInfo(props) {
             isMode={isMode}
             limits={isMode ? 3 : 2}
             keywords={gameData}
+            roomInfo={props.gameInfo.roomInfo}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>

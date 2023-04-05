@@ -681,7 +681,9 @@ function Home() {
                 </div>
               </SwiperSlide>
             </Swiper>
-            <GlowingBtn onClick={() => navigate("/hi-five")}>PLAY</GlowingBtn>
+            <GlowingBtn onClick={() => navigate("/speedoodle")}>
+              PLAY
+            </GlowingBtn>
           </GameInfoContainer>
         </HomeSpeedoodleContainer>
       </HomeWrapper>

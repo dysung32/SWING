@@ -40,10 +40,24 @@ export const HomeSentencyContainer = styled.div`
   );
   box-sizing: border-box;
 
+  @keyframes float {
+    0% {
+      transform: translatey(0px);
+    }
+    50% {
+      transform: translatey(-20px);
+    }
+    100% {
+      transform: translatey(0px);
+    }
+  }
+
   .pencil {
     position: absolute;
     left: 5%;
     height: 65vh;
+    user-drag: none;
+    animation: float 6s ease-in-out infinite;
   }
 `;
 
@@ -76,12 +90,15 @@ export const HomeSpeedoodleContainer = styled.div`
     position: absolute;
     right: 0;
     bottom: 0;
+    user-drag: none;
   }
 
   .paint2 {
+    width: 35%;
     position: absolute;
     left: 0;
     bottom: 0;
+    user-drag: none;
   }
 `;
 

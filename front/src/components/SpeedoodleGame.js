@@ -38,7 +38,8 @@ function SpeedoodleGame(props) {
   const [aiAnswer, setAiAnswer] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isDrawFinish, setIsDrawFinish] = useState(false);
-
+  const [recordSc, setRecordSc] = useState(0);
+  const [recordMs, setRecordMs] = useState(0);
   const [user, setUser] = useRecoilState(userState);
 
   let canvasRef = useRef(null);
@@ -144,11 +145,11 @@ function SpeedoodleGame(props) {
       });
     };
 
-    if (isDrawFinish === true && isCorrect === false) {
+    if (isDrawFinish === true && record === '') {
       getAnswer();
       setIsDrawFinish(() => false);
     }
-  }, [isDrawFinish, isCorrect]);
+  }, [isDrawFinish, record]);
 
   // 제한시간 다 끝났을 때 결과 모달 여는 useEffect
 
@@ -156,6 +157,7 @@ function SpeedoodleGame(props) {
     if (finish) {
       if (record === '') {
         setRecord(() => '실패' + props.limits + ': 00');
+        setRecordSc((prev) => prev + props.limits);
       }
       resetCanvas();
       setTimeout(() => {
@@ -176,6 +178,10 @@ function SpeedoodleGame(props) {
 
   const handleResultModal = () => {
     setAiAnswer(() => []);
+    if (recordMs >= 100) {
+      setRecordSc((prev) => prev + 1);
+      setRecordMs((prev) => prev - 100);
+    }
     setResultModalShow(true);
     setTimeout(() => {
       if (roundCnt === 1) {
@@ -227,7 +233,9 @@ function SpeedoodleGame(props) {
         setModalShow={setFinalResultModalShow}
       >
         <H2>최종결과</H2>
-        <H4>1등 ***</H4>
+        <H4>
+          누적 시간은 {recordSc}:{recordMs} 입니다.
+        </H4>
         <div style={{ width: '24vw', height: '24vw' }}></div>
       </ModalBasic>
       {/* 각 라운드 결과 제공 모달 */}
@@ -256,6 +264,8 @@ function SpeedoodleGame(props) {
                 setFinish={setFinish}
                 correct={isCorrect}
                 setIsCorrect={setIsCorrect}
+                setRecordSc={setRecordSc}
+                setRecordMs={setRecordMs}
               ></Stopwatch>
             ) : (
               <div

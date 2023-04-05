@@ -36,6 +36,7 @@ import {
   delCookie,
 } from '../config';
 import IsLogin from '../auth/IsLogin';
+import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -74,61 +75,6 @@ function Home() {
       .then((res) => {
         console.log(res);
         setCoupon(() => res.data.user.coupon);
-      });
-  };
-
-  const checkRefreshToken = () => {
-    axios
-      .post(
-        `${API_URL}/user/refresh`,
-        {
-          userId: user.userId,
-        },
-        {
-          headers: {
-            'Refresh-Token': getCookie('refreshToken'),
-          },
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setCookie('accessToken', res.data['access-token'], 1);
-          setSuccessRefresh(() => true);
-        } else if (res.status === 202) {
-          delCookie('accessToken');
-          delCookie('refreshToken');
-          setUser(null);
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const checkAccessToken = () => {
-    axios
-      .post(
-        `${API_URL}/user/check`,
-        {},
-        {
-          headers: {
-            'Access-Token': getCookie('accessToken'),
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.message === 'success') {
-          setPassAccess(() => true);
-        } else if (res.data.message === 'fail') {
-          checkRefreshToken();
-          if (successRefresh) {
-            setPassAccess(() => true);
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
       });
   };
 
@@ -180,23 +126,9 @@ function Home() {
     setHifiveRankShow(true);
   };
 
-  useEffect(() => {
-    if (user !== '' && user !== null) {
-      checkAccessToken();
-
-      if (passAccess) {
-        getCouponCnt();
-      }
-    }
-    return () => {
-      if (coupon === null && passAccess === false) {
-        setSuccessRefresh(() => false);
-      }
-    };
-  }, [successRefresh, passAccess]);
+  CheckAccessNRefresh(getCouponCnt, coupon);
 
   useEffect(() => {
-    // getCouponCnt();
     const wheelHandler = (e) => {
       e.preventDefault();
       const { deltaY } = e;

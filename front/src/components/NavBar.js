@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { userState, speedoodleGameState } from '../recoil';
 import { useRecoilState } from 'recoil';
-import { API_URL, getCookie, delCookie } from '.././config';
+import { API_URL, setCookie, getCookie, delCookie } from '.././config';
 
 import { RoundLogo, PlayerProfile } from '../styles/CommonEmotion';
 import {
@@ -17,6 +17,7 @@ import { H4, H6 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { BasicProfile } from '../config';
 import IsLogin from '../auth/IsLogin';
+import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -25,6 +26,72 @@ function NavBar() {
   const [hoverProfile, setHoverProfile] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+
+  const [successRefresh, setSuccessRefresh] = useState(false);
+  const [passAccess, setPassAccess] = useState(false);
+
+  const checkRefreshToken = () => {
+    axios
+      .post(
+        `${API_URL}/user/refresh`,
+        {
+          userId: user.userId,
+        },
+        {
+          headers: {
+            'Refresh-Token': getCookie('refreshToken'),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setCookie('accessToken', res.data['access-token'], 1);
+          setSuccessRefresh(() => true);
+        } else if (res.status === 202) {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setUser(null);
+          navigate('/login');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const checkAccessToken = () => {
+    axios
+      .post(
+        `${API_URL}/user/check`,
+        {},
+        {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.message === 'success') {
+          setPassAccess(() => true);
+        } else if (res.data.message === 'fail') {
+          checkRefreshToken();
+          if (successRefresh) {
+            setPassAccess(() => true);
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverGame === false && passAccess === false) {
+        setSuccessRefresh(() => false);
+      }
+    };
+  }, [successRefresh, passAccess]);
 
   useEffect(() => {
     if (user !== null) {
@@ -35,35 +102,49 @@ function NavBar() {
   }, [user]);
 
   const onClickLogo = () => {
-    const currentUrl = window.location.href;
-    if (currentUrl.indexOf('speedoodle/room') !== -1) {
-      const roomUrl = new URL(window.location.href).pathname.split('/');
-      const lengthUrl = roomUrl.length;
-      const roomId = roomUrl[lengthUrl - 1];
-      setIsGameStart(false);
-      axios
-        .delete(`${API_URL}/doodle/room/leave/${roomId}/${user.userId}`)
-        .then((res) => {
-          if (res.status === 200) {
-            console.log('방퇴장합니다!');
-          }
-        })
-        .catch((err) => console.error(err));
-    }
+    // const currentUrl = window.location.href;
+    // if (currentUrl.indexOf('speedoodle/room') !== -1) {
+    //   const roomUrl = new URL(window.location.href).pathname.split('/');
+    //   const lengthUrl = roomUrl.length;
+    //   const roomId = roomUrl[lengthUrl - 1];
+    //   setIsGameStart(false);
+    //   axios
+    //     .delete(`${API_URL}/doodle/room/leave/${roomId}/${user.userId}`)
+    //     .then((res) => {
+    //       if (res.status === 200) {
+    //         console.log('방퇴장합니다!');
+    //       }
+    //     })
+    //     .catch((err) => console.error(err));
+    // }
     navigate('/');
+  };
+
+  const afterPassAccess = (url) => {
+    if (passAccess) {
+      navigate(url);
+    }
   };
 
   const onClickSentency = () => {
     if (isLogin) {
-      navigate('/sentency');
+      checkAccessToken();
+      if (passAccess) {
+        navigate('/sentency');
+      }
+      afterPassAccess('/sentency');
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');
     }
   };
+
   const onClickHifive = () => {
     if (isLogin) {
-      navigate('/hi-five');
+      checkAccessToken();
+      if (passAccess) {
+        navigate('/hi-five');
+      }
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');
@@ -71,7 +152,10 @@ function NavBar() {
   };
   const onClickSpeedoodle = () => {
     if (isLogin) {
-      navigate('/speedoodle');
+      checkAccessToken();
+      if (passAccess) {
+        navigate('/speedoodle');
+      }
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');

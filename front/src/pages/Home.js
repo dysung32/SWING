@@ -26,15 +26,9 @@ import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { colors } from '../styles/ColorPalette';
 import { CouponImg } from '../styles/MyPageEmotion';
 
-import SentencyPic from '../assets/sentency.gif';
+import alarm from '../assets/alarm.png';
 import Coupon from '../assets/main_coupon.svg';
-import {
-  API_URL,
-  BasicProfile,
-  setCookie,
-  getCookie,
-  delCookie,
-} from '../config';
+import { API_URL, BasicProfile, setCookie, getCookie, delCookie } from '../config';
 import IsLogin from '../auth/IsLogin';
 import axios from 'axios';
 import SideLeaderBoard from '../components/SideLeaderBoard';
@@ -88,7 +82,7 @@ function Home() {
           headers: {
             'Refresh-Token': getCookie('refreshToken'),
           },
-        }
+        },
       )
       .then((res) => {
         if (res.status === 200) {
@@ -115,7 +109,7 @@ function Home() {
           headers: {
             'Access-Token': getCookie('accessToken'),
           },
-        }
+        },
       )
       .then((res) => {
         if (res.data.message === 'success') {
@@ -289,12 +283,7 @@ function Home() {
         {IsLogin() ? (
           <UserInfoBox>
             <div className='flex userInfo'>
-              <PlayerProfile
-                width={5}
-                height={5}
-                src={user.profileImageUrl}
-                onClick={() => navigate('/my-page')}
-              />
+              <PlayerProfile width={5} height={5} src={user.profileImageUrl} onClick={() => navigate('/my-page')} />
               <div className='nickname'>{user.nickname}</div>
             </div>
             <UserCouponBox>
@@ -348,11 +337,7 @@ function Home() {
         </HomeHeroContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
         <HomeSentencyContainer>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-          >
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
             SENTENCY
           </H1>
           <HomeRankBtn onClick={handleSentencyRankBtn}>
@@ -365,7 +350,6 @@ function Home() {
             rankers={rankers}
             myRank={myRank}
           />
-          <div className='howtoTitle'>How To PLAY ??</div>
           <Swiper
             modules={[Pagination]}
             className='slideContainer'
@@ -376,22 +360,90 @@ function Home() {
               sentencySwiperRef.current = swiper;
             }}
           >
-            <SwiperSlide className='slide'>Slide 1</SwiperSlide>
-            <SwiperSlide className='slide'>Slide 2</SwiperSlide>
-            <SwiperSlide className='slide'>Slide 3</SwiperSlide>
-            <SwiperSlide className='slide'>Slide 4</SwiperSlide>
-            <SwiperSlide className='slide'>Slide 5</SwiperSlide>
+            <SwiperSlide className='slide'>
+              <H3>게임 진행 방법</H3>
+              <img
+                className='how-to-img'
+                src={
+                  'https://user-images.githubusercontent.com/55757379/229963030-255665ed-bbdc-49fe-a865-ec3025cb9329.png'
+                }
+                alt='img'
+              />
+              <div className='flex'>
+                <H4 className='order'>1.</H4>
+                <H4 className='desc'>
+                  게임이 시작되면 한 장의 랜덤 이미지와 해당 이미지를 설명하는 한글 문장이 유저에게 주어집니다.
+                </H4>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide className='slide'>
+              <H3>게임 진행 방법</H3>
+              <img
+                className='how-to-img'
+                src={
+                  'https://user-images.githubusercontent.com/55757379/229963137-df7003a1-54a7-48fe-acd0-376257b6ec55.png'
+                }
+                alt='img'
+              />
+              <div className='flex'>
+                <H4 className='order'>2.</H4>
+                <H4 className='desc'>유저는 주어진 이미지와 문장의 단어 수를 참고하여 본문을 맞춰야 합니다.</H4>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide className='slide'>
+              <H3>게임 진행 방법</H3>
+              <img
+                className='how-to-img'
+                src={
+                  'https://user-images.githubusercontent.com/55757379/229958895-5395af6c-a765-4050-8dde-512d2923cbb5.png'
+                }
+                alt='img'
+              />
+              <div className='flex'>
+                <H4 className='order'>3.</H4>
+                <H4 className='desc'>
+                  유저가 입력한 문장과 정답을 비교하여 문장유사도가 90% 이상일 경우 정답으로 처리가 됩니다.
+                </H4>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide className='slide'>
+              <H3>
+                <img src={alarm} alt='warning' className='warningEmoji' />
+                게임 유의사항
+                <img src={alarm} alt='warning' className='warningEmoji' />
+              </H3>
+              <div className='warningBox'>
+                <div className='flex'>
+                  <H4 className='order'>•</H4>
+                  <H4>총 life 개수는 5개입니다.</H4>
+                </div>
+                <div className='flex'>
+                  <H4 className='order'>•</H4>
+                  <H4>
+                    보유하고 있는 쿠폰이 있다면 추가 시도가 가능합니다.
+                    <br />
+                    쿠폰은 복습테스트를 통해 획득이 가능합니다.
+                  </H4>
+                </div>
+                <div className='flex'>
+                  <H4 className='order'>•</H4>
+                  <H4>유사도 검사는 AI가 문장 구조 및 단어 스펠링이 아닌 문장의 의미를 기반으로 측정합니다.</H4>
+                </div>
+                <div className='flex'>
+                  <H4 className='order'>•</H4>
+                  <H4>
+                    오답이더라도 일부 단어가 정답 문장의 단어와 위치까지 일치할 경우, 해당 단어는 유저에게 공개됩니다.
+                  </H4>
+                </div>
+              </div>
+            </SwiperSlide>
           </Swiper>
           <GlowingBtn onClick={() => navigate('/sentency')}>PLAY</GlowingBtn>
         </HomeSentencyContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue200}` }}></Divider>
         <HomeHiFiveContainer>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-          >
-            HIFIVE
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
+            HI-FIVE
           </H1>
           <HomeRankBtn onClick={handleFiveRankBtn}>
             <div className='text'>Click!!</div>
@@ -403,7 +455,6 @@ function Home() {
             rankers={rankers}
             myRank={myRank}
           />
-          <div className='howtoTitle'>How To PLAY ??</div>
           <Swiper
             modules={[Pagination]}
             className='slideContainer'
@@ -414,7 +465,22 @@ function Home() {
               hifiveSwiperRef.current = swiper;
             }}
           >
-            <SwiperSlide className='slide'>Slide 1</SwiperSlide>
+            <SwiperSlide className='slide'>
+              <H3>게임 진행 방법</H3>
+              <img
+                className='how-to-img'
+                src={
+                  'https://user-images.githubusercontent.com/55757379/229955993-c2bdc45a-9c94-44a4-8e27-2afc2e7d2738.png'
+                }
+                alt='img'
+              />
+              <div className='flex'>
+                <H4 className='order'>1.</H4>
+                <H4 className='desc'>
+                  게임이 시작되면 한 장의 랜덤 이미지와 해당 이미지를 설명하는 한글 문장이 유저에게 주어집니다.
+                </H4>
+              </div>
+            </SwiperSlide>
             <SwiperSlide className='slide'>Slide 2</SwiperSlide>
             <SwiperSlide className='slide'>Slide 3</SwiperSlide>
             <SwiperSlide className='slide'>Slide 4</SwiperSlide>

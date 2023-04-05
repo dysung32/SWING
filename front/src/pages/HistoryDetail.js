@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import {
-  CaretLeft,
-  CaretLeftFill,
-  CaretRight,
-  CaretRightFill,
-} from 'react-bootstrap-icons';
+import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
 import { colors } from '../styles/ColorPalette';
 import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
 import { H1 } from '../styles/Fonts';
@@ -50,36 +45,59 @@ function HistoryDetail() {
   const swiperRef = useRef();
   const [round, setRound] = useState(1);
 
-  const renderPics = picDatas.map((pic, index) => {
-    return (
-      <SinglePicContainer key={index}>
-        <Picture src={pic.imgURL} />
-        <UserInfoBox>
-          <PlayerProfile
-            src={pic.profileImg}
-            width={3}
-            maxWidth={3}
-            height={3}
-            className='profile'
-          />
-          <UserNickName>{pic.nickname}</UserNickName>
-          <CommonBtn
-            width={'5rem'}
-            minWidth={'3.5rem'}
-            height={45}
-            font={1.1}
-            color={colors.gameYellow200}
-            hoverColor={colors.gameYellow300}
-            fontColor={colors.gameBlue500}
-            fontWeight={700}
-            className='save-btn'
-          >
-            저장
-          </CommonBtn>
-        </UserInfoBox>
-      </SinglePicContainer>
-    );
-  });
+  // const renderPics = picDatas.map((pic, index) => {
+  //   return (
+  //     <SinglePicContainer key={index}>
+  //       <Picture src={pic.imgURL} />
+  //       <UserInfoBox>
+  //         <PlayerProfile src={pic.profileImg} width={3} maxWidth={3} height={3} className='profile' />
+  //         <UserNickName>{pic.nickname}</UserNickName>
+  //         <CommonBtn
+  //           width={'5rem'}
+  //           minWidth={'3.5rem'}
+  //           height={45}
+  //           font={1.1}
+  //           color={colors.gameYellow200}
+  //           hoverColor={colors.gameYellow300}
+  //           fontColor={colors.gameBlue500}
+  //           fontWeight={700}
+  //           className='save-btn'
+  //         >
+  //           저장
+  //         </CommonBtn>
+  //       </UserInfoBox>
+  //     </SinglePicContainer>
+  //   );
+  // });
+
+  const renderPics = (pics) => {
+    if (pics) {
+      return pics.map((pic, idx) => {
+        return (
+          <SinglePicContainer key={idx}>
+            <Picture src={pic.roundImageUrl} />
+            <UserInfoBox>
+              <PlayerProfile src={pic.profileImageUrl} width={3} maxWidth={3} height={3} className='profile' />
+              <UserNickName>{pic.nickname}</UserNickName>
+              <CommonBtn
+                width={'5rem'}
+                minWidth={'3.5rem'}
+                height={45}
+                font={1.1}
+                color={colors.gameYellow200}
+                hoverColor={colors.gameYellow300}
+                fontColor={colors.gameBlue500}
+                fontWeight={700}
+                className='save-btn'
+              >
+                저장
+              </CommonBtn>
+            </UserInfoBox>
+          </SinglePicContainer>
+        );
+      });
+    }
+  };
 
   const getHistoryDetail = () => {
     axios
@@ -100,12 +118,7 @@ function HistoryDetail() {
     <>
       <MyPageWrapper>
         <GameTitle>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-            align='center'
-          >
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
             {date}자 게임 | 랭킹: {rank}등
           </H1>
         </GameTitle>
@@ -133,10 +146,7 @@ function HistoryDetail() {
                   onMouseLeave={() => setLeftHover(false)}
                 />
               ) : (
-                <CaretLeft
-                  className='left'
-                  onMouseEnter={() => setLeftHover(true)}
-                />
+                <CaretLeft className='left' onMouseEnter={() => setLeftHover(true)} />
               )}
               <div className='roundNum'>ROUND {round}</div>
               {rightHover ? (
@@ -147,10 +157,7 @@ function HistoryDetail() {
                   onMouseLeave={() => setRightHover(false)}
                 />
               ) : (
-                <CaretRight
-                  className='right'
-                  onMouseEnter={() => setRightHover(true)}
-                />
+                <CaretRight className='right' onMouseEnter={() => setRightHover(true)} />
               )}
             </GameRoundNav>
             <HistoryPictureContainer
@@ -183,25 +190,15 @@ function HistoryDetail() {
                 className='mySwiper'
               >
                 {/* 1라운드 */}
-                <SwiperSlide className='slideContainer'>
-                  {renderPics}
-                </SwiperSlide>
+                <SwiperSlide className='slideContainer'>{renderPics(picDatas[0])}</SwiperSlide>
                 {/* 2라운드 */}
-                <SwiperSlide className='slideContainer'>
-                  {renderPics}
-                </SwiperSlide>
+                <SwiperSlide className='slideContainer'>{renderPics(picDatas[1])}</SwiperSlide>
                 {/* 3라운드 */}
-                <SwiperSlide className='slideContainer'>
-                  {renderPics}
-                </SwiperSlide>
+                <SwiperSlide className='slideContainer'>{renderPics(picDatas[2])}</SwiperSlide>
                 {/* 4라운드 */}
-                <SwiperSlide className='slideContainer'>
-                  {renderPics}
-                </SwiperSlide>
+                <SwiperSlide className='slideContainer'>{renderPics(picDatas[3])}</SwiperSlide>
                 {/* 5라운드 */}
-                <SwiperSlide className='slideContainer'>
-                  {renderPics}
-                </SwiperSlide>
+                <SwiperSlide className='slideContainer'>{renderPics(picDatas[4])}</SwiperSlide>
               </Swiper>
             </HistoryPictureContainer>
             {/* {renderPics} */}

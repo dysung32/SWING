@@ -16,10 +16,11 @@ export const HomeWrapper = styled.div`
 export const HomeHeroContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 100vh;
-  padding: 0 10%;
+  padding: 11rem 10% 3rem;
   background-color: #bbd4f2;
   box-sizing: border-box;
 `;
@@ -31,7 +32,11 @@ export const HomeSentencyContainer = styled.div`
   height: 100vh;
   padding: 0 10%;
   padding-top: 13rem;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
   box-sizing: border-box;
 `;
 
@@ -61,8 +66,16 @@ export const Divider = styled.div`
   height: 5px;
 `;
 
+export const HeroIntroBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 60vh;
+  padding: 0 3% 0 0;
+`;
+
 export const HeroGif = styled.div`
-  width: 50%;
+  width: 60%;
   height: 100%;
   background: center / contain no-repeat url(${HeroImg});
 `;
@@ -296,7 +309,18 @@ export const GlowingBtn = styled.button`
 
   &:before {
     content: '';
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00c8,
+      #ff0000
+    );
     position: absolute;
     top: -2px;
     left: -2px;

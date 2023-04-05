@@ -85,11 +85,12 @@ function SpeedoodleGame(props) {
   // const saveRoundResult = (imageData) => {
   //   const data = {
   //     userId: user.userId,
-  //     roundId: keyword
+  //     roundId: keyword[keywordIdx].roundId,
+  //     image: 
   //   }
   //   axios({
   //     method: 'POST',
-  //     url: `${API_URL}/doodle/round`
+  //     url: `${API_URL}/doodle/round`,
   //   })
   // }
 
@@ -245,7 +246,7 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'>{keyword && keyword[keywordIdx].content}</H4>
+            <H4 align='center'>{keyword&& keyword[keywordIdx].content}</H4>
           </Keyword>
           <div
             style={{

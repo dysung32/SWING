@@ -34,24 +34,25 @@ function Hifive() {
   const [imageCheck, setImageCheck] = useState([[100,false],[100,false], [100,false], [100,false], [100,false]]);
   const [lifeStack, setLifeStack] = useState(5);
   const [answerStack, setAnswerStack] = useState([]);
-  const [scoreStack, setScoreStack] = useState(0);
   const [wrongWords, setWrongWords] = useState([]);
   const [resultValue,setresultValue] = useState();
   const [chanceCnt, setChanceCnt] = useState(null); 
   const [finalValue, setFinalValue] = useState(null);
-  const [userData, setUserData] = useRecoilState(userState);
+
   const [modalLoading, setModalLoading] = useState(false);
 
   const [otherRank, setOtherRank] = useState();
   const [mine, setMine] = useState();
 
+  const [user, setUser] = useRecoilState(userState);
+  const [scoreStack, setScoreStack] = useState(0);
   const [tryCnt, setTryCnt] = useState(0);
   const [corCnt, setCorCnt] = useState(0);
 
   // 페이지가 렌더링 될 때 유저의 횟수를 호출
   useEffect(() => {
     axios({ 
-      url: `${API_URL}/user/five/${userData.userId}`,
+      url: `${API_URL}/user/five/${user.userId}`,
       method: 'GET',
       headers: {
         'Access-Token': getCookie('accessToken'),
@@ -88,6 +89,19 @@ function Hifive() {
       });
     }
   },[chanceCnt]);
+
+  useEffect(() => {
+    if(lifeStack === 0){
+      setWrongWords(imageSet);
+      sendResult();
+    }
+  }, [lifeStack])
+
+  useEffect(() => {
+    if(corCnt === 5) {
+      sendResult();
+    }
+  }, [corCnt])
 
   // 유저가 답을 작성하면 발생하는 함수
   const handleSubmit = (e) => {
@@ -131,12 +145,7 @@ function Hifive() {
       setIsVibrating(true);
       setBorderColor(colors.gamePink500);
       
-      if(lifeStack - 1 === 0){
-        setLifeStack(lifeStack - 1);
-        handleFailModal(tempSet);
-      }else{
-        setLifeStack(lifeStack-1);
-      }
+      setLifeStack(lifeStack-1);
 
       temp.forEach(element => {
         element[0] = Math.ceil(element[0]*0.9);
@@ -157,12 +166,7 @@ function Hifive() {
       setImageCheck(temp);
       setBorderColor(colors.gamePink500);
       
-      if(lifeStack - 1 === 0){
-        setLifeStack(lifeStack - 1);
-        handleFailModal(tempSet);
-      }else{
-        setLifeStack(lifeStack-1);
-      }
+      setLifeStack(lifeStack - 1);
 
       const timeoutId = setTimeout(() => {
         temp[idx][1] = false;
@@ -173,7 +177,6 @@ function Hifive() {
       return () => clearTimeout(timeoutId);
     }
     else{
-      setCorCnt(corCnt+1);
       console.log(maxSimilar);
       const idx = imageSet.findIndex(obj => obj.content === maxKey);
       const answer = tempSet.splice(idx, 1);
@@ -185,12 +188,9 @@ function Hifive() {
       setBorderColor(colors.gameBlue300);
       setImageSet(tempSet);
       setImageCheck(temp);
+      setCorCnt(corCnt+1);
 
       const timeoutId = setTimeout(() => {
-        console.log(scoreStack);
-        if(imageSet.length-1 === 0) {
-          sendResult();
-        }
 
         setBorderColor("white");
       }, 500);
@@ -199,16 +199,10 @@ function Hifive() {
     }
   }
 
-  //목숨이 다했을때 모달 띄우는 함수
-  const handleFailModal = (tempSet) => {
-    setWrongWords(tempSet);
-    sendResult();
-  }
-
   // 유저가 결과를 전송할때 사용하는 함수
   const sendResult = () => {
     const FiveResultDto = {
-      userId: userData.userId,
+      userId: user.userId,
       dayScore: scoreStack,
       dayTry: tryCnt,
       dayCorrect: corCnt
@@ -229,7 +223,7 @@ function Hifive() {
   //서버로부터 오늘 결과 수신
   const getResult = () => {
     axios({
-      url:`${API_URL}/five/${userData.userId}`,
+      url:`${API_URL}/five/${user.userId}`,
       method:'GET',
       headers:{
         'Access-Token': getCookie('accessToken'),
@@ -254,6 +248,19 @@ function Hifive() {
   //모달을 불러오는 타이밍이 되었다는 뜻
   useEffect(() => {
     if(finalValue !== null){
+      axios({
+        method: 'PUT',
+        url: `${API_URL}/user/five/${user.userId}/0`,
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        }
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
       if(finalValue.streak === 0){
         setresultValue(false);
         setModalLoading(true);
@@ -264,39 +271,6 @@ function Hifive() {
       }
     }
   },[finalValue])
-
-  // // django로 api 호출을 하여 입력한 단어와 정답간에 유사도 판별
-  // async function getSimilarity() {
-  //   try {
-
-  //     let URL = "http://j8a405.p.ssafy.io:8000/api/five/check?";
-  //     imageSet.forEach(element => {
-  //       const content = element.content.replace('_',' ');        
-  //       URL += `solution=${content}&`;
-  //     });
-  //     URL += `answer=${inputValue}`;
-  //     // console.log(URL);
-  //     const promise = await fetch(URL,{method: 'GET'});
-  //     const data = await promise.json();
-  //     return data;
-  //   }
-  //   catch (error) {
-  //     console.log(error);
-  //     throw new Error("Api 호출 실패");
-  //   }
-  // }
-
-  // async function getImage() {
-  //   try {
-  //     const promise = await fetch("http://j8a405.p.ssafy.io:8080/api/five",{method: 'GET'});
-  //     const data = await promise.json();
-  //     return data;
-  //   }
-  //   catch (error) {
-  //     console.log(error);
-  //     throw new Error("Api 호출 실패");
-  //   }
-  // }
 
   return (
     <>
@@ -312,7 +286,7 @@ function Hifive() {
                 <div className='resultBox'>
                   <div className='resultValue'>
                     <H3 color={colors.gameBlue500}>점수</H3>
-                    <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+                    <H3 color={colors.gameBlue500}>{scoreStack? scoreStack : mine.score}점</H3>
                   </div>
                   <div className='resultValue'>
                   <H3 color={colors.gameBlue500}>누적 점수</H3>

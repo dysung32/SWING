@@ -26,6 +26,7 @@ function SpeedoodleRoom() {
   const [changeUser, setChangeUser] = useState(null);
   const [propMode, setPropMode] = useState(null);
   const [isStart, setIsStart] = useState(null);
+  const [gameKey, setGameKey] = useState(null);
 
   const stompRef = useRef(null);
   const roomUrl = new URL(window.location.href).pathname.split('/');
@@ -43,8 +44,7 @@ function SpeedoodleRoom() {
       .get(`${API_URL}/doodle/room/info/${room_id}/${user.userId}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log('존나 받는 데이터');
-          console.log(res.data.chatUserList);
+          console.log(res.data);
           setUserList(res.data.chatUserList);
           setGameRoomInfo(() => res.data);
         }
@@ -126,7 +126,8 @@ function SpeedoodleRoom() {
               setPropMode(msObj.data);
             }
             else if(msObj.messageType === 'START') {
-              // setIsStart(true);
+              setIsStart(true);
+              setGameKey(msObj.roundInfoList);
             }
             console.log(msObj);
           },
@@ -263,6 +264,7 @@ function SpeedoodleRoom() {
                   ModeMessage={ModeMessage}
                   propMode = {propMode}
                   isStart = {isStart}
+                  gameKey = {gameKey}
                   // isMode={isMode}
                 ></SpeedoodleGameInfo>
               )}
@@ -277,3 +279,4 @@ function SpeedoodleRoom() {
 }
 
 export default SpeedoodleRoom;
+

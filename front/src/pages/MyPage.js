@@ -33,6 +33,7 @@ import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userState } from '../recoil';
+import CheckAccessNRefresh from '../auth/CheckAccessNRefresh';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -123,6 +124,9 @@ function MyPage() {
         setCoupon(res.data.user.coupon);
       });
   };
+
+  //access-token이 통과될때 쿠폰 렌더
+  CheckAccessNRefresh(getCouponCnt, coupon);
 
   const changeNickname = () => {
     setAllowedMsg('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
@@ -324,10 +328,6 @@ function MyPage() {
       })
       .catch((err) => {});
   };
-
-  useState(() => {
-    getCouponCnt();
-  }, []);
 
   return (
     <>

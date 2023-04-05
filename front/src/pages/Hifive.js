@@ -94,6 +94,21 @@ function Hifive() {
     if(lifeStack === 0){
       setWrongWords(imageSet);
       sendResult();
+      imageSet.map((obj) => {
+        axios({
+          method: 'POST',
+          url: `${API_URL}/note/word/${user.userId}/${obj.wordId}`,
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          }
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      })
     }
   }, [lifeStack])
 

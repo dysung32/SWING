@@ -31,7 +31,7 @@ function SpeedoodleGameInfo(props) {
   const [isMode, setIsMode] = useState(props.gameInfo.mode);
   const [roomInfo, setRoomInfo] = useState(props.gameInfo);
   const [bgColor, setBgColor] = useState(null);
-  const [gameData, setGameData] = useState({});
+  const [gameData, setGameData] = useState(null);
   
   const [limits, setLimits] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
@@ -54,11 +54,20 @@ function SpeedoodleGameInfo(props) {
   }, [props.propMode])
 
   useEffect(() => {
-    if(props.isStart !== null){
+    if(props.gameKey !== null && gameData === null) {
+      console.log("key전달 완료")
+      setGameData(props.gameKey)
+    }
+  }, [props.gameKey]);
+
+  useEffect(() => {
+    if(gameData !== null){
+      console.log('드디어 시발 게임 시작')
+      console.log(gameData);
       setBgColor(`${colors.gameBlue100}`);
       setIsGameStart(true);
     }
-  },[props.isStart])
+  }, [gameData])
 
   // const getRoomDetail = () => {
   //   // 룸상세 정보 가져오는 axios
@@ -85,7 +94,7 @@ function SpeedoodleGameInfo(props) {
     handleChangeMode();
     //방 잠금 설정
     axios
-      .put(`${API_URL}/doodle/start/${roomInfo.roomId}`, null, {})
+      .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
       .then((res) => {
         if (res.status === 200) {
           console.log('방시작! 잠굴게요!');
@@ -104,12 +113,10 @@ function SpeedoodleGameInfo(props) {
       .get(`${API_URL}/doodle/start/${roomInfo.roomId}/${roomInfo.name}`)
       .then((res) => {
         console.log('게임시작 정보', res);
-        setGameData(res.data);
       })
       .catch((err) => console.error(err));
   };
 
-  //채팅이 칸너머 갈 경우 자동 스크롤
   const scrollToBottom = () => {
     messages.current?.scrollIntoView({behavior: 'smooth'});
   }
@@ -158,7 +165,7 @@ function SpeedoodleGameInfo(props) {
             style={{ width: '100%', height: '100%' }}
             isMode={isMode}
             limits={isMode ? 3 : 2}
-            keywords={gameData?.roundInfoList}
+            keywords={gameData}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>

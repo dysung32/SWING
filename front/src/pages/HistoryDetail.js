@@ -45,31 +45,6 @@ function HistoryDetail() {
   const swiperRef = useRef();
   const [round, setRound] = useState(1);
 
-  // const renderPics = picDatas.map((pic, index) => {
-  //   return (
-  //     <SinglePicContainer key={index}>
-  //       <Picture src={pic.imgURL} />
-  //       <UserInfoBox>
-  //         <PlayerProfile src={pic.profileImg} width={3} maxWidth={3} height={3} className='profile' />
-  //         <UserNickName>{pic.nickname}</UserNickName>
-  //         <CommonBtn
-  //           width={'5rem'}
-  //           minWidth={'3.5rem'}
-  //           height={45}
-  //           font={1.1}
-  //           color={colors.gameYellow200}
-  //           hoverColor={colors.gameYellow300}
-  //           fontColor={colors.gameBlue500}
-  //           fontWeight={700}
-  //           className='save-btn'
-  //         >
-  //           저장
-  //         </CommonBtn>
-  //       </UserInfoBox>
-  //     </SinglePicContainer>
-  //   );
-  // });
-
   const renderPics = (pics) => {
     if (pics) {
       return pics.map((pic, idx) => {

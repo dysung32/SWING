@@ -67,6 +67,7 @@ export const Divider = styled.div`
 `;
 
 export const HeroIntroBox = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -75,6 +76,8 @@ export const HeroIntroBox = styled.div`
 `;
 
 export const HeroGif = styled.div`
+  position: absolute;
+  right: 1rem;
   width: 60%;
   height: 100%;
   background: center / contain no-repeat url(${HeroImg});

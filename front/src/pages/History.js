@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { MyPageWrapper, HistoryHeader } from '../styles/MyPageEmotion';
-import { HistoryContent, HistoryContentContainer, SingleHistoryList } from '../styles/HistoryEmotion';
+import {
+  HistoryContent,
+  HistoryContentContainer,
+  SingleHistoryList,
+} from '../styles/HistoryEmotion';
 import { GameTitle } from '../styles/CommonEmotion';
 import { H1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
@@ -16,25 +20,32 @@ function History() {
   const [historyList, setHistoryList] = useState([]);
 
   const changeTimeStampToDate = (timestamp) => {
-    let date = new Date(timestamp);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDate();
-    return year + '년 ' + month + '월 ' + day + '일';
+    let yy = timestamp.slice(0, 4);
+    let mm = timestamp.slice(5, 7);
+    let dd = timestamp.slice(8, 10);
+    const date = `${yy}년 ${mm}월 ${dd}일`;
+
+    return date;
   };
 
-  const renderHistoryList = historyList.map((history, idx) => {
+  const renderHistoryList = historyList.map((history) => {
     return (
       // api 연결 후엔 key값 history id로 설정하기
       <SingleHistoryList
-        key={idx}
+        key={history.gameId}
         onClick={() =>
-          navigate(`/history/${idx}`, {
-            state: { date: changeTimeStampToDate(history.playTime), rank: history.rank },
+          navigate(`/history/${history.gameId}`, {
+            state: {
+              date: changeTimeStampToDate(history.playTime),
+              rank: history.rank,
+              gameId: history.gameId,
+            },
           })
         }
       >
-        <div className='history-date'>{changeTimeStampToDate(history.playTime)}</div>
+        <div className='history-date'>
+          {changeTimeStampToDate(history.playTime)}
+        </div>
         <div className='history-title'>{history.roomName}</div>
         <div className='history-rank'>{history.rank}등</div>
       </SingleHistoryList>
@@ -62,7 +73,12 @@ function History() {
     <>
       <MyPageWrapper>
         <GameTitle>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
+          <H1
+            color={colors.white}
+            outline={colors.gameBlue500}
+            outlineWeight={2}
+            align='center'
+          >
             게임 히스토리
           </H1>
         </GameTitle>
@@ -74,7 +90,11 @@ function History() {
             <div className='rank'>등수</div>
           </HistoryHeader>
           <HistoryContent>
-            {historyList.length > 0 ? renderHistoryList : <div className='no-history'>히스토리 목록이 없습니다.</div>}
+            {historyList.length > 0 ? (
+              renderHistoryList
+            ) : (
+              <div className='no-history'>히스토리 목록이 없습니다.</div>
+            )}
           </HistoryContent>
         </HistoryContentContainer>
       </MyPageWrapper>

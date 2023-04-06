@@ -357,7 +357,7 @@ function Sentency() {
   }, [life]);
 
   useEffect(() => {
-    if (similarity !== null) {
+    if (document.querySelector(".similarity") !== null) {
       if (similarity >= 70 && similarity < 90) {
         // 70% 이상 90% 미만일 경우
         document.querySelector(".similarity").classList.remove("red");
@@ -382,7 +382,7 @@ function Sentency() {
         document.querySelector(".similarity").classList.remove("yellow");
         document.querySelector(".similarity").classList.remove("green");
         document.querySelector(".similarity").classList.add("red");
-      } else {
+      } else if (similarity === 0 && life > 0) {
         // 0일 때 다시 white 기본 컬러로 초기화
         document.querySelector(".similarity").classList.remove("orange");
         document.querySelector(".similarity").classList.remove("green");

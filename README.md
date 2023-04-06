@@ -80,8 +80,8 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
 <br>
 
 ## **Architecture**
-    이미지 첨부하기
-
+![Architecture](/docs/architecture.PNG)
+    
 <br>
 
 ## **기술 스택**

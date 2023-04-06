@@ -1,7 +1,7 @@
 // import styled from '@emotion/styled/macro';
-import styled, { keyframes } from "styled-components";
-import { colors } from "../styles/ColorPalette";
-import HeroImg from "../assets/main.gif";
+import styled, { keyframes } from 'styled-components';
+import { colors } from '../styles/ColorPalette';
+import HeroImg from '../assets/main.gif';
 export const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,24 +33,8 @@ export const HomeSentencyContainer = styled.div`
   height: 100vh;
   padding: 0 10%;
   padding-top: 12rem;
-  background: linear-gradient(
-    to top right,
-    rgba(236, 61, 89, 0.5),
-    rgba(22, 86, 233, 0.5)
-  );
+  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
   box-sizing: border-box;
-
-  @keyframes float {
-    0% {
-      transform: translatey(0px);
-    }
-    50% {
-      transform: translatey(-20px);
-    }
-    100% {
-      transform: translatey(0px);
-    }
-  }
 
   .pencil {
     position: absolute;
@@ -64,6 +48,7 @@ export const HomeSentencyContainer = styled.div`
 export const HomeHiFiveContainer = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   align-items: center;
   width: 100%;
   height: 100vh;
@@ -71,6 +56,36 @@ export const HomeHiFiveContainer = styled.div`
   padding-top: 12rem;
   background-color: ${colors.gameBlue200};
   box-sizing: border-box;
+
+  @keyframes float {
+    0% {
+      transform: translatey(0px);
+    }
+    50% {
+      transform: translatey(-30px);
+    }
+    100% {
+      transform: translatey(0px);
+    }
+  }
+
+  .cloud1,
+  .cloud2 {
+    position: absolute;
+    user-drag: none;
+  }
+
+  .cloud1 {
+    left: 5%;
+    animation: float 5s ease-in-out infinite;
+  }
+
+  .cloud2 {
+    width: 30vw;
+    right: 5%;
+    bottom: -10%;
+    animation: float 6s ease-in-out infinite;
+  }
 `;
 
 export const HomeSpeedoodleContainer = styled.div`
@@ -388,19 +403,8 @@ export const GlowingBtn = styled.button`
   margin: 0 calc((50% - 12rem) / 2);
 
   &:before {
-    content: "";
-    background: linear-gradient(
-      45deg,
-      #ff0000,
-      #ff7300,
-      #fffb00,
-      #48ff00,
-      #00ffd5,
-      #002bff,
-      #7a00ff,
-      #ff00c8,
-      #ff0000
-    );
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
     position: absolute;
     top: -2px;
     left: -2px;
@@ -429,7 +433,7 @@ export const GlowingBtn = styled.button`
 
   &:after {
     z-index: -1;
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;

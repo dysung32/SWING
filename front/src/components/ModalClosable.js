@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import { ModalBackground, ModalBody } from '../styles/CommonEmotion';
 

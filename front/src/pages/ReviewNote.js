@@ -41,7 +41,7 @@ function ReviewNote() {
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.wordNoteList);
         setWordArray([...res.data.wordNoteList]);
       })
       .catch((err) => {
@@ -120,11 +120,17 @@ function ReviewNote() {
       axios({
         method: 'put',
         url: `${API_URL}/note/word/${wid}`,
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
       })
-        .then((res) => {
+        .then(() => {
           axios({
             method: 'get',
-            url: `${API_URL}/note/word/black/0`,
+            url: `${API_URL}/note/word/${user.userId}/0`,
+            headers: {
+              'Access-Token': getCookie('accessToken'),
+            },
           })
             .then((res) => {
               setWordArray([...res.data.wordNoteList]);
@@ -140,11 +146,17 @@ function ReviewNote() {
       axios({
         method: 'put',
         url: `${API_URL}/note/sentence/${wid}`,
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+        },
       })
         .then((res) => {
           axios({
             method: 'get',
             url: `${API_URL}/note/sentence/${user.userId}/0`,
+            headers: {
+              'Access-Token': getCookie('accessToken'),
+            },
           })
             .then((res) => {
               setSentenceArray([...res.data.sentenceNoteList]);
@@ -221,21 +233,21 @@ function ReviewNote() {
                   </div>
                   <div className='checkBtn'>
                     {wordReview === true ? (
-                      posts[idx + (page - 1) * limit].checked === 1 ? (
+                      posts[idx + offset].checked === 1 ? (
                         <CheckCircleFill
-                          onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)}
+                          onClick={() => ToggleCheck(posts[idx + offset].wordNoteId)}
                           color={colors.studyBlue300}
                         />
                       ) : (
-                        <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].wordNoteId)} />
+                        <CheckCircle onClick={() => ToggleCheck(posts[idx + offset].wordNoteId)} />
                       )
-                    ) : posts[idx + (page - 1) * limit].checked === 1 ? (
+                    ) : posts[idx + offset].checked === 1 ? (
                       <CheckCircleFill
-                        onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)}
+                        onClick={() => ToggleCheck(posts[idx + offset].sentenceNoteId)}
                         color={colors.studyBlue300}
                       />
                     ) : (
-                      <CheckCircle onClick={() => ToggleCheck(posts[idx + (page - 1) * limit].sentenceNoteId)} />
+                      <CheckCircle onClick={() => ToggleCheck(posts[idx + offset].sentenceNoteId)} />
                     )}
                   </div>
                 </WrongThingBox>

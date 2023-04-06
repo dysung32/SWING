@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   PlayerProfile,
   SideLeaderBoardBackground,
@@ -21,6 +21,21 @@ function SideLeaderBoard(props) {
     }
   };
 
+  useEffect(() => {
+    if (props.modalShow) {
+      document.body.style.cssText = `
+        position: fixed; 
+        top: -${window.scrollY}px;
+        overflow-y: scroll;
+        width: 100%;
+        `;
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+    }
+  }, [props.modalShow]);
+
   return (
     <>
       {props.modalShow ? (
@@ -37,7 +52,7 @@ function SideLeaderBoard(props) {
             <div className='title'>LEADERBOARD</div>
             {props.rankers.map((ranker, idx) => {
               return (
-                <SideLeaderBoardSingleBox>
+                <SideLeaderBoardSingleBox key={idx}>
                   <div className='rank'>{renderRank(idx + 1)}</div>
                   <PlayerProfile src={ranker.profileImageUrl} width={3.5} height={3.5} alt='profile' />
                   <div className='nickname'>{ranker.nickname}</div>

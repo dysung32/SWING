@@ -60,13 +60,14 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
   1. 이미지 분류: keras 라이브러리의 `MobileNetV2`에 `Quick Draw Dataset` 이미지를 학습시켜 분류 모델을 만들었습니다.
 
 ### 오답 노트
-- 오답 노트에는 Sentency 게임에서 틀린 `문장`, Hi-Five 및 Speedoodle에서 틀린 `단어`가 자동으로 등록되어 있습니다. 
+![Review Note](/docs/review_note.gif)
+- 오답 노트에는 Sentency 게임에서 틀린 `문장`, Hi-Five에서 틀린 `단어`가 자동으로 등록되어 있습니다. 
 - 각 문장과 단어의 한글, 영어 설명을 확인할 수 있습니다.
 - 오답 문장과 단어로 `복습 테스트`를 진행할 수 있습니다. 또한 테스트를 통과하면 Sentency 게임에 한 번 더 참여할 수 있는 쿠폰이 주어집니다.
 
 ### 히스토리
 - `Speedoodle` 게임 히스토리를 확인할 수 있습니다.
-- 라운드마다 유저와 유저 친구들이 그린 그림들과 등수를 보여줍니다.
+- 게임 등수와 라운드마다 유저와 유저 친구들이 그린 그림들을 볼 수 있습니다.
 
 ### **기타 기능**
   - 회원가입/로그인: 카카오톡 소셜 로그인
@@ -99,7 +100,7 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
   - [API 명세서](https://docs.google.com/spreadsheets/d/1FzohMrqxhmOpdn23zfUqp4oM6xWVXGCUMq-h7OiGy_M/edit?usp=sharing)
   - [UCC]()
   - [최종 발표 자료]()
-  - [포팅 매뉴얼]()
+  - [포팅 매뉴얼](https://docs.google.com/document/d/14uNQdsXdRBT4Gpzts3enwDEhEqrjuDFZxUm6kXN5DZY/edit?usp=sharing)
   - [시연 시나리오](https://docs.google.com/document/d/1Aj5QOxrrSI84Ck7exmFprGPfqBd8_HmUdCznBLLsdA8/edit?usp=sharing)
   - [AI 개발 상세](https://docs.google.com/document/d/12zAM9SJSx91n6lDtMtWGrgzpzvFKDT2_YYW_9-_MaOY/edit?usp=sharing)
   
@@ -107,6 +108,4 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
 <br>
 
 ## 팀원 소개
-![팀원소개](/uploads/4a7347151ee56fae0e011e192a41419b/팀원소개.png)
-
-
+![팀원소개](/docs/review_note.gif)

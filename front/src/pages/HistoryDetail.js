@@ -24,6 +24,7 @@ import { userState } from '../recoil';
 import { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import ModalClosable from '../components/ModalClosable';
 
 function HistoryDetail() {
   const navigate = useNavigate();
@@ -45,27 +46,13 @@ function HistoryDetail() {
   const swiperRef = useRef();
   const [round, setRound] = useState(1);
 
-  const downloadFile = (url) => {
-    console.log('사진 다운로드!');
-    fetch(url, { method: 'GET' })
-      .then((res) => {
-        return res.blob();
-      })
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'speedoodle.jpg';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout((_) => {
-          window.URL.revokeObjectURL(url);
-        }, 60000);
-        a.remove();
-      })
-      .catch((err) => {
-        console.error('err: ', err);
-      });
+  const [previewModal, setPreviewModal] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState();
+
+  const openPic = (url) => {
+    swiperRef.current.autoplay.stop();
+    setPreviewUrl(url);
+    setPreviewModal(true);
   };
 
   const renderPics = (pics) => {
@@ -87,9 +74,9 @@ function HistoryDetail() {
                 fontColor={colors.gameBlue500}
                 fontWeight={700}
                 className='save-btn'
-                onClick={() => downloadFile(pic.roundImageUrl)}
+                onClick={() => openPic(pic.roundImageUrl)}
               >
-                <a download='speedoodle.jpg'>저장</a>
+                보기
               </CommonBtn>
             </UserInfoBox>
           </SinglePicContainer>
@@ -115,6 +102,11 @@ function HistoryDetail() {
   }, []);
   return (
     <>
+      {previewModal ? (
+        <ModalClosable>
+          <img src={previewUrl} alt='preview' />
+        </ModalClosable>
+      ) : null}
       <MyPageWrapper>
         <GameTitle>
           <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>

@@ -26,7 +26,7 @@ import { colors } from '../styles/ColorPalette';
 
 import { PencilSquare } from 'react-bootstrap-icons';
 import ModalClosable from '../components/ModalClosable';
-import { API_URL, BasicProfile, getCookie } from '../config';
+import { API_URL, BasicProfile, delCookie, getCookie } from '../config';
 import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
 import { useRecoilState } from 'recoil';
@@ -267,16 +267,23 @@ function MyPage() {
   };
 
   const deleteUser = () => {
-    axios
-      .delete(`${API_URL}/user/${user.userId}`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
-      .then((res) => {
-        console.log('회원탈퇴 완료!');
-      })
-      .catch((err) => {});
+    const deleteConfirm = window.confirm('정말로 회원탈퇴를 하시겠습니까?');
+    if (deleteConfirm) {
+      axios
+        .delete(`${API_URL}/user/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setUser(null);
+          navigate('/');
+          console.log('회원탈퇴 완료!');
+        })
+        .catch((err) => {});
+    }
   };
 
   const getHistoryList = () => {

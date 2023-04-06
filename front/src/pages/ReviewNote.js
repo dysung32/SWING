@@ -164,7 +164,7 @@ function ReviewNote() {
       <ReviewNoteWrapper>
         <ReviewNoteWrapperColor>
           <div className='noteTitle'>
-            <H2 color={colors.black}>My 오답노트</H2>
+            <H2 color={colors.black}>오답 노트</H2>
           </div>
           <ReviewBtnContainer>
             <div className='selectButton'>

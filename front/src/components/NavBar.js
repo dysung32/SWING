@@ -30,7 +30,7 @@ function NavBar() {
   const [successRefresh, setSuccessRefresh] = useState(false);
   const [passAccess, setPassAccess] = useState(false);
 
-  const checkRefreshToken = () => {
+  const checkRefreshToken = (url) => {
     axios
       .post(
         `${API_URL}/user/refresh`,
@@ -47,6 +47,7 @@ function NavBar() {
         if (res.status === 200) {
           setCookie('accessToken', res.data['access-token'], 1);
           setSuccessRefresh(() => true);
+          navigate(url);
         } else if (res.status === 202) {
           delCookie('accessToken');
           delCookie('refreshToken');
@@ -59,7 +60,7 @@ function NavBar() {
       });
   };
 
-  const checkAccessToken = () => {
+  const checkAccessToken = (url) => {
     axios
       .post(
         `${API_URL}/user/check`,
@@ -73,8 +74,9 @@ function NavBar() {
       .then((res) => {
         if (res.data.message === 'success') {
           setPassAccess(() => true);
+          navigate(url);
         } else if (res.data.message === 'fail') {
-          checkRefreshToken();
+          checkRefreshToken(url);
           if (successRefresh) {
             setPassAccess(() => true);
           }
@@ -84,14 +86,6 @@ function NavBar() {
         console.error(err);
       });
   };
-
-  useEffect(() => {
-    return () => {
-      if (hoverGame === false && passAccess === false) {
-        setSuccessRefresh(() => false);
-      }
-    };
-  }, [successRefresh, passAccess]);
 
   useEffect(() => {
     if (user !== null) {
@@ -120,19 +114,9 @@ function NavBar() {
     navigate('/');
   };
 
-  const afterPassAccess = (url) => {
-    if (passAccess) {
-      navigate(url);
-    }
-  };
-
   const onClickSentency = () => {
     if (isLogin) {
-      checkAccessToken();
-      if (passAccess) {
-        navigate('/sentency');
-      }
-      afterPassAccess('/sentency');
+      checkAccessToken('/sentency');
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');
@@ -141,10 +125,7 @@ function NavBar() {
 
   const onClickHifive = () => {
     if (isLogin) {
-      checkAccessToken();
-      if (passAccess) {
-        navigate('/hi-five');
-      }
+      checkAccessToken('/hi-five');
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');
@@ -152,10 +133,7 @@ function NavBar() {
   };
   const onClickSpeedoodle = () => {
     if (isLogin) {
-      checkAccessToken();
-      if (passAccess) {
-        navigate('/speedoodle');
-      }
+      checkAccessToken('/speedoodle');
     } else {
       alert('로그인이 필요한 서비스 입니다.');
       navigate('/login');

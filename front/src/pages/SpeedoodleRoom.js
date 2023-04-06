@@ -54,40 +54,38 @@ function SpeedoodleRoom() {
       });
   };
 
-  //SpeedoodleRoom이 시작될때 
+  //SpeedoodleRoom이 시작될때
   useEffect(() => {
     if (!stompRef.current && gameRoomInfo !== null) {
       stompConnect();
     }
-    
   }, []);
 
-
   useEffect(() => {
-    if(changeUser !== null){
-      if(changeUser.messageType === 'ENTER'){
-        if(changeUser.nickname !== user.nickname){
+    if (changeUser !== null) {
+      if (changeUser.messageType === 'ENTER') {
+        if (changeUser.nickname !== user.nickname) {
           const tempUser = {
             userId: changeUser.userId,
             nickname: changeUser.nickname,
             profileImageUrl: changeUser.profileImageUrl,
             roomId: room_id,
-          }
-          setUserList([...userList, tempUser]); 
-        } 
-      }
-      else if(changeUser.messageType === 'LEAVE'){
-        console.log('나가는거 봤다')
-        if(changeUser.nickname === gameRoomInfo.roomInfo.leaderNickname){
-          navigate('/speedoodle');
+          };
+          setUserList([...userList, tempUser]);
         }
-        else{
-          const tempList  =  userList.filter(user => user.userId !== changeUser.userId);
+      } else if (changeUser.messageType === 'LEAVE') {
+        console.log('나가는거 봤다');
+        if (changeUser.nickname === gameRoomInfo.roomInfo.leaderNickname) {
+          navigate('/speedoodle');
+        } else {
+          const tempList = userList.filter(
+            (user) => user.userId !== changeUser.userId
+          );
           setUserList(tempList);
         }
       }
     }
-  },[changeUser]);
+  }, [changeUser]);
 
   //웹소켓 오픈하고 서버에 연결
   const stompConnect = () => {
@@ -103,29 +101,25 @@ function SpeedoodleRoom() {
           nickname: `${user.nickname}`,
           profileImageUrl: `${user.profileImageUrl}`,
           roomId: room_id,
-        }
+        };
         stomp.send('/pub/send', {}, JSON.stringify(data));
         stomp.subscribe(
           `/sub/${room_id}`,
           (Ms) => {
             const msObj = JSON.parse(Ms.body);
-            if(msObj.messageType ==='ENTER') {
-              console.log('왔다')
+            if (msObj.messageType === 'ENTER') {
+              console.log('왔다');
               setChangeUser(msObj);
-            }
-            else if(msObj.messageType === 'LEAVE') {
+            } else if (msObj.messageType === 'LEAVE') {
               setChangeUser(msObj);
-            }
-            else if(msObj.messageType === 'COMMON') {
+            } else if (msObj.messageType === 'COMMON') {
               setChatData((chatData) => [
                 ...chatData,
                 [msObj.publisher, msObj.message],
               ]);
-            }
-            else if(msObj.messageType === 'MODE') {
+            } else if (msObj.messageType === 'MODE') {
               setPropMode(msObj.data);
-            }
-            else if(msObj.messageType === 'START') {
+            } else if (msObj.messageType === 'START') {
               setIsStart(true);
               setGameKey(msObj.roundInfoList);
             }
@@ -143,21 +137,24 @@ function SpeedoodleRoom() {
   //웹소켓 연결 끊기
   const stompDisconnect = () => {
     try {
-      console.log("나간다")
+      console.log('나간다');
       const data = {
         messageType: 'LEAVE',
         userId: `${user.userId}`,
         nickname: `${user.nickname}`,
         profileImageUrl: `${user.profileImageUrl}`,
         roomId: room_id,
-      }
+      };
       console.log(data);
       stompRef.current.send('/pub/send', {}, JSON.stringify(data));
-      stompRef.current.disconnect(() => {
-      console.log('STOMP connection closed');
-    }, {
-      subscriptionId: `/sub/${room_id}`
-    });
+      stompRef.current.disconnect(
+        () => {
+          console.log('STOMP connection closed');
+        },
+        {
+          subscriptionId: `/sub/${room_id}`,
+        }
+      );
     } catch (error) {}
   };
 
@@ -185,7 +182,7 @@ function SpeedoodleRoom() {
       messageType: 'MODE',
       data: value,
       roomId: room_id,
-    }
+    };
     if (stompRef.current?.connected) {
       console.log(stompRef.current.connected);
       stompRef.current.send('/pub/send', {}, JSON.stringify(data));
@@ -259,13 +256,12 @@ function SpeedoodleRoom() {
                   chatInput={chatInput}
                   setChatInput={setChatInput}
                   chatData={chatData}
-                  stompDisconnect = {stompDisconnect}
+                  stompDisconnect={stompDisconnect}
                   SendMessage={SendMessage}
                   ModeMessage={ModeMessage}
-                  propMode = {propMode}
-                  isStart = {isStart}
-                  gameKey = {gameKey}
-                  // isMode={isMode}
+                  propMode={propMode}
+                  isStart={isStart}
+                  gameKey={gameKey}
                 ></SpeedoodleGameInfo>
               )}
             </>
@@ -279,4 +275,3 @@ function SpeedoodleRoom() {
 }
 
 export default SpeedoodleRoom;
-

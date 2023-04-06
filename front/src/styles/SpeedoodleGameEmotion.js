@@ -32,7 +32,7 @@ export const Keyword = styled.div`
 
 export const BtnContainer = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
 `;
 
 // export const fadeIn = keyframes`

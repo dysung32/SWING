@@ -110,6 +110,7 @@ export const PageNumBox = styled.button`
   justify-content: center;
   align-items: center;
   padding: 0px;
+  cursor: pointer;
 
   &[disabled] {
     background-color: ${colors.gray300};

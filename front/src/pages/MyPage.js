@@ -26,7 +26,7 @@ import { colors } from '../styles/ColorPalette';
 
 import { PencilSquare } from 'react-bootstrap-icons';
 import ModalClosable from '../components/ModalClosable';
-import { API_URL, BasicProfile, getCookie } from '../config';
+import { API_URL, BasicProfile, delCookie, getCookie } from '../config';
 import axios from 'axios';
 import { SingleHistoryList } from '../styles/HistoryEmotion';
 import { useRecoilState } from 'recoil';
@@ -44,6 +44,7 @@ function MyPage() {
   const [nicknameRegExpTest, setNicknameRegExpTest] = useState();
   const [confirmed, setConfirmed] = useState(false);
   const [allowedMsg, setAllowedMsg] = useState('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
+  const [deniedMsg, setDeniedMsg] = useState('');
 
   const [tmpProfileImg, setTmpProfileImg] = useState(user.profileImageUrl);
   const [imgChanged, setImgChanged] = useState(false);
@@ -101,32 +102,46 @@ function MyPage() {
     const changedNickname = nickNameRef.current.value;
     console.log(changedNickname);
     const regExp = /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,30}$/g;
-    if (regExp.test(changedNickname)) {
+    if (regExp.test(changedNickname) && changedNickname !== user.nickname) {
       console.log('유효성 검사 통과');
       setNicknameRegExpTest(true);
-    } else {
+    } else if (!regExp.test(changedNickname) && changedNickname !== user.nickname) {
       console.log('유효성 검사 통과 실패');
+      setDeniedMsg('한글, 영어, 숫자 가능 (2자-30자) / 특수문자, 공백 포함 불가능');
       setConfirmed(false);
+      setNicknameRegExpTest(false);
+    } else if (changedNickname === user.nickname) {
+      setDeniedMsg('');
+      setAllowedMsg('');
       setNicknameRegExpTest(false);
     }
   };
 
   const handleNickNameConfirm = async () => {
-    await axios
-      .get(`${API_URL}/user/nickname/${nickNameRef.current.value}`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data.possible) {
-          setConfirmed(true);
-          setAllowedMsg('사용 가능한 닉네임입니다 (O)');
-        } else {
-          setConfirmed(false);
-        }
-      });
+    if (nicknameRegExpTest) {
+      console.log('유효성검사 통과했으니 중복검사 go');
+      await axios
+        .get(`${API_URL}/user/nickname/${nickNameRef.current.value}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data.possible) {
+            setConfirmed(true);
+            setAllowedMsg('사용 가능한 닉네임입니다 (O)');
+          } else {
+            setConfirmed(false);
+            setNicknameRegExpTest(false);
+            setDeniedMsg('중복되는 닉네임입니다.');
+          }
+        });
+    } else if (nickNameRef.current.value !== user.nickname) {
+      alert('올바른 형식의 닉네임을 사용해주세요.');
+    } else if (nickNameRef.current.value === user.nickname) {
+      alert('기존 닉네임과 동일한 닉네임입니다.');
+    }
   };
 
   const handleProfileEdit = async () => {
@@ -267,16 +282,23 @@ function MyPage() {
   };
 
   const deleteUser = () => {
-    axios
-      .delete(`${API_URL}/user/${user.userId}`, {
-        headers: {
-          'Access-Token': getCookie('accessToken'),
-        },
-      })
-      .then((res) => {
-        console.log('회원탈퇴 완료!');
-      })
-      .catch((err) => {});
+    const deleteConfirm = window.confirm('정말로 회원탈퇴를 하시겠습니까?');
+    if (deleteConfirm) {
+      axios
+        .delete(`${API_URL}/user/${user.userId}`, {
+          headers: {
+            'Access-Token': getCookie('accessToken'),
+          },
+        })
+        .then((res) => {
+          delCookie('accessToken');
+          delCookie('refreshToken');
+          setUser(null);
+          navigate('/');
+          console.log('회원탈퇴 완료!');
+        })
+        .catch((err) => {});
+    }
   };
 
   const getHistoryList = () => {
@@ -295,6 +317,8 @@ function MyPage() {
 
   useEffect(() => {
     setTmpProfileImg(user.profileImageUrl);
+    setAllowedMsg('');
+    setDeniedMsg('');
     console.log('hi');
   }, [profileEditModalShow]);
 
@@ -366,7 +390,7 @@ function MyPage() {
             ) : nicknameRegExpTest ? (
               <div className='allowed'>{allowedMsg}</div>
             ) : (
-              <div className='denied'>한글, 영어, 숫자 가능 (2자-30자) / 특수문자, 공백 포함 불가능</div>
+              <div className='denied'>{deniedMsg}</div>
             )}
           </div>
         </NickNameEditBox>

@@ -387,6 +387,7 @@ function Sentency() {
         document.querySelector(".similarity").classList.remove("orange");
         document.querySelector(".similarity").classList.remove("green");
         document.querySelector(".similarity").classList.remove("red");
+        document.querySelector(".similarity").classList.remove("blue");
       }
     }
   }, [similarity]);

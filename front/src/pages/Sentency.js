@@ -214,6 +214,8 @@ function Sentency() {
         return;
       } else {
         if (life > 0) {
+          const firstHeart = document.querySelector(".heart");
+          firstHeart.classList.add("shake");
           setLife(life - 1);
         }
       }
@@ -354,6 +356,41 @@ function Sentency() {
     }
   }, [life]);
 
+  useEffect(() => {
+    if (similarity !== null) {
+      if (similarity >= 70 && similarity < 90) {
+        // 70% 이상 90% 미만일 경우
+        document.querySelector(".similarity").classList.remove("red");
+        document.querySelector(".similarity").classList.remove("yellow");
+        document.querySelector(".similarity").classList.remove("green");
+        document.querySelector(".similarity").classList.add("blue");
+      } else if (similarity >= 50 && similarity < 70) {
+        // 50% 이상 70% 미만일 경우
+        document.querySelector(".similarity").classList.remove("red");
+        document.querySelector(".similarity").classList.remove("yellow");
+        document.querySelector(".similarity").classList.remove("blue");
+        document.querySelector(".similarity").classList.add("green");
+      } else if (similarity >= 30 && similarity < 50) {
+        // 30% 이상 50% 미만일 경우
+        document.querySelector(".similarity").classList.remove("red");
+        document.querySelector(".similarity").classList.remove("green");
+        document.querySelector(".similarity").classList.remove("blue");
+        document.querySelector(".similarity").classList.add("yellow");
+      } else if (similarity > 0 && similarity < 30) {
+        // 0% 초과 30% 미만일 경우
+        document.querySelector(".similarity").classList.remove("blue");
+        document.querySelector(".similarity").classList.remove("yellow");
+        document.querySelector(".similarity").classList.remove("green");
+        document.querySelector(".similarity").classList.add("red");
+      } else {
+        // 0일 때 다시 white 기본 컬러로 초기화
+        document.querySelector(".similarity").classList.remove("orange");
+        document.querySelector(".similarity").classList.remove("green");
+        document.querySelector(".similarity").classList.remove("red");
+      }
+    }
+  }, [similarity]);
+
   return (
     <>
       {/* Sentency 성공 모달 */}
@@ -493,7 +530,10 @@ function Sentency() {
             <SentencyGameNav>
               <div className="flex">
                 <H3 color={colors.white}>SCORE: {score},</H3>
-                <H3 color={colors.white} margin={"0 0 0 1rem"}>
+                <H3
+                  color={colors.white}
+                  margin={"0 0 0 1rem"}
+                  className="similarity">
                   SIMILARITY: {similarity}%
                 </H3>
               </div>
@@ -527,7 +567,7 @@ function Sentency() {
               />
               <CommonBtn
                 height={55}
-                font={1.5}
+                font={1.6}
                 color={colors.gameBlue300}
                 hoverColor={colors.gameBlue400}
                 fontColor={colors.white}

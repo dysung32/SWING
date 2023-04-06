@@ -42,10 +42,6 @@ function SpeedoodleGameInfo(props) {
   // const user = JSON.parse(window.localStorage.getItem('user'));
   const messages = useRef(null);
 
-  // useEffect(() => {
-  //   getRoomDetail();
-  // }, []);
-
   useEffect(() => {
     scrollToBottom();
   }, [props.chatData]);
@@ -113,12 +109,12 @@ function SpeedoodleGameInfo(props) {
   const onClickEasyMode = () => {
     setIsMode(0);
     props.ModeMessage(0);
-    handleChangeMode();
+    // handleChangeMode();
   };
   const onClickHardMode = () => {
     setIsMode(1);
     props.ModeMessage(1);
-    handleChangeMode();
+    // handleChangeMode();
   };
 
   const linkCopy = () => {
@@ -194,6 +190,11 @@ function SpeedoodleGameInfo(props) {
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    handleChangeMode();
+  }, [isMode]);
+
   return (
     <>
       <GameInfoContainer color={bgColor}>

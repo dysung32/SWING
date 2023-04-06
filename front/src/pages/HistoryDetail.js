@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import { CaretLeft, CaretLeftFill, CaretRight, CaretRightFill } from 'react-bootstrap-icons';
-import { colors } from '../styles/ColorPalette';
-import { CommonBtn, GameTitle, PlayerProfile } from '../styles/CommonEmotion';
-import { H1 } from '../styles/Fonts';
+import {
+  CaretLeft,
+  CaretLeftFill,
+  CaretRight,
+  CaretRightFill,
+} from "react-bootstrap-icons";
+import { colors } from "../styles/ColorPalette";
+import { CommonBtn, GameTitle, PlayerProfile } from "../styles/CommonEmotion";
+import { H1 } from "../styles/Fonts";
 import {
   GameRoundNav,
   HistoryContent,
@@ -15,16 +20,16 @@ import {
   SinglePicContainer,
   UserInfoBox,
   UserNickName,
-} from '../styles/HistoryEmotion';
-import { MyPageWrapper } from '../styles/MyPageEmotion';
-import { API_URL } from '../config';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userState } from '../recoil';
+} from "../styles/HistoryEmotion";
+import { MyPageWrapper } from "../styles/MyPageEmotion";
+import { API_URL } from "../config";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { userState } from "../recoil";
 
-import { Autoplay, Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import ModalClosable from '../components/ModalClosable';
+import { Autoplay, Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import ModalClosable from "../components/ModalClosable";
 
 function HistoryDetail() {
   const navigate = useNavigate();
@@ -62,20 +67,25 @@ function HistoryDetail() {
           <SinglePicContainer key={idx}>
             <Picture src={pic.roundImageUrl} />
             <UserInfoBox>
-              <PlayerProfile src={pic.profileImageUrl} width={3} maxWidth={3} height={3} className='profile' />
+              <PlayerProfile
+                src={pic.profileImageUrl}
+                width={3}
+                maxWidth={3}
+                height={3}
+                className="profile"
+              />
               <UserNickName>{pic.nickname}</UserNickName>
               <CommonBtn
-                width={'5rem'}
-                minWidth={'3.5rem'}
+                width={"5rem"}
+                minWidth={"3.5rem"}
                 height={45}
                 font={1.1}
                 color={colors.gameYellow200}
                 hoverColor={colors.gameYellow300}
                 fontColor={colors.gameBlue500}
                 fontWeight={700}
-                className='save-btn'
-                onClick={() => openPic(pic.roundImageUrl)}
-              >
+                className="save-btn"
+                onClick={() => openPic(pic.roundImageUrl)}>
                 보기
               </CommonBtn>
             </UserInfoBox>
@@ -103,8 +113,8 @@ function HistoryDetail() {
   return (
     <>
       {previewModal ? (
-        <ModalClosable>
-          <img src={previewUrl} alt='preview' />
+        <ModalClosable modalShow={previewModal} setModalShow={setPreviewModal}>
+          <img src={previewUrl} alt="preview" />
         </ModalClosable>
       ) : null}
       <MyPageWrapper>
@@ -113,22 +123,20 @@ function HistoryDetail() {
             color={colors.white}
             outline={colors.gameBlue500}
             outlineWeight={2}
-            align='center'
-            className='historyName'
-          >
+            align="center"
+            className="historyName">
             {date}자 게임 | 랭킹: {rank}등
           </H1>
         </GameTitle>
-        <div className='flex history-btn'>
+        <div className="flex history-btn">
           <CommonBtn
             color={colors.gamePink200}
             fontColor={colors.gameBlue500}
             fontWeight={700}
             font={1.1}
-            padding='0.5rem 1rem'
-            margin='0 0 0.5rem 0'
-            onClick={() => navigate('/history')}
-          >
+            padding="0.5rem 1rem"
+            margin="0 0 0.5rem 0"
+            onClick={() => navigate("/history")}>
             목록으로
           </CommonBtn>
         </div>
@@ -137,30 +145,35 @@ function HistoryDetail() {
             <GameRoundNav>
               {leftHover ? (
                 <CaretLeftFill
-                  className='left'
+                  className="left"
                   ref={navigationPrevRef}
                   onClick={() => swiperRef.current.slidePrev()}
                   onMouseLeave={() => setLeftHover(false)}
                 />
               ) : (
-                <CaretLeft className='left' onMouseEnter={() => setLeftHover(true)} />
+                <CaretLeft
+                  className="left"
+                  onMouseEnter={() => setLeftHover(true)}
+                />
               )}
-              <div className='roundNum'>ROUND {round}</div>
+              <div className="roundNum">ROUND {round}</div>
               {rightHover ? (
                 <CaretRightFill
-                  className='right'
+                  className="right"
                   ref={navigationNextRef}
                   onClick={() => swiperRef.current.slideNext()}
                   onMouseLeave={() => setRightHover(false)}
                 />
               ) : (
-                <CaretRight className='right' onMouseEnter={() => setRightHover(true)} />
+                <CaretRight
+                  className="right"
+                  onMouseEnter={() => setRightHover(true)}
+                />
               )}
             </GameRoundNav>
             <HistoryPictureContainer
               onMouseEnter={() => swiperRef.current.autoplay.stop()}
-              onMouseLeave={() => swiperRef.current.autoplay.start()}
-            >
+              onMouseLeave={() => swiperRef.current.autoplay.start()}>
               <Swiper
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
@@ -184,18 +197,27 @@ function HistoryDetail() {
                   setRound(swiperRef.current.activeIndex + 1);
                 }}
                 modules={[Autoplay, Navigation]}
-                className='mySwiper'
-              >
+                className="mySwiper">
                 {/* 1라운드 */}
-                <SwiperSlide className='slideContainer'>{renderPics(picDatas[0])}</SwiperSlide>
+                <SwiperSlide className="slideContainer">
+                  {renderPics(picDatas[0])}
+                </SwiperSlide>
                 {/* 2라운드 */}
-                <SwiperSlide className='slideContainer'>{renderPics(picDatas[1])}</SwiperSlide>
+                <SwiperSlide className="slideContainer">
+                  {renderPics(picDatas[1])}
+                </SwiperSlide>
                 {/* 3라운드 */}
-                <SwiperSlide className='slideContainer'>{renderPics(picDatas[2])}</SwiperSlide>
+                <SwiperSlide className="slideContainer">
+                  {renderPics(picDatas[2])}
+                </SwiperSlide>
                 {/* 4라운드 */}
-                <SwiperSlide className='slideContainer'>{renderPics(picDatas[3])}</SwiperSlide>
+                <SwiperSlide className="slideContainer">
+                  {renderPics(picDatas[3])}
+                </SwiperSlide>
                 {/* 5라운드 */}
-                <SwiperSlide className='slideContainer'>{renderPics(picDatas[4])}</SwiperSlide>
+                <SwiperSlide className="slideContainer">
+                  {renderPics(picDatas[4])}
+                </SwiperSlide>
               </Swiper>
             </HistoryPictureContainer>
             {/* {renderPics} */}

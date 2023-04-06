@@ -42,10 +42,6 @@ function SpeedoodleGameInfo(props) {
   // const user = JSON.parse(window.localStorage.getItem('user'));
   const messages = useRef(null);
 
-  // useEffect(() => {
-  //   getRoomDetail();
-  // }, []);
-
   useEffect(() => {
     scrollToBottom();
   }, [props.chatData]);

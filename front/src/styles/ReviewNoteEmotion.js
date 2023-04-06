@@ -38,7 +38,7 @@ export const WrongBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     border-radius: 0.5rem;
     padding: 1rem 2rem 1rem 2rem;
     box-sizing: border-box;

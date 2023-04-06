@@ -294,6 +294,11 @@ function MyPage() {
   };
 
   useEffect(() => {
+    setTmpProfileImg(user.profileImageUrl);
+    console.log('hi');
+  }, [profileEditModalShow]);
+
+  useEffect(() => {
     getHistoryList();
   }, []);
 

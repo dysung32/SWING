@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from './ColorPalette';
+import styled from "@emotion/styled";
+import { colors } from "./ColorPalette";
 
 export const SentencyWrapper = styled.div`
   display: flex;
@@ -11,7 +11,11 @@ export const SentencyWrapper = styled.div`
   padding-top: 9rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
-  background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
+  background: linear-gradient(
+    to top right,
+    rgba(236, 61, 89, 0.5),
+    rgba(22, 86, 233, 0.5)
+  );
 
   .sentencyContentContainer {
     width: 100%;
@@ -52,6 +56,62 @@ export const SentencyGameNav = styled.div`
     font-size: 1.5rem;
     margin-right: 1rem;
   }
+
+  .shake {
+    animation: shake 1s linear infinite;
+  }
+
+  .green {
+    color: #4aa96c;
+  }
+
+  .yellow {
+    color: #ffd93d;
+  }
+
+  .red {
+    color: #fc2947;
+  }
+
+  .blue {
+    color: #0014ff;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+      transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+      transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+      transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
 `;
 
 export const WordListContainer = styled.div`
@@ -75,7 +135,7 @@ export const WordBox = styled.span`
   margin-right: 1.5rem;
   font-size: 2rem;
   line-height: 3rem;
-  letter-spacing: ${(props) => (props.spacing > 1 ? '0.5rem' : 'initial')};
+  letter-spacing: ${(props) => (props.spacing > 1 ? "0.5rem" : "initial")};
   text-align: center;
 `;
 

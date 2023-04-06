@@ -31,13 +31,19 @@ function SpeedoodleGame(props) {
   const [finalResultModalShow, setFinalResultModalShow] = useState(false);
   const [readyGame, setReadyGame] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
+
   const [keyword, setKeyword] = useState(props.keywords);
+  const [timeLimits, setTimeLimits] = useState(props.limits);
+  const [gameMode, setGameMode] = useState(props.isMode);
+
   const [keywordIdx, setKeywordIdx] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
 
   const [aiAnswer, setAiAnswer] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isDrawFinish, setIsDrawFinish] = useState(false);
+  const [showAnswers, setShowAnswers] = useState('');
+
   const [recordSc, setRecordSc] = useState(0);
   const [recordMs, setRecordMs] = useState(0);
   const [user, setUser] = useRecoilState(userState);
@@ -156,8 +162,8 @@ function SpeedoodleGame(props) {
   useEffect(() => {
     if (finish) {
       if (record === '') {
-        setRecord(() => '실패' + props.limits + ': 00');
-        setRecordSc((prev) => prev + props.limits);
+        setRecord(() => '실패' + timeLimits + ': 00');
+        setRecordSc((prev) => prev + timeLimits);
       }
       resetCanvas();
       setTimeout(() => {
@@ -258,7 +264,7 @@ function SpeedoodleGame(props) {
             {running ? (
               <Stopwatch
                 running={running}
-                seconds={props.limits}
+                seconds={timeLimits}
                 setRunning={setRunning}
                 setRecord={setRecord}
                 setFinish={setFinish}
@@ -275,7 +281,7 @@ function SpeedoodleGame(props) {
                   justifyContent: 'start',
                 }}
               >
-                <H5 color={colors.gameBlue500}>{props.limits}:00</H5>
+                <H5 color={colors.gameBlue500}>{timeLimits}:00</H5>
               </div>
             )}
           </span>
@@ -283,7 +289,12 @@ function SpeedoodleGame(props) {
 
         <CanvasContainer>
           <Keyword>
-            <H4 align='center'>{keyword && keyword[keywordIdx].content}</H4>
+            <H4 align='center'>
+              {keyword &&
+                (timeLimits === 30
+                  ? keyword[keywordIdx].meaningEn
+                  : keyword[keywordIdx].content)}
+            </H4>
           </Keyword>
           <div
             style={{
@@ -296,6 +307,29 @@ function SpeedoodleGame(props) {
           <canvas ref={canvasRef}></canvas>
         </CanvasContainer>
         <BtnContainer>
+          <div
+            style={{
+              width: '6vw',
+              opacity: '0',
+            }}
+          ></div>
+          <div
+            style={{
+              width: '20vw',
+              padding: '0.5rem',
+              color: `${colors.gameBlue500}`,
+              backgroundColor: 'white',
+              border: `1px solid ${colors.gameBlue500}`,
+              borderRadius: '0.75rem',
+              textAlign: 'center',
+            }}
+          >
+            {record !== '' ? (
+              <p style={{ fontWeight: 'bold', margin: '0' }}>성공</p>
+            ) : (
+              <p>{aiAnswer[aiAnswer.length - 1]}</p>
+            )}
+          </div>
           <CommonBtn
             onClick={resetCanvas}
             color={colors.gameBlue300}

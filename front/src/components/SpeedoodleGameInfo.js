@@ -33,7 +33,7 @@ function SpeedoodleGameInfo(props) {
   const [bgColor, setBgColor] = useState(null);
   const [gameData, setGameData] = useState(null);
 
-  const [limits, setLimits] = useState('');
+  const [limits, setLimits] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
   const [isLocked, setIsLocked] = useState(false);
 
@@ -52,6 +52,11 @@ function SpeedoodleGameInfo(props) {
 
   useEffect(() => {
     setIsMode(props.propMode);
+    if (props.propMode === 1) {
+      setLimits(() => 30);
+    } else {
+      setLimits(() => 20);
+    }
   }, [props.propMode]);
 
   useEffect(() => {
@@ -74,7 +79,12 @@ function SpeedoodleGameInfo(props) {
   useEffect(() => {
     setIsMode(props.gameInfo.mode);
     setRoomInfo(props.gameInfo);
-  }, [props.gameInfo]);
+    if (props.gameInfo.mode) {
+      setLimits(() => 30);
+    } else {
+      setLimits(() => 20);
+    }
+  }, []);
 
   useEffect(() => {
     if (isGameStart === false && isLocked === true) {
@@ -99,19 +109,16 @@ function SpeedoodleGameInfo(props) {
     }
   }, [isLocked]);
 
-  // const getRoomDetail = () => {
-  //   // 룸상세 정보 가져오는 axios
-  //   // axios.get(API_URL)
-  // };
-
   // 모드 변경
   const onClickEasyMode = () => {
     setIsMode(0);
     props.ModeMessage(0);
+    handleChangeMode();
   };
   const onClickHardMode = () => {
     setIsMode(1);
     props.ModeMessage(1);
+    handleChangeMode();
   };
 
   const linkCopy = () => {
@@ -121,7 +128,6 @@ function SpeedoodleGameInfo(props) {
 
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
-    handleChangeMode();
     //방 잠금 설정
     axios
       .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
@@ -194,8 +200,8 @@ function SpeedoodleGameInfo(props) {
         {isGameStart ? (
           <SpeedoodleGame
             style={{ width: '100%', height: '100%' }}
-            isMode={isMode}
-            limits={isMode ? 30 : 20}
+            isMode={props.propMode}
+            limits={limits}
             keywords={gameData}
             roomInfo={props.gameInfo.roomInfo}
           ></SpeedoodleGame>

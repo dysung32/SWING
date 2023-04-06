@@ -29,6 +29,7 @@ export const HomeSentencyContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   width: 100%;
   height: 100vh;
   padding: 0 10%;
@@ -36,12 +37,22 @@ export const HomeSentencyContainer = styled.div`
   background: linear-gradient(to top right, rgba(236, 61, 89, 0.5), rgba(22, 86, 233, 0.5));
   box-sizing: border-box;
 
-  .pencil {
+  .sentencyImg1,
+  .sentencyImg2 {
     position: absolute;
-    left: 5%;
-    height: 65vh;
     user-drag: none;
-    animation: float 6s ease-in-out infinite;
+  }
+
+  .sentencyImg1 {
+    left: 5%;
+    height: 75vh;
+  }
+
+  .sentencyImg2 {
+    right: 5%;
+    bottom: 5%;
+    height: 40vh;
+    transform: scaleX(-1);
   }
 `;
 

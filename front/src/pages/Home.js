@@ -30,10 +30,8 @@ import { CouponImg } from '../styles/MyPageEmotion';
 
 import paint1 from '../assets/paint1.png';
 import paint2 from '../assets/paint2.png';
-import pencil from '../assets/pencil.png';
+import sentencyimg from '../assets/sentencyhomeimg.png';
 import cloud1 from '../assets/cloud1.png';
-import cloud2 from '../assets/cloud2.png';
-import rainbow from '../assets/rainbow.png';
 import alarm from '../assets/alarm.png';
 import Coupon from '../assets/main_coupon.svg';
 import { API_URL, getCookie } from '../config';
@@ -325,7 +323,8 @@ function Home() {
         </HomeHeroContainer>
         <Divider style={{ backgroundColor: `${colors.gameBlue100}` }}></Divider>
         <HomeSentencyContainer>
-          <img className='pencil' src={pencil} alt='pencil' />
+          <img className='sentencyImg1' src={sentencyimg} alt='sentency' />
+          <img className='sentencyImg2' src={sentencyimg} alt='sentency' />
           <GameInfoContainer>
             <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>
               SENTENCY

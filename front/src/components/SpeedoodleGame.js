@@ -64,7 +64,7 @@ function SpeedoodleGame(props) {
     canvas.addEventListener('mouseup', finishDraw);
     canvas.addEventListener('mouseout', finishDraw);
     canvas.setAttribute('width', window.innerWidth * 0.49);
-    canvas.setAttribute('height', window.innerHeight * 0.43);
+    canvas.setAttribute('height', window.innerHeight * 0.38);
     ctx = canvas.getContext('2d');
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -248,6 +248,7 @@ function SpeedoodleGame(props) {
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
         <p>{record}</p>
+        <p>정답은 {keyword[keywordIdx].meaningKr}</p>
         <div style={{ width: '24vw', height: '24vw' }}></div>
         <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
       </ModalBasic>
@@ -324,10 +325,12 @@ function SpeedoodleGame(props) {
               textAlign: 'center',
             }}
           >
-            {record !== '' ? (
+            {record !== '' && record !== '실패' + timeLimits + ': 00' ? (
               <p style={{ fontWeight: 'bold', margin: '0' }}>성공</p>
             ) : (
-              <p>{aiAnswer[aiAnswer.length - 1]}</p>
+              <p style={{ fontWeight: 'bold', margin: '0' }}>
+                {aiAnswer[aiAnswer.length - 1]}
+              </p>
             )}
           </div>
           <CommonBtn

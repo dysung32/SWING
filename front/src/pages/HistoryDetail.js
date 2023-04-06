@@ -109,7 +109,13 @@ function HistoryDetail() {
       ) : null}
       <MyPageWrapper>
         <GameTitle>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
+          <H1
+            color={colors.white}
+            outline={colors.gameBlue500}
+            outlineWeight={2}
+            align='center'
+            className='historyName'
+          >
             {date}자 게임 | 랭킹: {rank}등
           </H1>
         </GameTitle>

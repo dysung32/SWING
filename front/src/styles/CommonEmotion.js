@@ -60,6 +60,24 @@ export const CommonBtn = styled.button`
 export const GameTitle = styled.div`
   padding-top: 1rem;
   padding-bottom: 1.5rem;
+
+  @media screen and (max-width: 1000px) {
+    .historyName {
+      font-size: 2.5rem !important;
+    }
+  }
+
+  @media screen and (max-width: 830px) {
+    .historyName {
+      font-size: 2rem !important;
+    }
+  }
+
+  @media screen and (max-width: 660px) {
+    .historyName {
+      font-size: 1.8rem !important;
+    }
+  }
 `;
 
 export const CommonModalBackdrop = styled.div`

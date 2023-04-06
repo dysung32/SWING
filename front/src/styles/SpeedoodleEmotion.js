@@ -60,16 +60,46 @@ export const HmmGif = styled.div`
 
 export const RoomTitleContainer = styled.div`
   padding: 0.5rem;
-  height: 34%;
   background-color: ${colors.white};
   border-radius: 1rem;
   margin: 0;
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+
+  .roomid {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .roomname {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-align: center;
+  }
+`;
+
+export const RoomNicknameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+
+  .award {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .nickname {
+    width: 100%;
+    padding: 0 1rem;
+  }
 `;
 
 export const RoomIconContainer = styled.div`
@@ -82,6 +112,7 @@ export const CreateRoomContainer = styled.div`
 `;
 
 export const FlexContainer = styled.div`
+  padding: 0.5rem 0;
   display: flex;
   justify-content: space-between;
 `;

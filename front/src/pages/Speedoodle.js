@@ -15,6 +15,7 @@ import {
   CreateRoomContainer,
   FlexContainer,
   HmmGif,
+  RoomNicknameContainer,
 } from '../styles/SpeedoodleEmotion';
 import { GameTitle, CommonInput, CommonBtn } from '../styles/CommonEmotion';
 import { H1, H2, H3, H4, H5, P1, P2, SmText } from '../styles/Fonts';
@@ -22,12 +23,7 @@ import { colors } from '../styles/ColorPalette';
 import Pagination from '../components/PaginatorBar';
 import ModalClosable from '../components/ModalClosable';
 import { API_URL, getCookie } from '.././config';
-import {
-  ArrowClockwise,
-  AwardFill,
-  PersonFill,
-  LockFill,
-} from 'react-bootstrap-icons';
+import { ArrowClockwise, AwardFill, PersonFill, LockFill } from 'react-bootstrap-icons';
 
 function Speedoodle() {
   const navigate = useNavigate();
@@ -112,24 +108,19 @@ function Speedoodle() {
 
   // 방 컴포넌트
   const rooms = renderRoomList?.slice(offset, offset + limit).map((room) => (
-    <Room
-      color={room.mode === 0 ? colors.gameBlue100 : colors.gamePink200}
-      key={room.roomId}
-    >
+    <Room color={room.mode === 0 ? colors.gameBlue100 : colors.gamePink200} key={room.roomId}>
       <H4 align='center'>{room.mode === 0 ? 'EASY' : 'HARD'}</H4>
       <RoomTitleContainer>
-        <P2 align='center'>방번호 [{room.roomId}]</P2>
-        <P1 align='center'>{room.name}</P1>
+        <div className='roomid'>방번호 [{room.roomId}]</div>
+        <div className='roomname'>{room.name}</div>
       </RoomTitleContainer>
       <FlexContainer>
-        <RoomIconContainer>
-          <AwardFill />
-          <P2 margin='0 0 0 1rem'>
-            {room.leaderNickname.length > 8
-              ? room.leaderNickname.substr(0, 8) + '...'
-              : room.leaderNickname}
-          </P2>
-        </RoomIconContainer>
+        <RoomNicknameContainer>
+          <AwardFill className='award' />
+          <div className='nickname'>
+            {room.leaderNickname.length > 20 ? room.leaderNickname.substr(0, 18) + '...' : room.leaderNickname}
+          </div>
+        </RoomNicknameContainer>
         <RoomIconContainer>
           <PersonFill />
           <P2 margin='0 0 0 1rem'>{room.userCnt} / 6</P2>
@@ -143,18 +134,14 @@ function Speedoodle() {
         border='none'
         font='1'
         onClick={() =>
-          room.started === 0
-            ? handleEnterRoom(room.roomId, room.code)
-            : alert('게임이 시작된 방입니다.')
+          room.started === 0 ? handleEnterRoom(room.roomId, room.code) : alert('게임이 시작된 방입니다.')
         }
       >
         {room.code !== '' ? (
           room.started === 0 ? (
             <LockFill style={{ fontSize: '24px' }} />
           ) : (
-            <LockFill
-              style={{ color: `${colors.gray300}`, fontSize: '24px' }}
-            />
+            <LockFill style={{ color: `${colors.gray300}`, fontSize: '24px' }} />
           )
         ) : room.started === 0 ? (
           <H5 align='center'>ENTER</H5>
@@ -201,7 +188,7 @@ function Speedoodle() {
         roomList.filter((room) => {
           const title = room.roomId;
           return title.toString().includes(search);
-        })
+        }),
       );
     } else {
       setRenderRoomList(roomList.filter((room) => room.name.includes(search)));
@@ -274,8 +261,7 @@ function Speedoodle() {
 
   // 비밀번호 생성 및 입력시 6자리로 제한
   const handleOnInputLength = (e) => {
-    if (e.target.value.length > e.target.maxLength)
-      e.target.value = e.target.value.slice(0, e.target.maxLength);
+    if (e.target.value.length > e.target.maxLength) e.target.value = e.target.value.slice(0, e.target.maxLength);
   };
 
   // 방목록 api 새로고침 함수
@@ -355,10 +341,7 @@ function Speedoodle() {
   return (
     <>
       {/* speedoodle 방생성 모달 */}
-      <ModalClosable
-        modalShow={createModalShow}
-        setModalShow={setCreateModalShow}
-      >
+      <ModalClosable modalShow={createModalShow} setModalShow={setCreateModalShow}>
         <H2 color={colors.gameBlue500}>방만들기</H2>
         <CreateRoomContainer>
           <FlexContainer>
@@ -449,12 +432,7 @@ function Speedoodle() {
               <label htmlFor='isLock'>
                 <LockFill /> 비밀방
               </label>
-              <input
-                type='checkbox'
-                id='isLock'
-                checked={isLock}
-                onChange={handleChangeIsLock}
-              ></input>
+              <input type='checkbox' id='isLock' checked={isLock} onChange={handleChangeIsLock}></input>
             </div>
             <CommonInput
               disabled={isLock ? false : true}
@@ -491,9 +469,7 @@ function Speedoodle() {
               font='1.5'
               fontColor={colors.white}
               color={colors.gameBlue500}
-              onClick={() =>
-                isOkTitle ? makeRoom() : alert('방제목을 확인해주세요.')
-              }
+              onClick={() => (isOkTitle ? makeRoom() : alert('방제목을 확인해주세요.'))}
             >
               <H4>확인</H4>
             </CommonBtn>
@@ -542,12 +518,7 @@ function Speedoodle() {
       </ModalClosable>
       <SpeedoodleWrapper>
         <GameTitle>
-          <H1
-            color={colors.white}
-            outline={colors.gameBlue500}
-            outlineWeight={2}
-            align='center'
-          >
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2} align='center'>
             SPEEDOODLE
           </H1>
         </GameTitle>

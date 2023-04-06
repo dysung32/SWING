@@ -4,13 +4,7 @@ import useInterval from '../hooks/useInterval';
 import axios from 'axios';
 import { AI_API_URL, API_URL } from '../config';
 
-import {
-  GameContainer,
-  RoundHeader,
-  CanvasContainer,
-  Keyword,
-  BtnContainer,
-} from '../styles/SpeedoodleGameEmotion';
+import { GameContainer, RoundHeader, CanvasContainer, Keyword, BtnContainer } from '../styles/SpeedoodleGameEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { AlarmFill, Pause } from 'react-bootstrap-icons';
@@ -234,10 +228,7 @@ function SpeedoodleGame(props) {
   return (
     <>
       {/* 최종결과 제공 모달 */}
-      <ModalBasic
-        modalShow={finalResultModalShow}
-        setModalShow={setFinalResultModalShow}
-      >
+      <ModalBasic modalShow={finalResultModalShow} setModalShow={setFinalResultModalShow}>
         <H2>최종결과</H2>
         <H4>
           누적 시간은 {recordSc}:{recordMs} 입니다.
@@ -253,10 +244,7 @@ function SpeedoodleGame(props) {
         <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
       </ModalBasic>
       <GameContainer>
-        <ReadyText
-          readyGame={readyGame}
-          setReadyGame={setReadyGame}
-        ></ReadyText>
+        <ReadyText readyGame={readyGame} setReadyGame={setReadyGame}></ReadyText>
         <RoundHeader>
           {roundCnt > 0 ? <H4>Round {6 - roundCnt}</H4> : <H4></H4>}
 
@@ -291,10 +279,7 @@ function SpeedoodleGame(props) {
         <CanvasContainer>
           <Keyword>
             <H4 align='center'>
-              {keyword &&
-                (timeLimits === 30
-                  ? keyword[keywordIdx].meaningEn
-                  : keyword[keywordIdx].content)}
+              {keyword && (timeLimits === 30 ? keyword[keywordIdx].meaningEn : keyword[keywordIdx].content)}
             </H4>
           </Keyword>
           <div
@@ -326,11 +311,9 @@ function SpeedoodleGame(props) {
             }}
           >
             {record !== '' && record !== '실패' + timeLimits + ': 00' ? (
-              <p style={{ fontWeight: 'bold', margin: '0' }}>성공</p>
+              <p style={{ fontWeight: 'bold', margin: '0', color: colors.gamePink500 }}>성공</p>
             ) : (
-              <p style={{ fontWeight: 'bold', margin: '0' }}>
-                {aiAnswer[aiAnswer.length - 1]}
-              </p>
+              <p style={{ fontWeight: 'bold', margin: '0' }}>{aiAnswer[aiAnswer.length - 1]}</p>
             )}
           </div>
           <CommonBtn

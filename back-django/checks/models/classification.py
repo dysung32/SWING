@@ -12,12 +12,12 @@ NOW_DIR = os.path.dirname(os.path.realpath(__file__)) + '/'
 def crop(im_np):
     im = Image.fromarray(im_np)
     im_np = np.array(im)
-    area = im_np.shape[0] * im_np.shape[1]
+    # area = im_np.shape[0] * im_np.shape[1]
     background = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     diff = ImageChops.difference(im, background)
     diff = ImageChops.add(diff, diff)
     bbox = diff.getbbox()
-    offset = 60
+    offset = 40
     bbox_new = [
         max(bbox[0]-offset, 0), 
         max(bbox[1]-offset, 0), 

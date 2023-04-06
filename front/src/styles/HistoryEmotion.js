@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { colors } from "./ColorPalette";
+import styled from '@emotion/styled';
+import { colors } from './ColorPalette';
 
 export const HistoryContentContainer = styled.div`
   width: 100%;

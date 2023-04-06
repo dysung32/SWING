@@ -248,7 +248,7 @@ function SpeedoodleGame(props) {
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
         <p>{record}</p>
-        <p>정답은 {keyword[keywordIdx].meaningKr}</p>
+        <p>정답은 {keyword && keyword[keywordIdx].meaningKr}</p>
         <div style={{ width: '24vw', height: '24vw' }}></div>
         <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
       </ModalBasic>

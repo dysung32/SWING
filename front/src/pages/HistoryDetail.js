@@ -45,6 +45,29 @@ function HistoryDetail() {
   const swiperRef = useRef();
   const [round, setRound] = useState(1);
 
+  const downloadFile = (url) => {
+    console.log('사진 다운로드!');
+    fetch(url, { method: 'GET' })
+      .then((res) => {
+        return res.blob();
+      })
+      .then((blob) => {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'speedoodle.jpg';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout((_) => {
+          window.URL.revokeObjectURL(url);
+        }, 60000);
+        a.remove();
+      })
+      .catch((err) => {
+        console.error('err: ', err);
+      });
+  };
+
   const renderPics = (pics) => {
     if (pics) {
       return pics.map((pic, idx) => {
@@ -64,8 +87,9 @@ function HistoryDetail() {
                 fontColor={colors.gameBlue500}
                 fontWeight={700}
                 className='save-btn'
+                onClick={() => downloadFile(pic.roundImageUrl)}
               >
-                저장
+                <a download='speedoodle.jpg'>저장</a>
               </CommonBtn>
             </UserInfoBox>
           </SinglePicContainer>

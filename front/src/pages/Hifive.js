@@ -95,6 +95,7 @@ function Hifive() {
       setWrongWords(imageSet);
       sendResult();
       imageSet.map((obj) => {
+        console.log(obj);
         axios({
           method: 'POST',
           url: `${API_URL}/note/word/${user.userId}/${obj.wordId}`,
@@ -341,7 +342,7 @@ function Hifive() {
                 <div className='resultBox'>
                   <div className='resultValue'>
                     <H3 color={colors.gameBlue500}>점수</H3>
-                    <H3 color={colors.gameBlue500}>{scoreStack}점</H3>
+                    <H3 color={colors.gameBlue500}>{scoreStack? scoreStack : mine.score}점</H3>
                   </div>
                   <div className='resultValue'>
                   <H3 color={colors.gameBlue500}>누적 점수</H3>

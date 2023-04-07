@@ -40,7 +40,6 @@ function SpeedoodleGameInfo(props) {
 
   const [user, setUser] = useRecoilState(userState);
 
-
   // const user = JSON.parse(window.localStorage.getItem('user'));
   const messages = useRef(null);
 
@@ -53,7 +52,7 @@ function SpeedoodleGameInfo(props) {
     if (props.propMode === 1) {
       setLimits(() => 30);
     } else {
-      setLimits(() => 2);
+      setLimits(() => 20);
     }
   }, [props.propMode]);
 
@@ -80,7 +79,7 @@ function SpeedoodleGameInfo(props) {
     if (props.gameInfo.mode) {
       setLimits(() => 30);
     } else {
-      setLimits(() => 2);
+      setLimits(() => 20);
     }
   }, []);
 
@@ -124,7 +123,6 @@ function SpeedoodleGameInfo(props) {
 
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
-
     //방 잠금 설정
     axios
       .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)

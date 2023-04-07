@@ -55,6 +55,10 @@ body {
   flex-direction: column;
 }
 
+.align-items {
+  align-items: center;
+}
+
 .loadingEmoji {
   width: 2rem;
 }

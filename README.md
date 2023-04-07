@@ -8,7 +8,7 @@ AI와 함께 세가지 이미지 게임으로 놀면서 영어를 공부할 수 
 ## **서비스 페이지: [SWING](https://swing.run/)**
 <br>
 
-## **서비스 소개 영상: [SWING UCC]()**
+## **서비스 소개 영상: [SWING UCC](https://drive.google.com/file/d/1GjBNeWZe1oHEl7sJUum2k0DcOztS3-TO/view?usp=share_link)**
 
 <br>
 
@@ -90,7 +90,7 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
   - FE/BE framework: <img src="https://img.shields.io/badge/REACT-109CA1?style=for-the-badge&logo=REACT&logoColor=white"><img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"><img src="https://img.shields.io/badge/DJANGO-9C4716?style=for-the-badge&logo=DJANGO&logoColor=white"><img src="https://img.shields.io/badge/TENSORFLOW-F5E341?style=for-the-badge&logo=TENSORFLOW&logoColor=white"><img src="https://img.shields.io/badge/PYTORCH-DD28E4?style=for-the-badge&logo=PYTORCH&logoColor=white"> 
   - DB: <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/Amazon S3-EBAB6B?style=for-the-badge&logo=Amazon S3&logoColor=white">
   - 배포: ![img](https://camo.githubusercontent.com/c75eb74744dd435c8f353a621e97b392201c530225b32b1be88d6cd38a1b1448/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f416d617a6f6e4157532d4646393930423f7374796c653d666f722d7468652d6261646765266c6f676f3d616d617a6f6e617773266c6f676f436f6c6f723d7768697465)<img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"><img src="https://img.shields.io/badge/Docker -2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  - CI/CD:  <img src="https://img.shields.io/badge/jenkins-7b2d00?style=for-the-badge&logo=jenkins&logoColor=white">
+  - CI/CD: <img src="https://img.shields.io/badge/jenkins-7b2d00?style=for-the-badge&logo=jenkins&logoColor=white">
   - 디자인: <img src="https://img.shields.io/badge/ICONIFY-c48da4?style=for-the-badge&logo=ICONIFY&logoColor=white"><img src="https://img.shields.io/badge/REACT BOOTSTRAP ICONS-621BCD?style=for-the-badge&logo=Bootstrap&logoColor=white">
 
 <br>
@@ -101,8 +101,8 @@ SSAFY 2학기 특화PJT(2023.02.20 ~ 2023.04.07)
   - [목업](https://www.figma.com/file/D7l1yJ4uPUi6tI1Byq56VY/sub1?node-id=1%3A2&t=XOTZk9Ez7gymd0zi-1)
   - [ERD](https://drive.google.com/file/d/1DWOISAf1ZNGQNr_eQ5gnvsDK7yM6tdBy/view?usp=sharing)
   - [API 명세서](https://docs.google.com/spreadsheets/d/1FzohMrqxhmOpdn23zfUqp4oM6xWVXGCUMq-h7OiGy_M/edit?usp=sharing)
-  - [UCC]()
-  - [최종 발표 자료]()
+  - [UCC](https://drive.google.com/file/d/1GjBNeWZe1oHEl7sJUum2k0DcOztS3-TO/view?usp=share_link)
+  - [최종 발표 자료](https://drive.google.com/file/d/1cyWOuYWc37MHR7v3mVv_rw5BmBcUkFiI/view?usp=share_link)
   - [포팅 매뉴얼](https://docs.google.com/document/d/14uNQdsXdRBT4Gpzts3enwDEhEqrjuDFZxUm6kXN5DZY/edit?usp=sharing)
   - [시연 시나리오](https://docs.google.com/document/d/1Aj5QOxrrSI84Ck7exmFprGPfqBd8_HmUdCznBLLsdA8/edit?usp=sharing)
   - [AI 개발 상세](https://docs.google.com/document/d/12zAM9SJSx91n6lDtMtWGrgzpzvFKDT2_YYW_9-_MaOY/edit?usp=sharing)

@@ -52,6 +52,7 @@ function SpeedoodleGame(props) {
 
   const [rankResult, setRankResult] = useState([]);
   const [roundImage, setRoundImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -118,8 +119,8 @@ function SpeedoodleGame(props) {
     if(roundCnt !== 5) {
       const formdata = new FormData();
       // formdata.append('userId', user.userId);
-      // console.log(user.userId);
-      // console.log(keyword[keywordIdx].roundId);
+      console.log(user.userId);
+      console.log(keyword[keywordIdx].roundId);
       const data = {
         userId: user.userId,
         roundId: keyword[keywordIdx].roundId,
@@ -140,6 +141,7 @@ function SpeedoodleGame(props) {
       })
       .then((res) => {
         // console.log(res.data);
+        setImageUrl(res.data.imageUrl);
         if(roundCnt > 0) {
           setKeywordIdx((prev) => prev + 1);
         }
@@ -150,7 +152,7 @@ function SpeedoodleGame(props) {
         }
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       })
     }
   }, [roundCnt]);
@@ -158,6 +160,7 @@ function SpeedoodleGame(props) {
   //websocket으로 END 메시지가 도착할 경우 각자의
   useEffect(() => {
     if(isTimeList?.userList.length === isTimeList.userNum){
+      console.log(`이게 받은 값:`);
       let temp = isTimeList.userList;
       temp.sort((a, b) => {
         // Convert each time string to seconds
@@ -183,10 +186,10 @@ function SpeedoodleGame(props) {
         },
       })
         .then((res) => {
-          // console.log(res);
+          console.log(res);
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
         });
     }
   }, [rankResult]);
@@ -207,11 +210,11 @@ function SpeedoodleGame(props) {
             },
           })
           .then((res) => {
-            // console.log(res.data);
-            // console.log('ai답변들', aiAnswer);
-            // console.log('키워드다', keyword[keywordIdx].content);
+            console.log(res.data);
+            console.log('ai답변들', aiAnswer);
+            console.log('키워드다', keyword[keywordIdx].content);
             if (res.data.class === keyword[keywordIdx].content) {
-              // console.log('성공');
+              console.log('성공');
               setIsCorrect(() => true);
             } else {
               setAiAnswer((aiAnswer) => [...aiAnswer, res.data.class]);
@@ -326,6 +329,7 @@ function SpeedoodleGame(props) {
           <H4 padding='2rem 0' color={colors.black}>
             {record}
           </H4>
+          <img src={imageUrl}/>
           <H3 padding='4rem 0' color={colors.gameBlue300}>
             정답은 {keyword && keyword[keywordIdx].meaningKr}
           </H3>

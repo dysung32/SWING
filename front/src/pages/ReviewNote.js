@@ -41,11 +41,11 @@ function ReviewNote() {
         },
       })
       .then((res) => {
-        console.log(res.data.wordNoteList);
+        // // console.log(res.data.wordNoteList);
         setWordArray([...res.data.wordNoteList]);
       })
       .catch((err) => {
-        console.log(err);
+        // // console.log(err);
       });
 
     axios
@@ -55,11 +55,11 @@ function ReviewNote() {
         },
       })
       .then((res) => {
-        console.log(res);
+        // // console.log(res);
         setSentenceArray([...res.data.sentenceNoteList]);
       })
       .catch((err) => {
-        console.log(err);
+        // // console.log(err);
       });
   }, []);
 
@@ -136,11 +136,11 @@ function ReviewNote() {
               setWordArray([...res.data.wordNoteList]);
             })
             .catch((err) => {
-              console.log(err);
+              // // console.log(err);
             });
         })
         .catch((err) => {
-          console.log(err);
+          // // console.log(err);
         });
     } else {
       axios({
@@ -162,11 +162,11 @@ function ReviewNote() {
               setSentenceArray([...res.data.sentenceNoteList]);
             })
             .catch((err) => {
-              console.log(err);
+              // console.log(err);
             });
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     }
   };

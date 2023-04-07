@@ -25,6 +25,7 @@ import { useRecoilState } from 'recoil';
 import { userState, speedoodleGameState } from '../recoil';
 
 import { SendFill } from 'react-bootstrap-icons';
+
 function SpeedoodleGameInfo(props) {
   const navigate = useNavigate();
   const chatWindowRef = useRef(null);
@@ -38,6 +39,7 @@ function SpeedoodleGameInfo(props) {
   const [isLocked, setIsLocked] = useState(false);
 
   const [user, setUser] = useRecoilState(userState);
+
 
   // const user = JSON.parse(window.localStorage.getItem('user'));
   const messages = useRef(null);
@@ -88,14 +90,12 @@ function SpeedoodleGameInfo(props) {
         axios
           .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
           .then((res) => {
-            if (res.status === 200) {
-              console.log('겜끝! 풀게요!');
-            }
+            console.log('겜끝! 풀게요!');
           })
           .catch((err) => console.error(err));
       }
-      setIsLocked(false);
       setBgColor(`${colors.white}`);
+      setIsLocked(false);
     }
   }, [isGameStart]);
 
@@ -124,6 +124,7 @@ function SpeedoodleGameInfo(props) {
 
   // 시작버튼 눌렀을 때
   const handleGameStart = () => {
+
     //방 잠금 설정
     axios
       .put(`${API_URL}/doodle/start/${roomInfo.roomId}`)
@@ -204,7 +205,8 @@ function SpeedoodleGameInfo(props) {
             isMode={props.propMode}
             limits={limits}
             keywords={gameData}
-            roomInfo={props.gameInfo.roomInfo}
+            roomInfo={props.gameInfo}
+            timeValue={props.timeValue}
           ></SpeedoodleGame>
         ) : (
           <div style={{ width: '100%', height: '100%' }}>

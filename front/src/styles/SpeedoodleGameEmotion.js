@@ -63,3 +63,11 @@ export const StartAlert = styled.div`
   z-index: 1;
   text-align: center;
 `;
+
+export const ResultContainer = styled.div`
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;

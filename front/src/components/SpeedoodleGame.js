@@ -1,19 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useInterval from '../hooks/useInterval';
 import axios from 'axios';
 import { AI_API_URL, API_URL } from '../config';
 
-import { GameContainer, RoundHeader, CanvasContainer, Keyword, BtnContainer } from '../styles/SpeedoodleGameEmotion';
+import {
+  GameContainer,
+  RoundHeader,
+  CanvasContainer,
+  Keyword,
+  BtnContainer,
+  ResultContainer
+} from '../styles/SpeedoodleGameEmotion';
 import { colors } from '../styles/ColorPalette';
-import { H1, H2, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
+import { H1, H2, H3, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
 import { AlarmFill, Pause } from 'react-bootstrap-icons';
 import { CommonBtn } from '../styles/CommonEmotion';
 import Stopwatch from './Stopwatch';
 import ReadyText from './ReadyText';
 import ModalBasic from './ModalBasic';
 import { useRecoilState } from 'recoil';
-import { userState, speedoodleGameState } from '../recoil';
+import { userState, speedoodleGameState,timeMessage,timeList } from '../recoil';
 
 function SpeedoodleGame(props) {
   const navigate = useNavigate();
@@ -32,6 +38,8 @@ function SpeedoodleGame(props) {
 
   const [keywordIdx, setKeywordIdx] = useState(0);
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+  const [isTimeMessage, setIsTimeMessage] = useRecoilState(timeMessage);
+  const [isTimeList, setIsTimeList] = useRecoilState(timeList);
 
   const [aiAnswer, setAiAnswer] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -41,6 +49,9 @@ function SpeedoodleGame(props) {
   const [recordSc, setRecordSc] = useState(0);
   const [recordMs, setRecordMs] = useState(0);
   const [user, setUser] = useRecoilState(userState);
+
+  const [rankResult, setRankResult] = useState([]);
+
 
   let canvasRef = useRef(null);
   let canvas;
@@ -65,18 +76,6 @@ function SpeedoodleGame(props) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = 'black';
   }, []);
-
-  // const saveRoundResult = (imageData) => {
-  //   const data = {
-  //     userId: user.userId,
-  //     roundId: keyword[keywordIdx].roundId,
-  //     image:
-  //   }
-  //   axios({
-  //     method: 'POST',
-  //     url: `${API_URL}/doodle/round`,
-  //   })
-  // }
 
   const getPosition = (e) => {
     return { X: e.offsetX, Y: e.offsetY };
@@ -114,6 +113,49 @@ function SpeedoodleGame(props) {
     canvas.getContext('2d').fillRect(0, 0, canvas.width, canvas.height);
   };
 
+  // 5 라운드가 끝난 시점에서 각자의 결과를 websocket으로 전송
+  useEffect(() => {
+    
+    if(roundCnt === 0){
+      const myTime = `${recordSc}:${recordMs}`;
+      // console.log(myTime);
+      setIsTimeMessage(myTime);
+    }
+  },[roundCnt])
+
+  //websocket으로 END 메시지가 도착할 경우 각자의 
+  useEffect(() => {
+    if(isTimeList.userList.length === isTimeList.userNum){
+      console.log(`이게 받은 값:`);
+      let temp = isTimeList.userList;
+      temp.sort();
+      setRankResult(temp);
+    }
+  },[isTimeList])
+
+  
+  useEffect(() => {
+    if(rankResult.length !== 0) {
+      const myTime = `${recordSc}:${recordMs}`;
+      let myIdx = (rankResult.indexOf(myTime) + 1);
+      const gameId = keyword[0].gameId;
+      axios({
+        method: 'POST',
+        url: `${API_URL}/doodle/game/${user.userId}/${gameId}/${myIdx}`,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+  },[rankResult])
+
+
   useEffect(() => {
     const getAnswer = () => {
       canvas = canvasRef.current;
@@ -140,7 +182,7 @@ function SpeedoodleGame(props) {
             }
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
           });
       });
     };
@@ -185,6 +227,8 @@ function SpeedoodleGame(props) {
     setResultModalShow(true);
     setTimeout(() => {
       if (roundCnt === 1) {
+        //임시
+        setRoundCnt((prev) => prev - 1);
         setTimeout(() => {
           setIsFinal(true);
         }, 2000);
@@ -211,6 +255,7 @@ function SpeedoodleGame(props) {
       setFinalResultModalShow(false);
       // 다시 대기방 상태로 회귀
       setIsGameStart(false);
+      setIsTimeList([]);
     }, 3000);
   };
   // readyText 가 끝났을 때 타이머 handle하는 함수
@@ -228,11 +273,18 @@ function SpeedoodleGame(props) {
   return (
     <>
       {/* 최종결과 제공 모달 */}
-      <ModalBasic modalShow={finalResultModalShow} setModalShow={setFinalResultModalShow}>
-        <H2>최종결과</H2>
-        <H4>
-          누적 시간은 {recordSc}:{recordMs} 입니다.
-        </H4>
+      <ModalBasic
+        modalShow={finalResultModalShow}
+        setModalShow={setFinalResultModalShow}
+      >
+        <H4 color={colors.gameBlue500}>최종 결과</H4>
+        <ResultContainer>
+        {
+          rankResult?.map((item,idx) => (
+            <H4 key={idx}>{idx+1}등 {item.user} : {item.context}</H4>
+          ))
+        }
+        </ResultContainer>
         <div style={{ width: '24vw', height: '24vw' }}></div>
       </ModalBasic>
       {/* 각 라운드 결과 제공 모달 */}

@@ -13,13 +13,15 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { API_URL, getCookie } from '../config';
 import { useRecoilState } from 'recoil';
-import { userState, speedoodleGameState } from '../recoil';
+import { userState, speedoodleGameState, timeMessage, timeList } from '../recoil';
 
 function SpeedoodleRoom() {
   const navigate = useNavigate();
   const [gameRoomInfo, setGameRoomInfo] = useState({});
   const [chatInput, setChatInput] = useState('');
   const [isGameStart, setIsGameStart] = useRecoilState(speedoodleGameState);
+  const [isTimeMessage, setIsTimeMessage] = useRecoilState(timeMessage);
+  const [isTimeList, setIsTimeList] = useRecoilState(timeList);
   const [chatData, setChatData] = useState([]);
   const [user, setUser] = useRecoilState(userState);
   const [userList, setUserList] = useState([]);
@@ -27,7 +29,8 @@ function SpeedoodleRoom() {
   const [propMode, setPropMode] = useState(null);
   const [isStart, setIsStart] = useState(null);
   const [gameKey, setGameKey] = useState(null);
-
+  const [timeValue, setTimeValue] = useState([]);
+  const [endCheck, setEndCheck] = useState(null);
   const stompRef = useRef(null);
   const roomUrl = new URL(window.location.href).pathname.split('/');
   const lengthUrl = roomUrl.length;
@@ -58,6 +61,13 @@ function SpeedoodleRoom() {
   useEffect(() => {
     if (!stompRef.current && gameRoomInfo !== null) {
       stompConnect();
+    }
+
+    return () => {
+      if (stompRef.current?.connected) {
+        setIsGameStart(false);
+        stompDisconnect();
+      }
     }
   }, []);
 
@@ -117,11 +127,29 @@ function SpeedoodleRoom() {
                 ...chatData,
                 [msObj.publisher, msObj.message],
               ]);
-            } else if (msObj.messageType === 'MODE') {
+            }
+            else if(msObj.messageType === 'MODE') {
+              console.log(msObj);
               setPropMode(msObj.data);
             } else if (msObj.messageType === 'START') {
               setIsStart(true);
+              console.log(msObj);
               setGameKey(msObj.roundInfoList);
+            }
+            else if(msObj.messageType === 'END') {
+              console.log(msObj);
+              const time = msObj.data.split(':');
+              console.log(time);
+              const context = {
+                user: msObj.publisher,
+                context: msObj.data,
+              }
+              setIsTimeList({
+                userNum: msObj.userNum,
+                userList: [...isTimeList.userList, context],
+              });
+              // setTimeValue([...timeValue,(Number(time[0])*100 + Number(time[1]))]);
+              // console.log(Number(time[0])*100 + Number(time[1]));
             }
             console.log(msObj);
           },
@@ -133,6 +161,14 @@ function SpeedoodleRoom() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if(isTimeMessage !== null){
+      SendTimeMessage(isTimeMessage, userList.length);
+      console.log(isTimeMessage);
+    }
+  },[isTimeMessage])
+
 
   //웹소켓 연결 끊기
   const stompDisconnect = () => {
@@ -156,6 +192,23 @@ function SpeedoodleRoom() {
         }
       );
     } catch (error) {}
+  };
+
+  //결과 누적 시간 보낼때
+  const SendTimeMessage = (val,num) => {
+    console.log("나 끝났어!");
+    const data = {
+      messageType: 'END',
+      data: val,
+      publisher: user.nickname,
+      roomId: room_id,
+      userNum: num,
+    }
+    if (stompRef.current?.connected) {
+      stompRef.current.send('/pub/send', {}, JSON.stringify(data));
+    } else {
+      console.log('STOMP connection is not open');
+    }
   };
 
   //일반 채팅 보낼때
@@ -186,8 +239,7 @@ function SpeedoodleRoom() {
     if (stompRef.current?.connected) {
       console.log(stompRef.current.connected);
       stompRef.current.send('/pub/send', {}, JSON.stringify(data));
-    } else {
-      console.log(stompRef.current.connected);
+    } else {  
       console.log('STOMP connection is not open');
     }
   };
@@ -262,6 +314,8 @@ function SpeedoodleRoom() {
                   propMode={propMode}
                   isStart={isStart}
                   gameKey={gameKey}
+                  timeValue={timeValue}
+                  // isMode={isMode}
                 ></SpeedoodleGameInfo>
               )}
             </>

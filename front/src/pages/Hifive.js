@@ -387,7 +387,7 @@ function Hifive() {
       </ModalBasic>
       <HifiveWrapper>
         <GameTitle>
-          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>Hi-five</H1>
+          <H1 color={colors.white} outline={colors.gameBlue500} outlineWeight={2}>HI-FIVE</H1>
         </GameTitle>
         <HifiveContainer>
           <ProblemtoalContainer>

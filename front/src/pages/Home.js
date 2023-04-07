@@ -74,7 +74,6 @@ function Home() {
         },
       })
       .then((res) => {
-        console.log(res);
         setCoupon(() => res.data.user.coupon);
       });
   };
@@ -92,14 +91,10 @@ function Home() {
         },
       })
       .then((res) => {
-        console.log('sentency 랭킹 불러오기');
-        console.log(res.data);
         setRankers(res.data.sentencyRankList.slice(0, 7));
         setMyRank(res.data.sentencyRankList.pop());
       })
-      .catch((err) => {
-        console.log(`sentency 랭킹 호출 중 오류 발생!`);
-      });
+      .catch((err) => {});
     setSentencyRankShow(true);
   };
 
@@ -116,14 +111,10 @@ function Home() {
         },
       })
       .then((res) => {
-        console.log('hifive 랭킹 불러오기');
-        console.log(res.data);
         setRankers(res.data.fiveRankList.slice(0, 7));
         setMyRank(res.data.fiveRankList.pop());
       })
-      .catch((err) => {
-        console.log(`Hifive 랭킹 호출 중 오류 발생!`);
-      });
+      .catch((err) => {});
     setHifiveRankShow(true);
   };
 

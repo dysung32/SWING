@@ -65,12 +65,9 @@ function Hifive() {
       },
     })
       .then((res) => {
-        console.log(res.data);
         setChanceCnt(res.data.fiveCnt);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   // 유저의 횟수가 남아있는가 여부에 따라 값이 달라진다.
@@ -86,12 +83,9 @@ function Hifive() {
         },
       })
         .then((res) => {
-          console.log(res.data);
           setImageSet(res.data.wordList);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [chanceCnt]);
 
@@ -100,7 +94,6 @@ function Hifive() {
       setWrongWords(imageSet);
       sendResult();
       imageSet.map((obj) => {
-        console.log(obj);
         axios({
           method: 'POST',
           url: `${API_URL}/note/word/${user.userId}/${obj.wordId}`,
@@ -108,12 +101,8 @@ function Hifive() {
             'Access-Token': getCookie('accessToken'),
           },
         })
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          .then((res) => {})
+          .catch((err) => {});
       });
     }
   }, [lifeStack]);
@@ -159,7 +148,6 @@ function Hifive() {
     let temp = [...imageCheck];
     let tempSet = [...imageSet];
     maxKey = maxKey.replace(' ', '_');
-    console.log(maxKey);
 
     if (maxSimilar < 0.4) {
       setIsVibrating(true);
@@ -195,11 +183,9 @@ function Hifive() {
 
       return () => clearTimeout(timeoutId);
     } else {
-      console.log(maxSimilar);
       const idx = imageSet.findIndex((obj) => obj.content === maxKey);
       const answer = tempSet.splice(idx, 1);
       const answerCheck = temp.splice(idx, 1);
-      console.log(answerCheck);
       answerStack.push([answer[0].content, answer[0].meaningKr]);
 
       setScoreStack(scoreStack + answerCheck[0][0]);
@@ -246,18 +232,13 @@ function Hifive() {
       },
     })
       .then((res) => {
-        console.log(res.data);
         const others = res.data.fiveRankList;
         const myRank = others.pop();
         setOtherRank(others);
         setMine(myRank);
         setFinalValue(res.data.fiveStat);
-        console.log(others);
-        console.log(myRank);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   //finalValue에 변화가 생긴다는 뜻은 getResult가 호출되었다는 뜻
@@ -271,12 +252,8 @@ function Hifive() {
           'Access-Token': getCookie('accessToken'),
         },
       })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => {})
+        .catch((err) => {});
       if (finalValue.streak === 0) {
         setresultValue(false);
         setModalLoading(true);

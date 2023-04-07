@@ -270,12 +270,12 @@ function SpeedoodleGame(props) {
     <>
       {/* 최종결과 제공 모달 */}
       <ModalBasic modalShow={finalResultModalShow} setModalShow={setFinalResultModalShow}>
-        <H4 color={colors.gameBlue500}>최종 결과</H4>
+        <H3 color={colors.gameBlue500}>최종 결과</H3>
         <ResultContainer>
           {rankResult?.map((item, idx) => (
-            <H4 key={idx}>
-              {idx + 1}등 {item.user} : {item.context}
-            </H4>
+            <H3 color={colors.gameBlue300} margin='5rem 0 0 0' key={idx}>
+              순위: {idx + 1}등({item.context})
+            </H3>
           ))}
         </ResultContainer>
         <div style={{ width: '24vw', height: '24vw' }}></div>
@@ -283,8 +283,8 @@ function SpeedoodleGame(props) {
       {/* 각 라운드 결과 제공 모달 */}
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
-        <div className='flex-column'>
-          <H4 padding='2rem' color={colors.black}>
+        <div className='flex-column align-items'>
+          <H4 padding='2rem 0' color={colors.black}>
             {record}
           </H4>
           <H3 padding='4rem 0' color={colors.gameBlue300}>

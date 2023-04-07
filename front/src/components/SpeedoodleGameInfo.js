@@ -53,7 +53,7 @@ function SpeedoodleGameInfo(props) {
     if (props.propMode === 1) {
       setLimits(() => 30);
     } else {
-      setLimits(() => 20);
+      setLimits(() => 2);
     }
   }, [props.propMode]);
 
@@ -80,7 +80,7 @@ function SpeedoodleGameInfo(props) {
     if (props.gameInfo.mode) {
       setLimits(() => 30);
     } else {
-      setLimits(() => 20);
+      setLimits(() => 2);
     }
   }, []);
 

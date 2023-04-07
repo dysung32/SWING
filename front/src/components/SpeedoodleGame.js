@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AI_API_URL, API_URL } from '../config';
+import { AI_API_URL, API_URL, getCookie } from '../config';
 
 import {
   GameContainer,
@@ -51,6 +51,7 @@ function SpeedoodleGame(props) {
   const [user, setUser] = useRecoilState(userState);
 
   const [rankResult, setRankResult] = useState([]);
+  const [roundImage, setRoundImage] = useState(null);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -114,19 +115,58 @@ function SpeedoodleGame(props) {
 
   // 5 라운드가 끝난 시점에서 각자의 결과를 websocket으로 전송
   useEffect(() => {
-    if (roundCnt === 0) {
-      const myTime = `${recordSc}:${recordMs}`;
-      // console.log(myTime);
-      setIsTimeMessage(myTime);
+    if(roundCnt !== 5) {
+      const formdata = new FormData();
+      // formdata.append('userId', user.userId);
+      console.log(user.userId);
+      console.log(keyword[keywordIdx].roundId);
+      const data = {
+        userId: user.userId,
+        roundId: keyword[keywordIdx].roundId,
+      }
+      const saveRoundResultDto = new Blob([JSON.stringify(data)], {type: 'application/json'});
+
+      formdata.append('saveRoundResultDto', saveRoundResultDto);
+      formdata.append('image', roundImage);
+
+      axios({
+        url:`${API_URL}/doodle/round`,
+        method: 'POST',
+        data: formdata,
+        headers: {
+          'Access-Token': getCookie('accessToken'),
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if(roundCnt > 0) {
+          setKeywordIdx((prev) => prev + 1);
+        }
+        if(roundCnt === 0){
+          const myTime = `${recordSc}:${recordMs}`;
+          // console.log(myTime);
+          setIsTimeMessage(myTime);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     }
   }, [roundCnt]);
 
   //websocket으로 END 메시지가 도착할 경우 각자의
   useEffect(() => {
-    if (isTimeList.userList.length === isTimeList.userNum) {
+    if(isTimeList?.userList.length === isTimeList.userNum){
       console.log(`이게 받은 값:`);
       let temp = isTimeList.userList;
-      temp.sort();
+      temp.sort((a, b) => {
+        // Convert each time string to seconds
+        const aSeconds = parseInt(a.split(":")[0], 10) * 100 + parseInt(a.split(":")[1], 10);
+        const bSeconds = parseInt(b.split(":")[0], 10) * 100 + parseInt(b.split(":")[1], 10);
+        
+        return aSeconds - bSeconds; // Sort in ascending order
+      });
       setRankResult(temp);
     }
   }, [isTimeList]);
@@ -134,13 +174,13 @@ function SpeedoodleGame(props) {
   useEffect(() => {
     if (rankResult.length !== 0) {
       const myTime = `${recordSc}:${recordMs}`;
-      let myIdx = rankResult.indexOf(myTime) + 1;
+      let myIdx = (rankResult.findIndex(obj => obj.context === myTime) + 1);
       const gameId = keyword[0].gameId;
       axios({
         method: 'POST',
         url: `${API_URL}/doodle/game/${user.userId}/${gameId}/${myIdx}`,
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Access-Token': getCookie('accessToken'),
         },
       })
         .then((res) => {
@@ -156,6 +196,7 @@ function SpeedoodleGame(props) {
     const getAnswer = () => {
       canvas = canvasRef.current;
       canvas.toBlob((blob) => {
+        setRoundImage(blob);
         const formdata = new FormData();
         formdata.append('answer', blob);
         formdata.append('answered', aiAnswer);
@@ -235,7 +276,6 @@ function SpeedoodleGame(props) {
       if (roundCnt > 1) {
         setFinish(false);
         setRoundCnt((prev) => prev - 1);
-        setKeywordIdx((prev) => prev + 1);
         setTimeout(() => {
           setReadyGame(false);
         }, 1000);

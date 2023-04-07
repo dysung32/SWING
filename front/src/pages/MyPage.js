@@ -89,7 +89,7 @@ function MyPage() {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         setCoupon(res.data.user.coupon);
       });
   };
@@ -100,13 +100,13 @@ function MyPage() {
   const changeNickname = () => {
     setAllowedMsg('올바른 형식의 닉네임입니다. 중복 확인을 진행해주세요.');
     const changedNickname = nickNameRef.current.value;
-    // console.log(changedNickname);
+    console.log(changedNickname);
     const regExp = /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,30}$/g;
     if (regExp.test(changedNickname) && changedNickname !== user.nickname) {
-      // console.log('유효성 검사 통과');
+      console.log('유효성 검사 통과');
       setNicknameRegExpTest(true);
     } else if (!regExp.test(changedNickname) && changedNickname !== user.nickname) {
-      // console.log('유효성 검사 통과 실패');
+      console.log('유효성 검사 통과 실패');
       setDeniedMsg('한글, 영어, 숫자 가능 (2자-30자) / 특수문자, 공백 포함 불가능');
       setConfirmed(false);
       setNicknameRegExpTest(false);
@@ -119,7 +119,7 @@ function MyPage() {
 
   const handleNickNameConfirm = async () => {
     if (nicknameRegExpTest) {
-      // console.log('유효성검사 통과했으니 중복검사 go');
+      console.log('유효성검사 통과했으니 중복검사 go');
       await axios
         .get(`${API_URL}/user/nickname/${nickNameRef.current.value}`, {
           headers: {
@@ -127,7 +127,7 @@ function MyPage() {
           },
         })
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           if (res.data.possible) {
             setConfirmed(true);
             setAllowedMsg('사용 가능한 닉네임입니다 (O)');
@@ -159,11 +159,11 @@ function MyPage() {
       if (confirmed) {
         // formData에 넣을 nickname 변경
         userInfo.nickname = nickNameRef.current.value;
-        // console.log('중복확인 완료됐으니 프로필 변경 axios 호출 go');
-        // console.log(tmpProfileImg);
+        console.log('중복확인 완료됐으니 프로필 변경 axios 호출 go');
+        console.log(tmpProfileImg);
         // 사진 변경이 있을 때
         if (imgChanged) {
-          // console.log('닉네임 변경 O 사진 변경 O');
+          console.log('닉네임 변경 O 사진 변경 O');
           // 기본이미지로 변경했을 때
           if (tmpProfileImg === BasicProfile) {
             userInfo.defaultImage = true;
@@ -176,11 +176,11 @@ function MyPage() {
           }
           formData.append('modifyDto', new Blob([JSON.stringify(userInfo)], { type: 'application/json' }));
 
-          // console.log(fileInput.current.files[0]);
+          console.log(fileInput.current.files[0]);
         }
         // 사진 변경이 없을 때
         else {
-          // console.log('닉네임 변경 O 사진 변경 X');
+          console.log('닉네임 변경 O 사진 변경 X');
           const dump = {};
           formData.append('image', new Blob([JSON.stringify(dump)], { type: 'application/json' }));
           formData.append('modifyDto', new Blob([JSON.stringify(userInfo)], { type: 'application/json' }));
@@ -196,7 +196,7 @@ function MyPage() {
       // 닉네임 변경이 없을 때
       // 사진 변경이 있을 때
       if (imgChanged) {
-        // console.log('닉네임 변경 X 사진 변경 O');
+        console.log('닉네임 변경 X 사진 변경 O');
         // 기본이미지로 변경했을 때
         if (tmpProfileImg === BasicProfile) {
           const dump = {};
@@ -223,12 +223,12 @@ function MyPage() {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         // 리뉴얼된 프로필 정보 받아와서 recoil update
         getNewProfile();
         alert('프로필 수정이 완료되었습니다!');
         setProfileEditModalShow(false);
-        // console.log(user);
+        console.log(user);
       })
       .catch((err) => {
         alert('프로필 수정 중 에러가 발생하였습니다.');
@@ -243,7 +243,7 @@ function MyPage() {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         const newData = {
           userId: res.data.user.userId,
           nickname: res.data.user.nickname,
@@ -295,7 +295,7 @@ function MyPage() {
           delCookie('refreshToken');
           setUser(null);
           navigate('/');
-          // console.log('회원탈퇴 완료!');
+          console.log('회원탈퇴 완료!');
         })
         .catch((err) => {});
     }
@@ -308,7 +308,7 @@ function MyPage() {
       })
       .then((res) => {
         if (res.status === 200) {
-          // console.log(res.data.gameHistoryList);
+          console.log(res.data.gameHistoryList);
           setHistoryList([...res.data.gameHistoryList]);
         }
       })
@@ -319,7 +319,7 @@ function MyPage() {
     setTmpProfileImg(user.profileImageUrl);
     setAllowedMsg('');
     setDeniedMsg('');
-    // console.log('hi');
+    console.log('hi');
   }, [profileEditModalShow]);
 
   useEffect(() => {

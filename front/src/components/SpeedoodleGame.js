@@ -52,6 +52,7 @@ function SpeedoodleGame(props) {
 
   const [rankResult, setRankResult] = useState([]);
   const [roundImage, setRoundImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   let canvasRef = useRef(null);
   let canvas;
@@ -139,7 +140,8 @@ function SpeedoodleGame(props) {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res.data);
+        setImageUrl(res.data.imageUrl);
         if(roundCnt > 0) {
           setKeywordIdx((prev) => prev + 1);
         }
@@ -327,9 +329,11 @@ function SpeedoodleGame(props) {
           <H4 padding='2rem 0' color={colors.black}>
             {record}
           </H4>
+          <img src={imageUrl}/>
           <H3 padding='4rem 0' color={colors.gameBlue300}>
             정답은 {keyword && keyword[keywordIdx].meaningKr}
           </H3>
+
         </div>
         {/* <div style={{ width: '24vw', height: '24vw' }}></div> */}
         <P2 margin='2rem 0 0'>다른 유저들의 그림은 히스토리에서 확인하실 수 있습니다.</P2>

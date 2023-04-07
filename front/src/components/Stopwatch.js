@@ -18,7 +18,7 @@ function Stopwatch(props) {
       if (props.correct) {
         let tmpSc = props.seconds - seconds - 1;
         let tmpMs = 100 - milliseconds;
-        props.setRecord('성공시간' + tmpSc + ':' + tmpMs);
+        props.setRecord('성공 ' + tmpSc + ':' + tmpMs);
         props.setRecordSc((prev) => prev + tmpSc);
         props.setRecordMs((prev) => prev + tmpMs);
         props.setIsCorrect(() => false);

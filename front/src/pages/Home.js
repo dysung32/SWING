@@ -627,16 +627,14 @@ function Home() {
               </SwiperSlide>
               <SwiperSlide className='slide'>
                 <div className='title'>게임 진행 방법</div>
-                <img
-                  className='how-to-img'
-                  src={
-                    'https://user-images.githubusercontent.com/55757379/229980852-1661d1b1-ca23-4045-a7b4-b325795dd7a4.png'
-                  }
-                  alt='img'
-                />
-                <div className='flex'>
+
+                <div className='flex speedoodleDesc'>
                   <div className='order'>3.</div>
                   <div className='desc'>AI가 그림을 분석하여 제시된 키워드로 인식한 순서대로 순위가 매겨집니다.</div>
+                </div>
+                <div className='flex speedoodleDesc'>
+                  <div className='order'>4.</div>
+                  <div className='desc'>총 5라운드로 진행되며, 각 라운드의 시간을 누적하여 최종 순위가 매겨집니다.</div>
                 </div>
               </SwiperSlide>
               <SwiperSlide className='slide'>
@@ -644,15 +642,13 @@ function Home() {
                 <img
                   className='how-to-img'
                   src={
-                    'https://user-images.githubusercontent.com/55757379/229980852-1661d1b1-ca23-4045-a7b4-b325795dd7a4.png'
+                    'https://user-images.githubusercontent.com/55757379/230521634-932d1b1f-411f-4115-83c9-60cfdad5f04f.png'
                   }
                   alt='img'
                 />
                 <div className='flex'>
-                  <div className='order'>4.</div>
-                  <div className='desc'>
-                    총 5라운드로 진행되며, 각 라운드의 통과 시간을 종합하여 최종 순위가 매겨집니다.
-                  </div>
+                  <div className='order'>5.</div>
+                  <div className='desc'>다른 친구들의 그림은 히스토리 페이지를 통해 확인이 가능합니다.</div>
                 </div>
               </SwiperSlide>
             </Swiper>

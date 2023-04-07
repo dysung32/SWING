@@ -349,6 +349,10 @@ export const GameInfoContainer = styled.div`
     flex-grow: 1;
   }
 
+  .speedoodleDesc {
+    padding-top: 2rem;
+  }
+
   .warningBox {
     width: 100%;
     display: flex;

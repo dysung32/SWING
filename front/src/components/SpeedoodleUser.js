@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { UserInfoContainer, UserInfo } from '../styles/SpeedoodleUserEmotion';
-import { PlayerInfo, PlayerProfile } from '../styles/CommonEmotion';
+import { PlayerInfo, PlayerProfile, SinglePlayerLine } from '../styles/CommonEmotion';
 import { P1 } from '../styles/Fonts';
 import { colors } from '../styles/ColorPalette';
 import { AwardFill } from 'react-bootstrap-icons';
@@ -14,17 +14,9 @@ function SpeedoodleUser(props) {
   const gameUsers = props.data;
   const userInfo = gameUsers?.map((user, idx) => {
     return (
-      <UserInfo
-        key={user.userId}
-        border={idx !== gameUsers.length - 1 ? `${colors.gameBlue500}` : false}
-      >
+      <UserInfo key={user.userId} border={idx !== gameUsers.length - 1 ? `${colors.gameBlue500}` : false}>
         <PlayerInfo>
-          <PlayerProfile
-            src={user.profileImageUrl}
-            alt='user image'
-            width='2.5'
-            height='2.5'
-          />
+          <PlayerProfile src={user.profileImageUrl} alt='user image' width='2.5' height='2.5' />
           {props.leader === user.nickname ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <AwardFill
@@ -43,7 +35,6 @@ function SpeedoodleUser(props) {
               {user.nickname}
             </P1>
           )}
-
         </PlayerInfo>
         {user.time && <P1>{user.time}</P1>}
       </UserInfo>

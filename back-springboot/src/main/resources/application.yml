@@ -25,10 +25,10 @@ file:
 cloud:
   aws:
     credentials:
-      access-key: AKIAZ4LSOWIH3XXT3WSI
-      secret-key: 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
+      access-key: [ACCESS-KEY]
+      secret-key: [SECRET-KEY]
     s3:
-      bucket : a405-swing
+      bucket : [BUCKET]
     region:
       static: ap-northeast-2
     stack:

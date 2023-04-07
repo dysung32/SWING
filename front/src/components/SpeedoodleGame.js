@@ -9,7 +9,7 @@ import {
   CanvasContainer,
   Keyword,
   BtnContainer,
-  ResultContainer
+  ResultContainer,
 } from '../styles/SpeedoodleGameEmotion';
 import { colors } from '../styles/ColorPalette';
 import { H1, H2, H3, H4, H5, H6, P1, P2, SmText } from '../styles/Fonts';
@@ -19,7 +19,7 @@ import Stopwatch from './Stopwatch';
 import ReadyText from './ReadyText';
 import ModalBasic from './ModalBasic';
 import { useRecoilState } from 'recoil';
-import { userState, speedoodleGameState,timeMessage,timeList } from '../recoil';
+import { userState, speedoodleGameState, timeMessage, timeList } from '../recoil';
 
 function SpeedoodleGame(props) {
   const navigate = useNavigate();
@@ -51,7 +51,6 @@ function SpeedoodleGame(props) {
   const [user, setUser] = useRecoilState(userState);
 
   const [rankResult, setRankResult] = useState([]);
-
 
   let canvasRef = useRef(null);
   let canvas;
@@ -115,29 +114,27 @@ function SpeedoodleGame(props) {
 
   // 5 라운드가 끝난 시점에서 각자의 결과를 websocket으로 전송
   useEffect(() => {
-    
-    if(roundCnt === 0){
+    if (roundCnt === 0) {
       const myTime = `${recordSc}:${recordMs}`;
       // console.log(myTime);
       setIsTimeMessage(myTime);
     }
-  },[roundCnt])
+  }, [roundCnt]);
 
-  //websocket으로 END 메시지가 도착할 경우 각자의 
+  //websocket으로 END 메시지가 도착할 경우 각자의
   useEffect(() => {
-    if(isTimeList.userList.length === isTimeList.userNum){
+    if (isTimeList.userList.length === isTimeList.userNum) {
       console.log(`이게 받은 값:`);
       let temp = isTimeList.userList;
       temp.sort();
       setRankResult(temp);
     }
-  },[isTimeList])
+  }, [isTimeList]);
 
-  
   useEffect(() => {
-    if(rankResult.length !== 0) {
+    if (rankResult.length !== 0) {
       const myTime = `${recordSc}:${recordMs}`;
-      let myIdx = (rankResult.indexOf(myTime) + 1);
+      let myIdx = rankResult.indexOf(myTime) + 1;
       const gameId = keyword[0].gameId;
       axios({
         method: 'POST',
@@ -146,15 +143,14 @@ function SpeedoodleGame(props) {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  },[rankResult])
-
+  }, [rankResult]);
 
   useEffect(() => {
     const getAnswer = () => {
@@ -198,7 +194,7 @@ function SpeedoodleGame(props) {
   useEffect(() => {
     if (finish) {
       if (record === '') {
-        setRecord(() => '실패' + timeLimits + ': 00');
+        setRecord(() => '실패 ' + timeLimits + ': 00');
         setRecordSc((prev) => prev + timeLimits);
       }
       resetCanvas();
@@ -273,27 +269,30 @@ function SpeedoodleGame(props) {
   return (
     <>
       {/* 최종결과 제공 모달 */}
-      <ModalBasic
-        modalShow={finalResultModalShow}
-        setModalShow={setFinalResultModalShow}
-      >
+      <ModalBasic modalShow={finalResultModalShow} setModalShow={setFinalResultModalShow}>
         <H4 color={colors.gameBlue500}>최종 결과</H4>
         <ResultContainer>
-        {
-          rankResult?.map((item,idx) => (
-            <H4 key={idx}>{idx+1}등 {item.user} : {item.context}</H4>
-          ))
-        }
+          {rankResult?.map((item, idx) => (
+            <H4 key={idx}>
+              {idx + 1}등 {item.user} : {item.context}
+            </H4>
+          ))}
         </ResultContainer>
         <div style={{ width: '24vw', height: '24vw' }}></div>
       </ModalBasic>
       {/* 각 라운드 결과 제공 모달 */}
       <ModalBasic modalShow={resultModalShow} setModalShow={setResultModalShow}>
         <H2>Round {6 - roundCnt}</H2>
-        <p>{record}</p>
-        <p>정답은 {keyword && keyword[keywordIdx].meaningKr}</p>
-        <div style={{ width: '24vw', height: '24vw' }}></div>
-        <P2>다른 유저들의 그림은 히스토리에서 다시 볼 수 있습니다.</P2>
+        <div className='flex-column'>
+          <H4 padding='2rem' color={colors.black}>
+            {record}
+          </H4>
+          <H3 padding='4rem 0' color={colors.gameBlue300}>
+            정답은 {keyword && keyword[keywordIdx].meaningKr}
+          </H3>
+        </div>
+        {/* <div style={{ width: '24vw', height: '24vw' }}></div> */}
+        <P2 margin='2rem 0 0'>다른 유저들의 그림은 히스토리에서 확인하실 수 있습니다.</P2>
       </ModalBasic>
       <GameContainer>
         <ReadyText readyGame={readyGame} setReadyGame={setReadyGame}></ReadyText>
@@ -362,8 +361,8 @@ function SpeedoodleGame(props) {
               textAlign: 'center',
             }}
           >
-            {record !== '' && record !== '실패' + timeLimits + ': 00' ? (
-              <p style={{ fontWeight: 'bold', margin: '0', color: colors.gamePink500 }}>성공</p>
+            {record !== '' && record !== '실패 ' + timeLimits + ': 00' ? (
+              <p style={{ fontWeight: 'bold', margin: '0', color: '#0000FF' }}>성공</p>
             ) : (
               <p style={{ fontWeight: 'bold', margin: '0' }}>{aiAnswer[aiAnswer.length - 1]}</p>
             )}

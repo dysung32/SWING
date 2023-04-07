@@ -237,6 +237,7 @@ export const SinglePlayerContainer = styled.div`
 export const PlayerInfo = styled.div`
   display: flex;
   align-items: center;
+  flex-grow: 1;
 
   .profile {
     margin: 0.5rem 0.7rem 0.5rem 0;
